@@ -1,0 +1,9 @@
+models/yolov8n.pt
+models/age_net.caffemodel
+models/age_deploy.prototxt
+models/gender_deploy.prototxt
+models/gender_net.caffemodel
+models/opencv_face_detector.pbtxt
+models/opencv_face_detector_uint8.pb
+assets/videos/street_demo.mp4
+__pycache__/
