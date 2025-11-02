@@ -1,0 +1,14 @@
+{
+  "ad001": {
+    "file_path": "assets/ads/olive_young.mp4",
+    "tags": ["20s_female", "20s_male", "college"]
+  },
+  "ad002": {
+    "file_path": "assets/ads/stock_app.mp4",
+    "tags": ["30-50s_male", "office"]
+  },
+  "ad003": {
+    "file_path": "assets/ads/shabu_shabu.mp4",
+    "tags": ["rainy_day", "all"]
+  }
+}
