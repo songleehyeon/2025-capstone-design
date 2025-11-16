@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 광고 AR 시스템</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>📱 스마트 광고 AR 시스템</h1>
+            <p class="subtitle">Camo Camera로 스마트폰 카메라를 연결하세요</p>
+        </header>
+
+        <!-- 페르소나 정보 표시 -->
+        <div id="persona-display" class="persona-display">
+            <div class="persona-info">
+                <span id="persona-name" class="persona-name">로딩 중...</span>
+                <span id="persona-tags" class="persona-tags"></span>
+            </div>
+            <a href="/admin" class="admin-link">⚙️ 페르소나 설정</a>
+        </div>
+
+        <!-- 비디오 컨테이너 (웹캠 + 오버레이) -->
+        <div class="video-container">
+            <!-- 웹캠 스트림 -->
+            <video id="webcam" autoplay playsinline></video>
+
+            <!-- 캔버스 (프레임 캡처용, 숨김) -->
+            <canvas id="canvas" style="display: none;"></canvas>
+
+            <!-- 오버레이 레이어 -->
+            <div id="overlay-layer" class="overlay-layer">
+                <!-- 오버레이들이 여기에 동적으로 추가됩니다 -->
+            </div>
+
+            <!-- 로딩 인디케이터 -->
+            <div id="loading" class="loading-indicator">
+                <div class="spinner"></div>
+                <p>OCR 처리 중...</p>
+            </div>
+        </div>
+
+        <!-- 컨트롤 패널 -->
+        <div class="control-panel">
+            <div class="camera-selector">
+                <label for="camera-select">카메라 선택:</label>
+                <select id="camera-select" class="camera-dropdown">
+                    <option value="">카메라를 불러오는 중...</option>
+                </select>
+            </div>
+
+            <button id="start-btn" class="btn btn-primary">카메라 시작</button>
+            <button id="stop-btn" class="btn btn-secondary" disabled>카메라 중지</button>
+            <button id="toggle-ocr" class="btn btn-toggle">OCR ON</button>
+
+            <div class="stats">
+                <span>FPS: <span id="fps">0</span></span>
+                <span>OCR 호출: <span id="ocr-count">0</span></span>
+                <span>오버레이: <span id="overlay-count">0</span></span>
+            </div>
+        </div>
+
+        <!-- 디버그 패널 -->
+        <div class="debug-panel">
+            <h3>🔍 디버그 정보</h3>
+            <div id="debug-info">
+                <p>준비 중...</p>
+            </div>
+            <h3>📋 OCR 결과</h3>
+            <div id="ocr-results">
+                <p>텍스트 인식 대기 중...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

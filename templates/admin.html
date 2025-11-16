@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페르소나 관리 - 스마트 광고 AR</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>🎭 사용자 페르소나 설정</h1>
+            <p class="subtitle">설정한 페르소나가 스마트폰에 실시간으로 반영됩니다</p>
+        </header>
+
+        <!-- 메인 폼 -->
+        <div class="form-container">
+            <form id="persona-form">
+                <!-- 사용자 ID -->
+                <div class="form-group">
+                    <label for="user-id">👤 사용자 ID</label>
+                    <input type="text" id="user-id" value="user001" readonly>
+                </div>
+
+                <!-- 페르소나 선택 -->
+                <div class="form-group">
+                    <label>🎯 페르소나 선택</label>
+                    <div class="persona-cards">
+                        <div class="persona-card" data-persona="young-female">
+                            <div class="persona-icon">👩</div>
+                            <h3>2-30대 여성</h3>
+                            <p>패션, 뷰티, 카페</p>
+                        </div>
+                        <div class="persona-card" data-persona="young-male">
+                            <div class="persona-icon">👨</div>
+                            <h3>2-30대 남성</h3>
+                            <p>게임, IT, 운동</p>
+                        </div>
+                        <div class="persona-card" data-persona="middle-female">
+                            <div class="persona-icon">👩‍💼</div>
+                            <h3>4-50대 여성</h3>
+                            <p>육아, 가전, 건강</p>
+                        </div>
+                        <div class="persona-card" data-persona="middle-male">
+                            <div class="persona-icon">👨‍💼</div>
+                            <h3>4-50대 남성</h3>
+                            <p>자동차, 투자, 골프</p>
+                        </div>
+                        <div class="persona-card" data-persona="senior">
+                            <div class="persona-icon">👴</div>
+                            <h3>시니어</h3>
+                            <p>건강, 여행, 취미</p>
+                        </div>
+                        <div class="persona-card active" data-persona="custom">
+                            <div class="persona-icon">⚙️</div>
+                            <h3>커스텀</h3>
+                            <p>직접 설정</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 커스텀 설정 -->
+                <div id="custom-settings">
+                    <!-- 선호 음료 -->
+                    <div class="form-group">
+                        <label for="coffee-types">☕ 선호 음료 (쉼표로 구분)</label>
+                        <input type="text" id="coffee-types" placeholder="예: 라떼, 아메리카노, 카푸치노">
+                    </div>
+
+                    <!-- 알레르기 -->
+                    <div class="form-group">
+                        <label for="allergies">⚠️ 알레르기 성분 (쉼표로 구분)</label>
+                        <input type="text" id="allergies" placeholder="예: 우유, 견과류">
+                    </div>
+
+                    <!-- 관심사 -->
+                    <div class="form-group">
+                        <label for="interests">💡 관심사 (쉼표로 구분)</label>
+                        <input type="text" id="interests" placeholder="예: 운동, 전자제품, 패션">
+                    </div>
+
+                    <!-- 식이 제한 -->
+                    <div class="form-group">
+                        <label>🥗 식이 제한</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="vegetarian">
+                                채식주의자
+                            </label>
+                            <label>
+                                <input type="checkbox" id="vegan">
+                                비건
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 가격 민감도 -->
+                    <div class="form-group">
+                        <label for="price-sensitivity">💰 가격 민감도</label>
+                        <select id="price-sensitivity">
+                            <option value="low">낮음 (프리미엄 선호)</option>
+                            <option value="medium" selected>보통</option>
+                            <option value="high">높음 (가성비 중시)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 버튼 -->
+                <div class="button-group">
+                    <button type="button" id="save-btn" class="btn btn-primary">💾 저장 및 적용</button>
+                    <button type="button" id="reset-btn" class="btn btn-secondary">🔄 초기화</button>
+                </div>
+            </form>
+
+            <!-- 상태 표시 -->
+            <div id="status-message" class="status-message"></div>
+        </div>
+
+        <!-- 미리보기 -->
+        <div class="preview-section">
+            <h2>📋 현재 프로필</h2>
+            <pre id="profile-preview">{}</pre>
+        </div>
+
+        <!-- 하단 링크 -->
+        <div class="footer-links">
+            <a href="/" class="link">📱 스마트폰 뷰로 이동</a>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

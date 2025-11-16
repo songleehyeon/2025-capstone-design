@@ -1,0 +1,4 @@
+{
+  "openai_api_key": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "_comment": "OpenAI API 키를 설정하세요. api_config.json 파일을 생성하고 실제 키를 입력하세요."
+}

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# PaddleOCR 모델 (용량이 크므로 제외)
+.paddlex/
+PaddleOCR_models/
+
+# 설정 파일 (API 키 등)
+config/api_config.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 로그
+*.log
+
+# 임시 파일
+*.tmp
+*.bak
+*.backup

@@ -1,0 +1,23 @@
+{
+  "user_id": "user001",
+  "preferences": {
+    "coffee_type": [
+      "라떼",
+      "바닐라라떼",
+      "카푸치노"
+    ],
+    "dietary": {
+      "allergies": [],
+      "vegetarian": false,
+      "vegan": false
+    },
+    "price_sensitivity": "medium",
+    "interests": [
+      "패션",
+      "뷰티",
+      "카페",
+      "SNS"
+    ]
+  },
+  "personalization_level": "high"
+}
