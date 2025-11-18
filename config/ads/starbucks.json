@@ -1,0 +1,299 @@
+{
+  "brand": "Starbucks",
+  "category": "cafe",
+  "detection_keywords": ["boost", "my", "day", "starbucks"],
+  "products": {
+    "P1": {
+      "id": "P1",
+      "name": "더블 에스프레소 크림 라떼",
+      "tags": ["coffee", "latte", "cream", "sweet"],
+      "allergies": [],
+      "caffeine": "high",
+      "sugar": "medium",
+      "options": ["decaf"],
+      "target_demographics": {
+        "gender": ["female"],
+        "age_group": ["20s", "30s"]
+      }
+    },
+    "P2": {
+      "id": "P2",
+      "name": "말차 초콜릿 라떼",
+      "tags": ["matcha", "chocolate", "sweet", "latte"],
+      "allergies": [],
+      "caffeine": "low",
+      "sugar": "high",
+      "options": [],
+      "target_demographics": {
+        "gender": ["female"],
+        "age_group": ["10s"]
+      }
+    },
+    "P3": {
+      "id": "P3",
+      "name": "홀그레인 오트 라떼",
+      "tags": ["oat", "healthy", "latte"],
+      "allergies": ["gluten"],
+      "caffeine": "low",
+      "sugar": "medium",
+      "options": ["vegan"],
+      "target_demographics": {
+        "age_group": ["50s", "60s+"]
+      }
+    }
+  },
+  "store": {
+    "location": "강남점",
+    "crowd_level": "high"
+  },
+  "rules": [
+    {
+      "rule_id": "WARN",
+      "type": "warning",
+      "priority": 100,
+      "category": "allergy_warning",
+      "conditions": {
+        "type": "allergy_match",
+        "user_field": "allergies",
+        "product_field": "allergies"
+      },
+      "message_template": "⚠️ 주의! {allergen}이 들어간 제품이에요",
+      "color": [255, 200, 200]
+    },
+    {
+      "rule_id": "WARN",
+      "type": "warning",
+      "priority": 100,
+      "category": "caffeine_warning",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "low_caffeine_preference", "value": true},
+          {"type": "product_field_equals", "field": "caffeine", "value": "high"},
+          {"type": "product_has_option", "option": "decaf"}
+        ]
+      },
+      "message": "⚠️ 주의! 고카페인이 함유된 제품이에요\n💡 디카페인 옵션으로 변경 가능",
+      "color": [255, 220, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "demographic_match",
+      "conditions": {
+        "type": "product_demographic_match",
+        "match_gender": true,
+        "match_age_group": true
+      },
+      "message_templates": {
+        "female_20s_30s": "💁‍♀️ 2-30대 여성이 많이 주문한 메뉴예요",
+        "female_10s": "💁‍♀️ 10대 여성이 많이 주문한 메뉴예요",
+        "50s_60s": "👥 50대 이상이 많이 주문한 메뉴예요"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 30,
+      "category": "frequency_event",
+      "conditions": {
+        "type": "equals",
+        "user_field": "price_sensitivity",
+        "value": "high"
+      },
+      "message": "🎁 시즌 음료를 구입하면 프리퀀시가 3개 남아요!",
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 20,
+      "category": "frequency_event_medium",
+      "conditions": {
+        "type": "equals",
+        "user_field": "price_sensitivity",
+        "value": "medium"
+      },
+      "message": "🎁 시즌 음료를 구입하면 프리퀀시가 3개 남아요!",
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 30,
+      "category": "student_discount",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "array_contains", "user_field": "occupation", "value": "student"},
+          {"type": "equals", "user_field": "price_sensitivity", "value": "high"}
+        ]
+      },
+      "message": "🎓 학생 할인쿠폰이 적용가능한 상품이에요",
+      "color": [220, 230, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 20,
+      "category": "student_discount_medium",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "array_contains", "user_field": "occupation", "value": "student"},
+          {"type": "equals", "user_field": "price_sensitivity", "value": "medium"}
+        ]
+      },
+      "message": "🎓 학생 할인쿠폰이 적용가능한 상품이에요",
+      "color": [220, 230, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 30,
+      "category": "cold_weather_latte_hot",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "weather", "value": "cold"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "latte"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "hot"}
+        ]
+      },
+      "message": "❄️ 쌀쌀한 날씨, 따뜻한 라떼는 어떠세요?",
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "cold_weather_latte_or_hot",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "weather", "value": "cold"},
+          {"type": "or", "rules": [
+            {"type": "array_contains", "user_field": "attribute_preferences", "value": "latte"},
+            {"type": "array_contains", "user_field": "attribute_preferences", "value": "hot"}
+          ]}
+        ]
+      },
+      "message": "❄️ 쌀쌀한 날씨, 따뜻한 라떼는 어떠세요?",
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 10,
+      "category": "cold_weather_general",
+      "conditions": {
+        "type": "context_equals",
+        "field": "weather",
+        "value": "cold"
+      },
+      "message": "❄️ 쌀쌀한 날씨, 따뜻한 라떼는 어떠세요?",
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 30,
+      "category": "afternoon_sweet_matcha",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "current_time", "value": "afternoon"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "sweet"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "matcha"}
+        ]
+      },
+      "message": "🍫 오후 시간, 달콤한 메뉴로 당충전 어떠세요?",
+      "product_id": "P2",
+      "color": [240, 220, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "afternoon_sweet",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "current_time", "value": "afternoon"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "sweet"}
+        ]
+      },
+      "message": "🍫 오후 시간, 달콤한 메뉴로 당충전 어떠세요?",
+      "product_id": "P2",
+      "color": [240, 220, 255]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 10,
+      "category": "afternoon_general",
+      "conditions": {
+        "type": "context_equals",
+        "field": "current_time",
+        "value": "afternoon"
+      },
+      "message": "🍫 오후 시간, 달콤한 메뉴로 당충전 어떠세요?",
+      "product_id": "P2",
+      "color": [240, 220, 255]
+    },
+    {
+      "rule_id": "CROWD_LEVEL",
+      "type": "info",
+      "priority": 100,
+      "category": "crowd_very_high",
+      "conditions": {
+        "type": "store_field_equals",
+        "field": "crowd_level",
+        "value": "very_high"
+      },
+      "message": "🚨 혼잡도: 매우 혼잡! 대기 시간: 12분",
+      "color": [255, 210, 210]
+    },
+    {
+      "rule_id": "CROWD_LEVEL",
+      "type": "info",
+      "priority": 30,
+      "category": "crowd_high",
+      "conditions": {
+        "type": "store_field_equals",
+        "field": "crowd_level",
+        "value": "high"
+      },
+      "message": "⚠️ 혼잡도: 혼잡 대기 시간: 8분",
+      "color": [255, 235, 210]
+    },
+    {
+      "rule_id": "CROWD_LEVEL",
+      "type": "info",
+      "priority": 20,
+      "category": "crowd_medium",
+      "conditions": {
+        "type": "store_field_equals",
+        "field": "crowd_level",
+        "value": "medium"
+      },
+      "message": "ℹ️ 혼잡도: 보통 대기 시간: 5분",
+      "color": [230, 245, 230]
+    },
+    {
+      "rule_id": "CROWD_LEVEL",
+      "type": "info",
+      "priority": 10,
+      "category": "crowd_low",
+      "conditions": {
+        "type": "store_field_equals",
+        "field": "crowd_level",
+        "value": "low"
+      },
+      "message": "✅ 혼잡도: 여유 대기 시간: 3분",
+      "color": [220, 250, 220]
+    }
+  ]
+}

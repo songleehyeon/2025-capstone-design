@@ -3,6 +3,8 @@
 
 Camo camera를 통한 웹캠 스트림을 받아 OCR 처리 후
 개인화된 오버레이 데이터를 JSON으로 반환
+
+User Profile: user02 (서강대 학생 김민수)
 """
 
 from flask import Flask, render_template, request, jsonify
@@ -11,6 +13,7 @@ import cv2
 import numpy as np
 import base64
 import sys
+import json
 from pathlib import Path
 
 # Windows 콘솔 인코딩 문제 해결
@@ -36,9 +39,22 @@ print("=" * 60)
 print("웹 기반 스마트 광고 시스템 초기화 중...")
 print("=" * 60)
 
-ocr_processor = OCRProcessor(engine='paddleocr', gpu=False, enable_llm_correction=False)
-personalization_engine = PersonalizationEngine()
+# 초기화 상태 추적
+backend_ready = False
+initialization_status = {
+    'ocr_ready': False,
+    'personalization_ready': False,
+    'aruco_ready': False
+}
 
+ocr_processor = OCRProcessor(engine='paddleocr', gpu=False, enable_llm_correction=False, use_aruco=True)
+initialization_status['ocr_ready'] = True
+initialization_status['aruco_ready'] = True
+
+personalization_engine = PersonalizationEngine()
+initialization_status['personalization_ready'] = True
+
+backend_ready = True
 print("✓ 백엔드 초기화 완료")
 print("=" * 60)
 
@@ -136,6 +152,7 @@ def process_frame():
 def apply_hardcoded_rules(ocr_results):
     """
     하드코딩된 룰 기반 오버레이 생성
+    (현재는 사용하지 않음 - 모든 광고는 설정 기반 통합 추천 엔진에서 처리)
 
     Args:
         ocr_results: OCR 결과 리스트
@@ -145,77 +162,8 @@ def apply_hardcoded_rules(ocr_results):
     """
     overlays = []
 
-    # 모든 텍스트 합치기 (대소문자 구분 없이)
-    all_text = ' '.join([item['text'] for item in ocr_results])
-    all_text_lower = all_text.lower()
-
-    # ========== 테스트용 광고 전단지 룰 ==========
-
-    # 룰 1: "LG" 또는 "electronics" 감지 시
-    if 'lg' in all_text_lower or 'electronics' in all_text_lower or 'electron' in all_text_lower:
-        overlays.append({
-            'type': 'promotion',
-            'position': 'top-center',
-            'content': '🔌 LG 신제품 출시 특가! 최대 30% 할인',
-            'style': 'coffee',  # 파란색 계열로 변경 가능
-            'reason': '하드코딩 룰: LG Electronics 감지'
-        })
-        overlays.append({
-            'type': 'badge',
-            'position': 'top-right',
-            'content': '5년 무상 A/S',
-            'style': 'new',
-            'reason': '하드코딩 룰: LG 부가 혜택'
-        })
-
-    # 룰 2: "BALANCE" 또는 "LAB" 감지 시
-    if 'balance' in all_text_lower or 'lab' in all_text_lower or '근골격' in all_text or '운동' in all_text:
-        overlays.append({
-            'type': 'promotion',
-            'position': 'center',
-            'content': '💪 첫 방문 고객 1개월 무료 체험!',
-            'style': 'dessert',
-            'reason': '하드코딩 룰: BALANCE LAB 감지'
-        })
-        overlays.append({
-            'type': 'suggestion',
-            'position': 'bottom-center',
-            'content': '🏋️ PT 3개월 등록 시 1개월 추가 증정',
-            'style': 'dessert',
-            'reason': '하드코딩 룰: BALANCE LAB 프로모션'
-        })
-
-    # ========== 기존 카페 관련 룰 (참고용) ==========
-
-    # 룰 3: "라떼" 감지 시 따뜻한 음료 추천
-    if '라떼' in all_text or '라떼' in all_text:
-        overlays.append({
-            'type': 'promotion',
-            'position': 'top-left',
-            'content': '☕ 쌀쌀한 아침에 따뜻한 라떼는 어떠세요?',
-            'style': 'coffee',
-            'reason': '하드코딩 룰: 라떼 감지'
-        })
-
-    # 룰 4: "아메리카노" 감지 시 추가 샷 추천
-    if '아메리카노' in all_text:
-        overlays.append({
-            'type': 'badge',
-            'position': 'top-right',
-            'content': '샷 추가 +500원',
-            'style': 'espresso',
-            'reason': '하드코딩 룰: 아메리카노 감지'
-        })
-
-    # 룰 5: "케이크" 또는 "디저트" 감지 시 페어링 추천
-    if '케이크' in all_text or '디저트' in all_text:
-        overlays.append({
-            'type': 'suggestion',
-            'position': 'bottom-left',
-            'content': '🍰 커피와 함께 즐기시면 더 맛있어요!',
-            'style': 'dessert',
-            'reason': '하드코딩 룰: 디저트 감지'
-        })
+    # 모든 광고는 personalization_engine의 통합 추천 엔진에서 자동으로 처리됨
+    # 브랜드별 룰은 config/ads/*.json 파일에 정의되어 있음
 
     return overlays
 
@@ -236,16 +184,22 @@ def update_profile():
 
     Request:
         {
-            "user_id": "user001",
-            "preferences": {
-                "coffee_type": ["라떼", "아메리카노"],
-                "dietary": {
-                    "allergies": ["우유"],
-                    "vegetarian": false,
-                    "vegan": false
-                },
-                "price_sensitivity": "medium",
-                "interests": ["패션", "IT"]
+            "user_id": "user01",
+            "gender": "female",
+            "age": 28,
+            "age_group": "20s",
+            "occupation": ["worker", "bank"],
+            "living_type": ["single_household", "single"],
+            "allergies": [],
+            "vegan": false,
+            "low_sugar_preference": true,
+            "low_caffeine_preference": false,
+            "price_sensitivity": "high",
+            "attribute_preferences": ["ice", "sweet", "latte", ...],
+            "context": {
+                "current_time": "afternoon",
+                "day_type": "weekday",
+                "weather": "cold"
             },
             "personalization_level": "high"
         }
@@ -272,8 +226,9 @@ def update_profile():
         personalization_engine._save_profile()
 
         print(f"✓ 프로필 업데이트 완료: {data.get('user_id', 'Unknown')}")
-        print(f"  선호 음료: {data.get('preferences', {}).get('coffee_type', [])}")
-        print(f"  관심사: {data.get('preferences', {}).get('interests', [])}")
+        print(f"  성별: {data.get('gender', 'Unknown')}, 나이: {data.get('age', 'Unknown')}")
+        print(f"  선호 속성: {data.get('attribute_preferences', [])}")
+        print(f"  가격 민감도: {data.get('price_sensitivity', 'medium')}")
 
         return jsonify({
             'success': True,
@@ -292,6 +247,16 @@ def update_profile():
         }), 500
 
 
+@app.route('/api/ready', methods=['GET'])
+def check_readiness():
+    """백엔드 준비 상태 확인"""
+    return jsonify({
+        'ready': backend_ready,
+        'status': initialization_status,
+        'message': '백엔드 준비 완료' if backend_ready else 'OCR 모델 로딩중...'
+    })
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """헬스 체크"""
@@ -302,11 +267,146 @@ def health_check():
     })
 
 
+@app.route('/api/personas', methods=['GET'])
+def get_personas():
+    """모든 페르소나 목록 조회"""
+    try:
+        personas_path = Path(__file__).parent / 'config' / 'personas.json'
+        with open(personas_path, 'r', encoding='utf-8') as f:
+            personas_data = json.load(f)
+
+        return jsonify({
+            'success': True,
+            'personas': personas_data.get('personas', {})
+        })
+    except Exception as e:
+        print(f"페르소나 로드 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+def convert_persona_to_profile(persona_data: dict) -> dict:
+    """
+    페르소나 구조를 user_profile 구조로 변환
+
+    Args:
+        persona_data: personas.json의 페르소나 데이터
+
+    Returns:
+        user_profile.json 형식의 프로필
+    """
+    demographics = persona_data.get('demographics', {})
+    living = persona_data.get('living', {})
+    dietary = persona_data.get('dietary', {})
+    preferences = persona_data.get('preferences', {})
+    context = persona_data.get('context', {})
+
+    profile = {
+        'user_id': persona_data.get('id', 'unknown'),
+        'persona_type': persona_data.get('id', 'unknown'),
+        'persona_name': persona_data.get('displayName', persona_data.get('name', 'Unknown')),
+        'gender': demographics.get('gender', 'unknown'),
+        'age': demographics.get('age', 25),
+        'age_group': demographics.get('age_group', '20s'),
+        'occupation': demographics.get('occupation', []),
+        'living_type': living.get('type', []),
+        'allergies': dietary.get('allergies', []),
+        'vegan': dietary.get('vegan', False),
+        'low_sugar_preference': dietary.get('low_sugar_preference', False),
+        'low_caffeine_preference': dietary.get('low_caffeine_preference', False),
+        'price_sensitivity': preferences.get('price_sensitivity', 'medium'),
+        'attribute_preferences': preferences.get('attribute_preferences', []),
+        'context': context,
+        'personalization_level': 'high'
+    }
+
+    return profile
+
+
+@app.route('/api/select_persona', methods=['POST'])
+def select_persona():
+    """
+    페르소나 선택 및 활성화
+
+    Request:
+        {
+            "persona_id": "young-female"
+        }
+
+    Response:
+        {
+            "success": true,
+            "profile": {...}
+        }
+    """
+    try:
+        data = request.get_json()
+        persona_id = data.get('persona_id')
+
+        if not persona_id:
+            return jsonify({
+                'success': False,
+                'error': '페르소나 ID가 필요합니다.'
+            }), 400
+
+        # 페르소나 데이터 로드
+        personas_path = Path(__file__).parent / 'config' / 'personas.json'
+        with open(personas_path, 'r', encoding='utf-8') as f:
+            personas_data = json.load(f)
+
+        personas = personas_data.get('personas', {})
+        if persona_id not in personas:
+            return jsonify({
+                'success': False,
+                'error': f'페르소나를 찾을 수 없습니다: {persona_id}'
+            }), 404
+
+        # 페르소나를 user_profile 형식으로 변환
+        persona_data = personas[persona_id]
+        user_profile = convert_persona_to_profile(persona_data)
+
+        # personalization_engine의 프로필 업데이트
+        personalization_engine.user_profile = user_profile
+
+        # user_profile.json 파일에 저장
+        personalization_engine._save_profile()
+
+        print(f"✓ 페르소나 선택: {user_profile.get('persona_name', 'Unknown')}")
+        print(f"  ID: {persona_id}")
+
+        return jsonify({
+            'success': True,
+            'message': f"페르소나 '{user_profile.get('persona_name')}' 선택됨",
+            'profile': user_profile
+        })
+
+    except Exception as e:
+        print(f"페르소나 선택 오류: {e}")
+        import traceback
+        traceback.print_exc()
+
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 if __name__ == '__main__':
+    import socket
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+
     print("\n🚀 Flask 서버 시작...")
-    print("📱 브라우저에서 https://localhost:5000 접속 (HTTPS)")
-    print("💡 스마트폰에서도 접속 가능 (HTTPS 필수)")
+    print(f"📱 PC 브라우저: https://localhost:5000")
+    print(f"📱 스마트폰: https://{local_ip}:5000")
+    print(f"\n⚠️  인증서 경고 해결 방법:")
+    print(f"   1. 브라우저에서 '고급' 또는 'Advanced' 클릭")
+    print(f"   2. '안전하지 않음(계속)' 또는 'Proceed to...' 클릭")
+    print(f"   3. 카메라 권한 허용")
+    print(f"\n💡 같은 Wi-Fi에 연결되어 있는지 확인하세요")
     print("\n종료하려면 Ctrl+C를 누르세요\n")
 
-    # HTTPS로 실행 (adhoc SSL 사용 - 개발/테스트용)
+    # HTTPS로 실행 (카메라 접근 필수)
     app.run(host='0.0.0.0', port=5000, debug=True, threaded=True, ssl_context='adhoc')

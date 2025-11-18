@@ -1,0 +1,112 @@
+{
+  "brand": "HyundaiSeoul",
+  "category": "exhibition",
+  "detection_keywords": ["the hyundai seoul", "store"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "female_20s_30s",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "gender", "value": "female"},
+          {"type": "in_array", "user_field": "age_group", "values": ["20s", "30s"]}
+        ]
+      },
+      "message": "💁‍♀️ 2-30대 여성이 많이 방문한 전시예요",
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "couple",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "living_type",
+        "value": "in a relationship"
+      },
+      "message": "💑 커플끼리 방문하기 좋은 이벤트예요",
+      "color": [255, 220, 240]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "type": "recommendation",
+      "priority": 25,
+      "category": "similar_brands",
+      "conditions": {
+        "type": "or",
+        "rules": [
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "nike"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "adidas"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "sports"}
+        ]
+      },
+      "message": "👟 ZEXYMIX, ANDAR와 유사한 브랜드예요",
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 30,
+      "category": "sns_gift",
+      "conditions": {
+        "type": "equals",
+        "user_field": "price_sensitivity",
+        "value": "high"
+      },
+      "message": "🎁 SNS 방문 인증 시 기프트 증정",
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 15,
+      "category": "new_edition",
+      "conditions": {
+        "type": "always_true"
+      },
+      "message": "✨ 2025 Winter 에디션 상품을 만나보세요",
+      "color": [240, 250, 255]
+    },
+    {
+      "rule_id": "LOC_INFO",
+      "type": "info",
+      "priority": 20,
+      "category": "sogang_distance",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "sogang university"
+      },
+      "message": "🚇 서강대학교에서 지하철 34분 거리",
+      "color": [230, 245, 230]
+    },
+    {
+      "rule_id": "PURCHASE_INFO",
+      "type": "info",
+      "priority": 10,
+      "category": "reservation_link",
+      "conditions": {
+        "type": "always_true"
+      },
+      "message": "📱 예약 정보: https://hyundai.com/popup",
+      "color": [245, 245, 245]
+    },
+    {
+      "rule_id": "WEATHER_RECOMM",
+      "type": "recommendation",
+      "priority": 15,
+      "category": "winter_new_arrival",
+      "conditions": {
+        "type": "context_equals",
+        "field": "weather",
+        "value": "cold"
+      },
+      "message": "❄️ 겨울맞이 다양한 신상이 공개되었어요",
+      "color": [210, 230, 255]
+    }
+  ]
+}

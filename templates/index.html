@@ -7,12 +7,38 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <!-- 백엔드 초기화 로딩 오버레이 -->
+    <div id="backend-loading" class="backend-loading-overlay">
+        <div class="backend-loading-content">
+            <div class="loading-spinner"></div>
+            <h2 id="loading-title">OCR 모델 로딩중...</h2>
+            <p id="loading-message">잠시만 기다려주세요</p>
+            <div class="loading-progress">
+                <div id="loading-progress-bar" class="progress-bar"></div>
+            </div>
+            <div class="loading-details">
+                <div class="loading-step">
+                    <span class="step-icon" id="ocr-icon">⏳</span>
+                    <span>OCR 엔진 초기화</span>
+                </div>
+                <div class="loading-step">
+                    <span class="step-icon" id="aruco-icon">⏳</span>
+                    <span>ArUco 마커 검출기</span>
+                </div>
+                <div class="loading-step">
+                    <span class="step-icon" id="personalization-icon">⏳</span>
+                    <span>개인화 엔진</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 메인 컨테이너 -->
     <div class="container">
         <!-- 헤더 -->
         <header class="header">
             <h1>📱 스마트 광고 AR 시스템</h1>
-            <p class="subtitle">Camo Camera로 스마트폰 카메라를 연결하세요</p>
+            <p class="subtitle">[링크]에 접속하여 스마트폰 카메라를 연결하세요</p>
         </header>
 
         <!-- 페르소나 정보 표시 -->

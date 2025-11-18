@@ -1,0 +1,85 @@
+{
+  "brand": "GameRPG",
+  "category": "mobile_game",
+  "detection_keywords": ["rpg", "게임", "모바일게임", "리니지", "검은사막"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "type": "recommendation",
+      "priority": 20,
+      "category": "male_10s_20s",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "gender", "value": "male"},
+          {"type": "in_array", "user_field": "age_group", "values": ["10s", "20s"]}
+        ]
+      },
+      "message": "🎮 1-20대 남성에게 인기 많은 게임이에요",
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "type": "recommendation",
+      "priority": 25,
+      "category": "similar_games",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "gaming"
+      },
+      "message": "⚔️ 리니지, 검은사막과 유사한 게임이에요",
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 30,
+      "category": "webtoon_cookie_high",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "price_sensitivity", "value": "high"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "webtoon"}
+        ]
+      },
+      "message": "📱 접속만으로 네이버 웹툰 쿠키 3개 증정",
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 20,
+      "category": "webtoon_cookie_medium",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "webtoon"
+      },
+      "message": "📱 접속만으로 네이버 웹툰 쿠키 3개 증정",
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 25,
+      "category": "signup_diamond",
+      "conditions": {
+        "type": "always_true"
+      },
+      "message": "💎 가입 시 3,000 다이아 즉시 지급",
+      "color": [255, 235, 200]
+    },
+    {
+      "rule_id": "PURCHASE_INFO",
+      "type": "info",
+      "priority": 10,
+      "category": "download_link",
+      "conditions": {
+        "type": "always_true"
+      },
+      "message": "📱 다운로드: https://play.google.com/...",
+      "color": [245, 245, 245]
+    }
+  ]
+}

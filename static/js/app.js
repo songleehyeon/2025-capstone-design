@@ -53,11 +53,24 @@ class SmartAdARSystem {
         const host = window.location.host; // hostname:port
         this.apiUrl = `${protocol}//${host}/api/process_frame`;
         this.profileUrl = `${protocol}//${host}/api/user_profile`;
+        this.readyUrl = `${protocol}//${host}/api/ready`;
+
+        // 로딩 오버레이 요소
+        this.backendLoading = document.getElementById('backend-loading');
+        this.loadingProgressBar = document.getElementById('loading-progress-bar');
+        this.ocrIcon = document.getElementById('ocr-icon');
+        this.arucoIcon = document.getElementById('aruco-icon');
+        this.personalizationIcon = document.getElementById('personalization-icon');
+        this.loadingTitle = document.getElementById('loading-title');
+        this.loadingMessage = document.getElementById('loading-message');
 
         this.init();
     }
 
     async init() {
+        // 백엔드 준비 상태 확인
+        await this.waitForBackendReady();
+
         // 이벤트 리스너 등록
         this.startBtn.addEventListener('click', () => this.startCamera());
         this.stopBtn.addEventListener('click', () => this.stopCamera());
@@ -74,6 +87,68 @@ class SmartAdARSystem {
         await this.loadCameras();
 
         this.updateDebugInfo('시스템 초기화 완료');
+    }
+
+    async waitForBackendReady() {
+        let progress = 0;
+        const maxRetries = 60; // 최대 60초 대기
+        let retries = 0;
+
+        while (retries < maxRetries) {
+            try {
+                const response = await fetch(this.readyUrl);
+                const data = await response.json();
+
+                // 진행률 업데이트
+                progress = 0;
+                if (data.status.ocr_ready) {
+                    progress += 33.3;
+                    this.ocrIcon.textContent = '✅';
+                }
+                if (data.status.aruco_ready) {
+                    progress += 33.3;
+                    this.arucoIcon.textContent = '✅';
+                }
+                if (data.status.personalization_ready) {
+                    progress += 33.4;
+                    this.personalizationIcon.textContent = '✅';
+                }
+
+                this.loadingProgressBar.style.width = `${progress}%`;
+
+                // 모든 컴포넌트가 준비되면
+                if (data.ready) {
+                    this.loadingTitle.textContent = '준비 완료!';
+                    this.loadingMessage.textContent = '카메라를 시작할 수 있습니다';
+
+                    // 0.5초 후 로딩 화면 제거
+                    setTimeout(() => {
+                        this.backendLoading.classList.add('fade-out');
+                        setTimeout(() => {
+                            this.backendLoading.style.display = 'none';
+                        }, 500);
+                    }, 500);
+
+                    return;
+                }
+
+                // 1초 대기 후 재시도
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                retries++;
+
+            } catch (error) {
+                console.error('백엔드 상태 확인 실패:', error);
+                this.loadingMessage.textContent = '서버 연결 중... (' + (retries + 1) + '/' + maxRetries + ')';
+
+                // 1초 대기 후 재시도
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                retries++;
+            }
+        }
+
+        // 타임아웃 시 경고 표시
+        this.loadingTitle.textContent = '연결 실패';
+        this.loadingMessage.textContent = '서버에 연결할 수 없습니다. 페이지를 새로고침하세요.';
     }
 
     async loadCameras() {
@@ -309,8 +384,14 @@ class SmartAdARSystem {
         this.clearOverlays();
 
         if (!overlays || overlays.length === 0) {
+            console.log('오버레이 없음');
             return;
         }
+
+        console.log(`🎨 ${overlays.length}개 오버레이 렌더링 시작`);
+        overlays.forEach((overlay, idx) => {
+            console.log(`  오버레이 ${idx+1}:`, overlay);
+        });
 
         this.overlayCountElement.textContent = overlays.length;
 
@@ -318,14 +399,23 @@ class SmartAdARSystem {
             const element = this.createOverlayElement(overlay);
             this.overlayLayer.appendChild(element);
         });
+
+        console.log(`✓ 오버레이 렌더링 완료`);
     }
 
     createOverlayElement(overlay) {
         const div = document.createElement('div');
-        div.className = `overlay-${overlay.type} ${overlay.position || ''} ${overlay.style || ''}`;
-        div.textContent = overlay.content;
 
-        // 커스텀 위치 (bbox 기반)
+        // position이 배열이면 CSS 클래스로 사용하지 않음
+        const positionClass = Array.isArray(overlay.position) ? '' : (overlay.position || '');
+        div.className = `overlay-${overlay.type} ${positionClass} ${overlay.style || ''}`.trim();
+
+        // 텍스트 내용 설정 (줄바꿈 처리)
+        if (overlay.content) {
+            div.innerHTML = overlay.content.replace(/\n/g, '<br>');
+        }
+
+        // 위치 설정 우선순위: bbox > position 배열 > CSS 클래스
         if (overlay.bbox) {
             // bbox는 [[x1,y1], [x2,y2], [x3,y3], [x4,y4]] 형식
             const points = overlay.bbox;
@@ -338,6 +428,92 @@ class SmartAdARSystem {
             div.style.top = `${y}px`;
             div.style.width = `${width}px`;
             div.style.height = `${height}px`;
+        } else if (Array.isArray(overlay.position) && overlay.position.length === 2) {
+            // position이 [x, y] 배열 형태 - 비디오 크기 기준 상대 좌표로 변환
+            const videoRect = this.video.getBoundingClientRect();
+            const videoWidth = this.video.videoWidth || videoRect.width;
+            const videoHeight = this.video.videoHeight || videoRect.height;
+
+            // 원본 좌표를 퍼센트로 변환 (1920x1080 기준으로 가정)
+            const baseWidth = 1920;
+            const baseHeight = 1080;
+            const xPercent = (overlay.position[0] / baseWidth) * 100;
+            const yPercent = (overlay.position[1] / baseHeight) * 100;
+
+            div.style.position = 'absolute';
+            div.style.left = `${xPercent}%`;
+            div.style.top = `${yPercent}%`;
+            div.style.transform = 'translateX(0)'; // 기본값
+        }
+
+        // 색상 설정 (RGB 튜플) - 고급 글래스모피즘 스타일 (liquidGL 영감)
+        if (overlay.color && Array.isArray(overlay.color) && overlay.color.length === 3) {
+            const [r, g, b] = overlay.color;
+
+            // 기본 배경 (투명도 높임 - 더 투명하게)
+            div.style.backgroundColor = `rgba(${r}, ${g}, ${b}, 0.25)`;
+
+            // 강화된 블러와 채도, 밝기 효과
+            div.style.backdropFilter = 'blur(24px) saturate(200%) brightness(1.1)';
+            div.style.webkitBackdropFilter = 'blur(24px) saturate(200%) brightness(1.1)';
+
+            // 텍스트 색상 및 그림자
+            div.style.color = r + g + b > 400 ? '#1a1a1a' : '#fff';
+            div.style.textShadow = r + g + b > 400 ? '0 1px 2px rgba(255, 255, 255, 0.5)' : '0 1px 2px rgba(0, 0, 0, 0.3)';
+
+            // 패딩 및 레이아웃
+            div.style.padding = '14px 26px';
+            div.style.borderRadius = '24px';
+
+            // 다층 그림자로 깊이감 표현
+            div.style.boxShadow = `
+                0 8px 32px rgba(${r}, ${g}, ${b}, 0.15),
+                0 2px 8px rgba(${r}, ${g}, ${b}, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.05)
+            `;
+
+            // 투명 테두리 (pseudo-element에서 그라디언트 적용)
+            div.style.border = '1.5px solid transparent';
+            div.style.backgroundClip = 'padding-box';
+
+            // 타이포그래피
+            div.style.fontSize = '0.95rem';
+            div.style.fontWeight = '500';
+            div.style.maxWidth = '85%';
+            div.style.wordWrap = 'break-word';
+            div.style.lineHeight = '1.5';
+
+            // 유리 반사 하이라이트 추가 (::before 효과)
+            const highlight = document.createElement('div');
+            highlight.style.position = 'absolute';
+            highlight.style.top = '0';
+            highlight.style.left = '0';
+            highlight.style.right = '0';
+            highlight.style.height = '50%';
+            highlight.style.background = 'linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%)';
+            highlight.style.borderRadius = '24px 24px 0 0';
+            highlight.style.pointerEvents = 'none';
+            div.appendChild(highlight);
+
+            // 유리 테두리 굴절 효과 추가 (::after 효과)
+            const border = document.createElement('div');
+            border.style.position = 'absolute';
+            border.style.inset = '-1.5px';
+            border.style.borderRadius = '24px';
+            border.style.padding = '1.5px';
+            border.style.background = `linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.7) 0%,
+                rgba(255, 255, 255, 0.15) 50%,
+                rgba(255, 255, 255, 0.5) 100%
+            )`;
+            border.style.webkitMask = 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)';
+            border.style.webkitMaskComposite = 'xor';
+            border.style.maskComposite = 'exclude';
+            border.style.pointerEvents = 'none';
+            border.style.zIndex = '-1';
+            div.appendChild(border);
         }
 
         // 애니메이션 효과
@@ -348,14 +524,17 @@ class SmartAdARSystem {
 
     getAnimationForType(type) {
         const animations = {
-            'promotion': 'slideInDown 0.5s ease-out, pulse 2s infinite',
-            'badge': 'bounceIn 0.6s ease-out',
-            'suggestion': 'fadeInUp 0.5s ease-out',
-            'highlight': 'highlightPulse 1.5s infinite',
-            'warning': 'shake 0.5s ease-out, blinkWarning 1s infinite'
+            'promotion': 'fadeIn 0.4s ease-out',
+            'badge': 'fadeIn 0.3s ease-out',
+            'suggestion': 'fadeIn 0.4s ease-out',
+            'recommendation': 'fadeIn 0.4s ease-out',
+            'highlight': 'subtlePulse 2s infinite',
+            'warning': 'fadeIn 0.4s ease-out',
+            'info': 'fadeIn 0.4s ease-out',
+            'event': 'fadeIn 0.4s ease-out'
         };
 
-        return animations[type] || 'fadeIn 0.5s ease-out';
+        return animations[type] || 'fadeIn 0.4s ease-out';
     }
 
     clearOverlays() {
@@ -388,65 +567,59 @@ class SmartAdARSystem {
     }
 
     updatePersonaDisplay(profile) {
-        const prefs = profile.preferences || {};
-
-        // 페르소나 이름 결정
-        let personaName = '커스텀';
-        const coffeeTypes = prefs.coffee_type || [];
-        const interests = prefs.interests || [];
-
-        // 간단한 페르소나 추론 (실제로는 관리 페이지에서 설정한 값을 사용해야 함)
-        if (coffeeTypes.includes('라떼') && interests.includes('패션')) {
-            personaName = '20대 여성';
-        } else if (coffeeTypes.includes('아메리카노') && interests.includes('게임')) {
-            personaName = '20대 남성';
-        } else if (interests.includes('육아')) {
-            personaName = '30대 여성';
-        } else if (interests.includes('자동차')) {
-            personaName = '30대 남성';
-        } else if (interests.includes('건강') && interests.includes('여행')) {
-            personaName = '시니어';
-        }
-
+        // 페르소나 이름 (저장된 값 사용)
+        const personaName = profile.persona_name || '커스텀';
         this.personaName.textContent = personaName;
 
-        // 태그 생성
+        // 태그 생성 (새로운 구조에 맞게)
         const tags = [];
 
-        // 선호 음료
-        if (coffeeTypes.length > 0) {
-            tags.push(...coffeeTypes.slice(0, 3));
+        // 성별 + 나이
+        if (profile.gender && profile.age) {
+            const genderText = profile.gender === 'female' ? '여성' : profile.gender === 'male' ? '남성' : '기타';
+            tags.push(`${genderText}, ${profile.age}세`);
         }
 
-        // 관심사
-        if (interests.length > 0) {
-            tags.push(...interests.slice(0, 3));
+        // 직업
+        if (profile.occupation && profile.occupation.length > 0) {
+            tags.push(profile.occupation.join(', '));
+        }
+
+        // 선호 속성 (최대 3개)
+        const attrPrefs = profile.attribute_preferences || [];
+        if (attrPrefs.length > 0) {
+            tags.push(...attrPrefs.slice(0, 3));
+        }
+
+        // 가격 민감도
+        if (profile.price_sensitivity) {
+            const priceText = {
+                'low': '프리미엄 선호',
+                'medium': '보통',
+                'high': '가성비 중시'
+            };
+            tags.push(priceText[profile.price_sensitivity] || profile.price_sensitivity);
         }
 
         // 알레르기
-        const allergies = prefs.dietary?.allergies || [];
+        const allergies = profile.allergies || [];
         if (allergies.length > 0) {
             tags.push(`⚠️ ${allergies.join(', ')} 알레르기`);
         }
 
         // 식이 제한
-        if (prefs.dietary?.vegetarian) {
-            tags.push('🥗 채식주의');
+        if (profile.vegan) {
+            tags.push('🥗 비건');
         }
-        if (prefs.dietary?.vegan) {
-            tags.push('🌱 비건');
+        if (profile.low_sugar_preference) {
+            tags.push('🍬 저당 선호');
         }
-
-        // 가격 민감도
-        const priceSens = prefs.price_sensitivity;
-        if (priceSens === 'low') {
-            tags.push('💎 프리미엄 선호');
-        } else if (priceSens === 'high') {
-            tags.push('💰 가성비 중시');
+        if (profile.low_caffeine_preference) {
+            tags.push('☕ 저카페인 선호');
         }
 
-        // 태그 HTML 생성
-        this.personaTags.innerHTML = tags.map(tag =>
+        // 태그 HTML 생성 (최대 5개만 표시)
+        this.personaTags.innerHTML = tags.slice(0, 5).map(tag =>
             `<span class="persona-tag">${tag}</span>`
         ).join('');
     }

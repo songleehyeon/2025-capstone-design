@@ -24,7 +24,7 @@ os.makedirs('C:/PaddleOCR_models', exist_ok=True)
 class OCRProcessor:
     """OCR 기반 텍스트 인식 및 처리"""
 
-    def __init__(self, engine='easyocr', languages=['ko', 'en'], gpu=False, enable_llm_correction=False):
+    def __init__(self, engine='easyocr', languages=['ko', 'en'], gpu=False, enable_llm_correction=False, use_aruco=False):
         """
         초기화
 
@@ -33,12 +33,14 @@ class OCRProcessor:
             languages: 인식할 언어 리스트
             gpu: GPU 사용 여부
             enable_llm_correction: LLM 기반 오타 교정 활성화
+            use_aruco: ArUco 마커 기반 ROI 추출 사용 여부 (안정화 + 최적화)
         """
         self.engine = engine.lower()
         self.languages = languages
         self.enable_llm_correction = enable_llm_correction
+        self.use_aruco = use_aruco
 
-        print(f"OCRProcessor 초기화 중... (엔진: {self.engine.upper()}, GPU: {gpu}, LLM 교정: {enable_llm_correction})")
+        print(f"OCRProcessor 초기화 중... (엔진: {self.engine.upper()}, GPU: {gpu}, LLM 교정: {enable_llm_correction}, ArUco: {use_aruco})")
 
         if self.engine == 'easyocr':
             import easyocr
@@ -85,6 +87,13 @@ class OCRProcessor:
 
         else:
             raise ValueError(f"지원하지 않는 OCR 엔진: {engine}. 'easyocr', 'paddleocr', 'windows' 중 선택하세요.")
+
+        # ArUco 마커 검출기 초기화 (선택적)
+        self.aruco_detector = None
+        if self.use_aruco:
+            from aruco_detector import ArucoDetector
+            self.aruco_detector = ArucoDetector()
+            print("✓ ArUco 마커 검출 활성화 (안정화 + 최적화)")
 
         # 성능 최적화를 위한 캐싱
         self.last_result = None
@@ -151,6 +160,18 @@ class OCRProcessor:
             return self.last_result
 
         self.frame_skip_count = 0
+
+        # ArUco 마커 기반 ROI 추출 (안정화 + 최적화)
+        roi_extracted = False
+        if self.use_aruco and self.aruco_detector is not None:
+            corners, ids = self.aruco_detector.detect_markers(image)
+            if corners is not None and ids is not None and len(ids) >= 4:
+                # 4개 마커로 ROI 추출 (원근 변환으로 안정화)
+                roi = self.aruco_detector.extract_roi(image, corners, ids, target_ids=[0, 1, 2, 3])
+                if roi is not None:
+                    print(f"✓ ArUco ROI 추출 성공 (크기: {roi.shape[1]}x{roi.shape[0]})")
+                    image = roi  # ROI로 이미지 교체
+                    roi_extracted = True
 
         # 전처리 (선택적)
         if use_preprocessing:

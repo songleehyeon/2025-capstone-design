@@ -1,23 +1,43 @@
 {
-  "user_id": "user001",
-  "preferences": {
-    "coffee_type": [
-      "라떼",
-      "바닐라라떼",
-      "카푸치노"
-    ],
-    "dietary": {
-      "allergies": [],
-      "vegetarian": false,
-      "vegan": false
-    },
-    "price_sensitivity": "medium",
-    "interests": [
-      "패션",
-      "뷰티",
-      "카페",
-      "SNS"
-    ]
+  "user_id": "user01",
+  "persona_type": "student-male",
+  "persona_name": "서강대 학생 김민수",
+  "gender": "male",
+  "age": 22,
+  "age_group": "20s",
+  "occupation": [
+    "student",
+    "sogang university"
+  ],
+  "living_type": [
+    "dorm",
+    "in a relationship"
+  ],
+  "allergies": [
+    "nut"
+  ],
+  "vegan": false,
+  "low_sugar_preference": true,
+  "low_caffeine_preference": false,
+  "price_sensitivity": "high",
+  "attribute_preferences": [
+    "ice",
+    "not-sweet",
+    "protein",
+    "americano",
+    "coldbrew",
+    "webtoon",
+    "gaming",
+    "IT",
+    "sports",
+    "nike",
+    "adidas",
+    "running"
+  ],
+  "context": {
+    "current_time": "afternoon",
+    "day_type": "weekday",
+    "weather": "cold"
   },
   "personalization_level": "high"
 }
