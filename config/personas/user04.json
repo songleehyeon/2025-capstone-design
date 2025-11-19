@@ -1,0 +1,27 @@
+{
+  "id": "user04",
+  "name": "사장님",
+  "displayName": "인테리어 사장",
+  "icon": "👨‍🔧",
+  "demographics": {
+    "gender": "male",
+    "age": 56,
+    "age_group": "50s",
+    "occupation": ["worker"]
+  },
+  "living": { "type": ["family"] },
+  "dietary": { "allergies": ["nut", "shrimp"], "vegan": false },
+  "preferences": {
+    "price_sensitivity": "low",
+    "attribute_preferences": [
+      "ice", "gift_김마포",
+      "not_member", "health", "kt"
+    ]
+  },
+  "context": {
+    "current_time": "morning",
+    "day_type": "weekday",
+    "weather": "sunny",
+    "season": "winter"
+  }
+}

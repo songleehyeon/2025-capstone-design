@@ -1,39 +1,47 @@
 {
-  "user_id": "young-female",
-  "persona_type": "young-female",
-  "persona_name": "우리은행 사원 강유미",
-  "gender": "female",
-  "age": 28,
+  "user_id": "user01",
+  "persona_type": "user02",
+  "persona_name": "서강대 학생 김서강",
+  "gender": "male",
+  "age": 23,
   "age_group": "20s",
   "occupation": [
-    "worker",
-    "bank"
+    "student",
+    "sogang university"
   ],
   "living_type": [
-    "single_household",
-    "single"
+    "dorm",
+    "couple"
   ],
   "allergies": [],
   "vegan": false,
-  "low_sugar_preference": true,
+  "low_sugar_preference": false,
   "low_caffeine_preference": false,
   "price_sensitivity": "high",
   "attribute_preferences": [
     "ice",
-    "sweet",
-    "spicy",
-    "latte",
-    "dessert",
-    "cafe",
+    "matcha",
+    "gift_홍대의",
+    "frequency_3",
+    "protein",
+    "member_2150",
+    "wicked_1",
     "musical",
-    "beauty",
-    "xexymix",
-    "andar"
+    "muscle",
+    "sns",
+    "wisdom",
+    "scaling_8",
+    "리니지",
+    "검은사막",
+    "webtoon",
+    "download_장대규",
+    "graphics",
+    "action"
   ],
   "context": {
     "current_time": "afternoon",
-    "day_type": "weekday",
-    "weather": "cold"
+    "day_type": "weekend",
+    "weather": "sunny"
   },
   "personalization_level": "high"
 }

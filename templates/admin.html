@@ -8,55 +8,51 @@
 </head>
 <body>
     <div class="container">
-        <!-- 헤더 -->
         <header class="header">
             <h1>🎭 사용자 페르소나 설정</h1>
             <p class="subtitle">설정한 페르소나가 스마트폰에 실시간으로 반영됩니다</p>
         </header>
 
-        <!-- 메인 폼 -->
         <div class="form-container">
             <form id="persona-form">
-                <!-- 사용자 ID -->
                 <div class="form-group">
                     <label for="user-id">👤 사용자 ID</label>
-                    <input type="text" id="user-id" value="user001" readonly>
+                    <input type="text" id="user-id" value="user00" readonly>
                 </div>
 
-                <!-- 페르소나 선택 -->
                 <div class="form-group">
                     <label>🎯 페르소나 선택</label>
                     <div class="persona-cards">
-                        <div class="persona-card" data-persona="young-female">
-                            <div class="persona-icon">👩</div>
-                            <h3>강유미 (28세)</h3>
-                            <p>우리은행 사원 · 뷰티·카페</p>
+                        <div class="persona-card" data-persona="user00">
+                            <div class="persona-icon">👦</div>
+                            <h3>김철수 (17세)</h3>
+                            <p>광성고 학생 · 게임, 웹툰</p>
                         </div>
-                        <div class="persona-card" data-persona="young-male">
-                            <div class="persona-icon">👨</div>
-                            <h3>2-30대 남성</h3>
-                            <p>게임, IT, 운동</p>
-                        </div>
-                        <div class="persona-card" data-persona="middle-female">
+
+                        <div class="persona-card" data-persona="user01">
                             <div class="persona-icon">👩‍💼</div>
-                            <h3>4-50대 여성</h3>
-                            <p>육아, 가전, 건강</p>
+                            <h3>강우리 (30세)</h3>
+                            <p>우리은행 사원 · 뷰티, 뮤지컬</p>
                         </div>
-                        <div class="persona-card" data-persona="middle-male">
-                            <div class="persona-icon">👨‍💼</div>
-                            <h3>4-50대 남성</h3>
-                            <p>자동차, 투자, 골프</p>
-                        </div>
-                        <div class="persona-card" data-persona="senior">
-                            <div class="persona-icon">👴</div>
-                            <h3>시니어</h3>
-                            <p>건강, 여행, 취미</p>
-                        </div>
-                        <div class="persona-card active" data-persona="student-male">
+
+                        <div class="persona-card" data-persona="user02">
                             <div class="persona-icon">👨‍🎓</div>
-                            <h3>김서강 (22세)</h3>
-                            <p>서강대 학생 · 게임·IT</p>
+                            <h3>김서강 (23세)</h3>
+                            <p>서강대 학생 · 운동, 게임</p>
                         </div>
+
+                        <div class="persona-card" data-persona="user03">
+                            <div class="persona-icon">👩‍💻</div>
+                            <h3>편집장 (46세)</h3>
+                            <p>한겨레 편집장 · 비건, 클래식</p>
+                        </div>
+
+                        <div class="persona-card" data-persona="user04">
+                            <div class="persona-icon">👨‍🔧</div>
+                            <h3>사장님 (56세)</h3>
+                            <p>인테리어 사장 · 건강, 골프</p>
+                        </div>
+
                         <div class="persona-card" data-persona="custom">
                             <div class="persona-icon">⚙️</div>
                             <h3>커스텀</h3>
@@ -65,12 +61,9 @@
                     </div>
                 </div>
 
-                <!-- 커스텀 설정 -->
                 <div id="custom-settings">
-                    <!-- 기본 정보 -->
                     <div class="form-section">
                         <h3>👤 기본 정보</h3>
-
                         <div class="form-group">
                             <label for="gender">성별</label>
                             <select id="gender">
@@ -79,58 +72,40 @@
                                 <option value="other">기타</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="age">나이</label>
                             <input type="number" id="age" min="1" max="120" placeholder="예: 28">
                         </div>
-
                         <div class="form-group">
                             <label for="occupation">직업 (쉼표로 구분)</label>
                             <input type="text" id="occupation" placeholder="예: worker, bank">
                         </div>
-
                         <div class="form-group">
                             <label for="living-type">거주 형태 (쉼표로 구분)</label>
                             <input type="text" id="living-type" placeholder="예: single_household, single">
                         </div>
                     </div>
 
-                    <!-- 식이 선호도 -->
                     <div class="form-section">
                         <h3>🥗 식이 선호도</h3>
-
                         <div class="form-group">
                             <label for="allergies">⚠️ 알레르기 성분 (쉼표로 구분)</label>
                             <input type="text" id="allergies" placeholder="예: 우유, 견과류">
                         </div>
-
                         <div class="checkbox-group">
-                            <label>
-                                <input type="checkbox" id="vegan">
-                                비건
-                            </label>
-                            <label>
-                                <input type="checkbox" id="low-sugar">
-                                저당 선호
-                            </label>
-                            <label>
-                                <input type="checkbox" id="low-caffeine">
-                                저카페인 선호
-                            </label>
+                            <label><input type="checkbox" id="vegan"> 비건</label>
+                            <label><input type="checkbox" id="low-sugar"> 저당 선호</label>
+                            <label><input type="checkbox" id="low-caffeine"> 저카페인 선호</label>
                         </div>
                     </div>
 
-                    <!-- 속성 선호도 -->
                     <div class="form-section">
                         <h3>💡 속성 선호도</h3>
-
                         <div class="form-group">
                             <label for="attribute-preferences">관심 속성 (쉼표로 구분)</label>
-                            <input type="text" id="attribute-preferences" placeholder="예: ice, sweet, latte, cafe, beauty, musical">
-                            <small>음료(latte, ice), 맛(sweet, spicy), 관심사(cafe, beauty, musical) 등</small>
+                            <input type="text" id="attribute-preferences" placeholder="예: ice, sweet, latte, game, beauty">
+                            <small>음료, 맛, 관심사, 브랜드 등을 자유롭게 입력하세요.</small>
                         </div>
-
                         <div class="form-group">
                             <label for="price-sensitivity">💰 가격 민감도</label>
                             <select id="price-sensitivity">
@@ -141,10 +116,8 @@
                         </div>
                     </div>
 
-                    <!-- 상황 정보 -->
                     <div class="form-section">
-                        <h3>🌤️ 상황 정보</h3>
-
+                        <h3>🌤️ 상황 정보 (Context)</h3>
                         <div class="form-group">
                             <label for="current-time">현재 시간대</label>
                             <select id="current-time">
@@ -154,7 +127,6 @@
                                 <option value="night">밤</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="day-type">요일 유형</label>
                             <select id="day-type">
@@ -162,42 +134,44 @@
                                 <option value="weekend">주말</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="weather">날씨</label>
                             <select id="weather">
-                                <option value="hot">더움</option>
-                                <option value="normal">보통</option>
-                                <option value="cold">추움</option>
+                                <option value="sunny">맑음</option>
+                                <option value="cloudy">흐림</option>
+                                <option value="rainy">비</option>
+                                <option value="snowy">눈</option>
+                            </select>
+                        </div>
+                         <div class="form-group">
+                            <label for="season">계절</label>
+                            <select id="season">
+                                <option value="spring">봄</option>
+                                <option value="summer">여름</option>
+                                <option value="fall">가을</option>
+                                <option value="winter">겨울</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- 버튼 -->
                 <div class="button-group">
                     <button type="button" id="save-btn" class="btn btn-primary">💾 저장 및 적용</button>
                     <button type="button" id="reset-btn" class="btn btn-secondary">🔄 초기화</button>
                 </div>
             </form>
-
-            <!-- 상태 표시 -->
-            <div id="status-message" class="status-message"></div>
+             <div id="status-message" class="status-message"></div>
         </div>
-
-        <!-- 미리보기 -->
+        
         <div class="preview-section">
             <h2>📋 현재 프로필</h2>
             <pre id="profile-preview">{}</pre>
         </div>
 
-        <!-- 하단 링크 -->
         <div class="footer-links">
             <a href="/" class="link">📱 스마트폰 뷰로 이동</a>
-            <a href="/3d-demo" class="link" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 10px;">🎮 3D 광고판 시뮬레이터 체험</a>
         </div>
     </div>
-
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
 </html>

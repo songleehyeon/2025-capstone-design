@@ -1,0 +1,69 @@
+{
+  "brand": "Subway",
+  "category": "food",
+  "detection_keywords": ["subway", "서브웨이", "sandwich"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 15,
+      "message": "🍤 New 쉬림프, 더 커지고 맛있어졌어요!",
+      "conditions": { "type": "always_true" },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "WARN",
+      "priority": 100,
+      "type": "warning",
+      "message": "⚠️ 주의! 새우·해산물 알레르기",
+      "conditions": { "type": "array_contains", "user_field": "allergies", "value": "shrimp" },
+      "color": [255, 200, 200]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 30,
+      "message": "🍱 학생·직장인 인기 점심 메뉴예요",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {
+            "type": "or",
+            "rules": [
+              {"type": "array_contains", "user_field": "occupation", "value": "student"},
+              {"type": "array_contains", "user_field": "occupation", "value": "worker"}
+            ]
+          },
+          {"type": "context_equals", "field": "current_time", "value": "afternoon"}
+        ]
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🥗 튀기지 않은 재료로 가벼운 한 끼 추천",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "health" },
+      "color": [220, 255, 220]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "💪 단백질 16.5g! 운동 후 샌드위치 추천",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "protein" },
+      "color": [220, 230, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 20,
+      "message": "📱 앱 가입 시 첫 주문 15% 할인 > [바로가기]",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "not_member" },
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "💰 포인트 1,080P 사용 가능해요!",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "member_1080" },
+      "color": [255, 245, 220]
+    }
+  ]
+}

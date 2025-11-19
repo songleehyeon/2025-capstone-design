@@ -1,0 +1,29 @@
+{
+  "id": "user00",
+  "name": "김철수",
+  "displayName": "광성고 학생 김철수",
+  "icon": "👦",
+  "demographics": {
+    "gender": "male",
+    "age": 17,
+    "age_group": "10s",
+    "occupation": ["student", "high school"]
+  },
+  "living": { "type": ["family"] },
+  "dietary": { "allergies": [], "vegan": false },
+  "preferences": {
+    "price_sensitivity": "low",
+    "attribute_preferences": [
+      "ice", "matcha", "sweet", "gift_수학 선생님",
+      "spicy", "not_member",
+      "webtoon", "로스트아크", "story", "fantasy",
+      "wicked_1", "sns", "wisdom", "scaling_8"
+    ]
+  },
+  "context": {
+    "current_time": "evening",
+    "day_type": "weekday",
+    "weather": "sunny",
+    "season": "summer"
+  }
+}

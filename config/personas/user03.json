@@ -1,0 +1,29 @@
+{
+  "id": "user03",
+  "name": "편집장",
+  "displayName": "한겨레 편집장",
+  "icon": "👩‍💻",
+  "demographics": {
+    "gender": "female",
+    "age": 46,
+    "age_group": "40s",
+    "occupation": ["worker", "hani"]
+  },
+  "living": { "type": ["family"] },
+  "dietary": { "allergies": ["gluten"], "vegan": true },
+  "preferences": {
+    "price_sensitivity": "medium",
+    "attribute_preferences": [
+      "hot", "frequency_3", "decaf",
+      "health", "not_member",
+      "director", "wicked_1", "kt",
+      "minimal", "classic", "sns", "one_day_left"
+    ]
+  },
+  "context": {
+    "current_time": "morning",
+    "day_type": "weekday",
+    "weather": "cloudy",
+    "season": "fall"
+  }
+}

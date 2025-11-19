@@ -1,0 +1,55 @@
+{
+  "brand": "Wicked2",
+  "category": "movie",
+  "detection_keywords": ["wicked", "위키드", "cinema", "cgv"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 10,
+      "message": "🔥 11월 한 달 예매율 1위!",
+      "conditions": { "type": "always_true" },
+      "color": [255, 230, 230]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 20,
+      "message": "👪 가족끼리 보기 좋은 영화예요",
+      "conditions": { "type": "array_contains", "user_field": "living_type", "value": "family" },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 20,
+      "message": "💑 커플끼리 보기 좋은 영화예요",
+      "conditions": { "type": "array_contains", "user_field": "living_type", "value": "couple" },
+      "color": [255, 220, 240]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🎬 최근 관람한 <위키드 1>과 이어지는 내용이에요",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "wicked_1" },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "🎫 KT 회원 티켓 최대 40% 할인",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "kt" },
+      "color": [230, 230, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 30,
+      "message": "⏳ 주말 저녁 매진 임박! [좌석 보기]",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "day_type", "value": "weekend"},
+          {"type": "context_equals", "field": "current_time", "value": "afternoon"}
+        ]
+      },
+      "color": [255, 200, 200]
+    }
+  ]
+}
