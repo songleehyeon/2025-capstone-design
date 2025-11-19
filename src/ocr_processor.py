@@ -17,6 +17,13 @@ os.environ['PADDLEX_HOME'] = 'C:/PaddleOCR_models'
 os.environ['PPOCR_HOME'] = 'C:/PaddleOCR_models'
 os.environ['HF_HOME'] = 'C:/PaddleOCR_models'
 
+# PaddlePaddle CPU 최적화 환경 변수 설정
+os.environ['FLAGS_use_mkldnn'] = '1'                    # MKL-DNN 활성화 (Intel CPU 최적화)
+os.environ['OMP_NUM_THREADS'] = '4'                     # OpenMP 스레드 수
+os.environ['MKL_NUM_THREADS'] = '4'                     # MKL 스레드 수
+os.environ['FLAGS_mkldnn_cache_capacity'] = '10'        # MKL-DNN 캐시 용량
+os.environ['FLAGS_fraction_of_gpu_memory_to_use'] = '0.1'  # GPU 메모리 사용량 제한 (CPU 모드)
+
 # 디렉토리 생성
 os.makedirs('C:/PaddleOCR_models', exist_ok=True)
 
@@ -50,12 +57,31 @@ class OCRProcessor:
 
         elif self.engine == 'paddleocr':
             from paddleocr import PaddleOCR
-            # PaddleOCR 초기화
+            # PaddleOCR 3.x 초기화 (속도 최적화 설정)
             self.reader = PaddleOCR(
-                use_angle_cls=False,
-                lang='korean'  # 한국어+영어 모델
+                lang='korean',                          # 한국어+영어 모델
+
+                # 불필요한 기능 비활성화 (속도↑)
+                use_textline_orientation=False,         # 텍스트 방향 분류 비활성화 (각도 보정 OFF)
+                use_doc_orientation_classify=False,     # 문서 방향 분류 비활성화
+                use_doc_unwarping=False,                # 문서 펼침 비활성화
+
+                # 이미지 해상도 제한 (속도↑)
+                text_det_limit_side_len=720,            # Detection 해상도 960→720 (25% 픽셀 감소)
+                text_det_limit_type='max',              # 최대 크기 제한
+
+                # Detection 파라미터 튜닝 (속도↑, 정확도 유지)
+                text_det_thresh=0.4,                    # Detection 임계값 (0.3→0.4)
+                text_det_box_thresh=0.7,                # 박스 필터링 (0.6→0.7, 더 엄격)
+                text_det_unclip_ratio=1.5,              # 박스 확장 비율
+
+                # 배치 처리 (속도↑)
+                text_recognition_batch_size=8,          # Recognition 배치 크기 (기본 6→8)
+
+                # Recognition 임계값
+                text_rec_score_thresh=0.5               # 인식 신뢰도 임계값 (저품질 결과 필터링)
             )
-            print("✓ OCRProcessor 초기화 완료 (PaddleOCR - Korean)")
+            print("✓ OCRProcessor 초기화 완료 (PaddleOCR 3.x - Korean, 최적화 모드)")
 
         elif self.engine == 'windows':
             try:
@@ -99,7 +125,7 @@ class OCRProcessor:
         self.last_result = None
         self.last_image_hash = None
         self.frame_skip_count = 0
-        self.skip_threshold = 3  # 3프레임마다 1회 OCR 실행
+        self.skip_threshold = 10  # 10프레임마다 1회 OCR 실행 (속도 최적화 강화)
 
         # 텍스트 인식 통계
         self.total_recognitions = 0
@@ -141,7 +167,7 @@ class OCRProcessor:
         return binary
 
     def recognize_text(self, image: np.ndarray, use_preprocessing=False,
-                       min_confidence=0.3) -> List[Dict]:
+                       min_confidence=0.5) -> List[Dict]:
         """
         이미지에서 텍스트 인식
 
@@ -154,14 +180,8 @@ class OCRProcessor:
             인식된 텍스트 정보 리스트
             [{'text': str, 'confidence': float, 'bbox': [[x,y], ...], 'center': [x,y]}, ...]
         """
-        # 성능 최적화: 프레임 스킵
-        self.frame_skip_count += 1
-        if self.frame_skip_count < self.skip_threshold and self.last_result is not None:
-            return self.last_result
-
-        self.frame_skip_count = 0
-
         # ArUco 마커 기반 ROI 추출 (안정화 + 최적화)
+        # ⚠️ 중요: 마커 검출은 매 프레임마다 체크 (프레임 스킵보다 우선)
         roi_extracted = False
         if self.use_aruco and self.aruco_detector is not None:
             corners, ids = self.aruco_detector.detect_markers(image)
@@ -169,9 +189,36 @@ class OCRProcessor:
                 # 4개 마커로 ROI 추출 (원근 변환으로 안정화)
                 roi = self.aruco_detector.extract_roi(image, corners, ids, target_ids=[0, 1, 2, 3])
                 if roi is not None:
-                    print(f"✓ ArUco ROI 추출 성공 (크기: {roi.shape[1]}x{roi.shape[0]})")
+                    original_size = (roi.shape[1], roi.shape[0])
+                    print(f"✓ ArUco ROI 추출 성공 (원본 크기: {original_size[0]}x{original_size[1]})")
+
+                    # ROI 크기 축소 (속도 최적화 - 50%)
+                    scale_factor = 0.5
+                    new_width = int(roi.shape[1] * scale_factor)
+                    new_height = int(roi.shape[0] * scale_factor)
+                    roi = cv2.resize(roi, (new_width, new_height), interpolation=cv2.INTER_AREA)
+                    print(f"  → 리사이즈: {new_width}x{new_height} (50% 축소)")
+
                     image = roi  # ROI로 이미지 교체
                     roi_extracted = True
+                else:
+                    # ROI 추출 실패 시 즉시 캐시 초기화 및 빈 배열 반환
+                    print("⚠ ArUco ROI 추출 실패 - OCR 건너뜀 (캐시 초기화)")
+                    self.clear_cache()
+                    return []
+            else:
+                # 마커가 4개 미만이면 즉시 캐시 초기화 및 빈 배열 반환
+                detected_count = len(ids) if ids is not None else 0
+                print(f"⚠ ArUco 마커 부족 ({detected_count}/4) - OCR 건너뜀 (캐시 초기화)")
+                self.clear_cache()
+                return []
+
+        # 성능 최적화: 프레임 스킵 (마커가 검출된 경우에만)
+        self.frame_skip_count += 1
+        if self.frame_skip_count < self.skip_threshold and self.last_result is not None:
+            return self.last_result
+
+        self.frame_skip_count = 0
 
         # 전처리 (선택적)
         if use_preprocessing:
@@ -481,3 +528,14 @@ class OCRProcessor:
                 closest_text = result
 
         return closest_text
+
+    def clear_cache(self):
+        """
+        OCR 캐시 초기화
+
+        초기화 버튼을 눌렀을 때 이전 OCR 결과를 완전히 제거하기 위해 사용
+        """
+        self.last_result = None
+        self.last_image_hash = None
+        self.frame_skip_count = 0
+        print("✓ OCR 캐시 초기화됨")

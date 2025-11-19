@@ -1,0 +1,31 @@
+{
+  "id": "custom",
+  "name": "커스텀",
+  "displayName": "커스텀",
+  "icon": "⚙️",
+  "shortDescription": "직접 설정",
+  "demographics": {
+    "gender": "custom",
+    "age_group": "custom",
+    "occupation": []
+  },
+  "living": {
+    "type": []
+  },
+  "dietary": {
+    "allergies": [],
+    "vegan": false,
+    "vegetarian": false,
+    "low_sugar_preference": false,
+    "low_caffeine_preference": false
+  },
+  "preferences": {
+    "price_sensitivity": "medium",
+    "attribute_preferences": []
+  },
+  "context": {
+    "current_time": "afternoon",
+    "day_type": "weekday",
+    "weather": "normal"
+  }
+}

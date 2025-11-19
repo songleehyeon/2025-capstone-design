@@ -62,13 +62,43 @@
     {
       "rule_id": "EVENT_INFO",
       "type": "event",
-      "priority": 25,
-      "category": "signup_diamond",
+      "priority": 10,
+      "category": "signup_diamond_high_sensitivity",
       "conditions": {
-        "type": "always_true"
+        "type": "equals",
+        "user_field": "price_sensitivity",
+        "value": "high"
       },
       "message": "💎 가입 시 3,000 다이아 즉시 지급",
       "color": [255, 235, 200]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 30,
+      "category": "catsoup_item_high",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "price_sensitivity", "value": "high"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "고양이와 스프"}
+        ]
+      },
+      "message": "🎁 가입 시 관심 게임 '고양이와 스프'의 '호박 마차' 아이템을 드려요",
+      "color": [220, 255, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 20,
+      "category": "catsoup_item_medium",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "고양이와 스프"
+      },
+      "message": "🎁 가입 시 관심 게임 '고양이와 스프'의 '호박 마차' 아이템을 드려요",
+      "color": [220, 255, 220]
     },
     {
       "rule_id": "PURCHASE_INFO",

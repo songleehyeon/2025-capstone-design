@@ -1,0 +1,38 @@
+{
+  "id": "middle-male",
+  "name": "4-50대 남성",
+  "displayName": "4-50대 남성",
+  "icon": "👨‍💼",
+  "shortDescription": "자동차, 투자, 골프",
+  "demographics": {
+    "gender": "male",
+    "age_group": "40s-50s",
+    "occupation": ["worker", "manager"]
+  },
+  "living": {
+    "type": ["family"]
+  },
+  "dietary": {
+    "allergies": [],
+    "vegan": false,
+    "vegetarian": false,
+    "low_sugar_preference": false,
+    "low_caffeine_preference": false
+  },
+  "preferences": {
+    "price_sensitivity": "low",
+    "attribute_preferences": [
+      "automotive",
+      "investment",
+      "golf",
+      "IT",
+      "americano",
+      "espresso"
+    ]
+  },
+  "context": {
+    "current_time": "afternoon",
+    "day_type": "weekday",
+    "weather": "normal"
+  }
+}

@@ -14,6 +14,7 @@
           {"type": "equals", "user_field": "gender", "value": "female"},
           {"type": "in_array", "user_field": "age_group", "values": ["20s", "30s"]}
         ]
+
       },
       "message": "💁‍♀️ 2-30대 여성이 많이 방문한 전시예요",
       "color": [200, 240, 200]
@@ -26,7 +27,7 @@
       "conditions": {
         "type": "array_contains",
         "user_field": "living_type",
-        "value": "in a relationship"
+        "value": "couple"
       },
       "message": "💑 커플끼리 방문하기 좋은 이벤트예요",
       "color": [255, 220, 240]

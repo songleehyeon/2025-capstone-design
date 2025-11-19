@@ -197,8 +197,8 @@
     },
     "student-male": {
       "id": "student-male",
-      "name": "김민수",
-      "displayName": "서강대 학생 김민수",
+      "name": "김서강",
+      "displayName": "서강대 학생 김서강",
       "icon": "👨‍🎓",
       "shortDescription": "대학생, 게임, IT",
       "demographics": {
@@ -208,7 +208,7 @@
         "occupation": ["student", "sogang university"]
       },
       "living": {
-        "type": ["dorm", "in a relationship"]
+        "type": ["dorm", "couple"]
       },
       "dietary": {
         "allergies": ["nut"],

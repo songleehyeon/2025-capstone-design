@@ -1,0 +1,38 @@
+{
+  "id": "senior",
+  "name": "시니어",
+  "displayName": "시니어",
+  "icon": "👴",
+  "shortDescription": "건강, 여행, 취미",
+  "demographics": {
+    "gender": "male",
+    "age_group": "60s+",
+    "occupation": ["retired"]
+  },
+  "living": {
+    "type": ["family", "couple"]
+  },
+  "dietary": {
+    "allergies": [],
+    "vegan": false,
+    "vegetarian": false,
+    "low_sugar_preference": true,
+    "low_caffeine_preference": true
+  },
+  "preferences": {
+    "price_sensitivity": "low",
+    "attribute_preferences": [
+      "health",
+      "travel",
+      "golf",
+      "hiking",
+      "americano",
+      "decaf"
+    ]
+  },
+  "context": {
+    "current_time": "afternoon",
+    "day_type": "weekday",
+    "weather": "normal"
+  }
+}

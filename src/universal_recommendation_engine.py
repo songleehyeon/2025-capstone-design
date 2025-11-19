@@ -96,7 +96,6 @@ class UniversalRecommendationEngine:
                 rec = {
                     'rule_id': rule.get('rule_id', 'UNKNOWN'),
                     'priority': rule.get('priority', 0),
-                    'score': 0,
                     'type': rule.get('type', 'info'),
                     'color': tuple(rule.get('color', [100, 200, 100]))
                 }
@@ -125,7 +124,7 @@ class UniversalRecommendationEngine:
                 recommendations.append(rec)
 
         # 우선순위 정렬
-        recommendations.sort(key=lambda x: (x['priority'], x['score']), reverse=True)
+        recommendations.sort(key=lambda x: x['priority'], reverse=True)
 
         return recommendations
 

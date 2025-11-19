@@ -65,8 +65,8 @@ class RecommendationEngine:
         # 5. CROWD_LEVEL 규칙
         recommendations.extend(self._apply_crowd_level_rules(user_profile))
 
-        # 우선순위 정렬 (priority 높은 순, 같으면 score 높은 순)
-        recommendations.sort(key=lambda x: (x.get('priority', 0), x.get('score', 0)), reverse=True)
+        # 우선순위 정렬 (priority 높은 순)
+        recommendations.sort(key=lambda x: x.get('priority', 0), reverse=True)
 
         return recommendations
 
@@ -83,7 +83,6 @@ class RecommendationEngine:
                 warnings.append({
                     'rule_id': 'WARN',
                     'priority': 100,  # prior
-                    'score': 0,
                     'product_id': product_id,
                     'product_name': product['name'],
                     'message': f"⚠️ 주의! 글루텐이 들어간 제품이에요",
@@ -96,7 +95,6 @@ class RecommendationEngine:
                 warnings.append({
                     'rule_id': 'WARN',
                     'priority': 100,  # prior
-                    'score': 0,
                     'product_id': product_id,
                     'product_name': product['name'],
                     'message': f"⚠️ 주의! 고카페인이 함유된 제품이에요\n💡 디카페인 옵션으로 변경 가능",
@@ -133,7 +131,6 @@ class RecommendationEngine:
                 recommendations.append({
                     'rule_id': 'GENERAL_RECOMM',
                     'priority': 20,
-                    'score': 0,
                     'product_id': product_id,
                     'product_name': product['name'],
                     'message': message,
@@ -161,7 +158,6 @@ class RecommendationEngine:
             events.append({
                 'rule_id': 'EVENT_INFO',
                 'priority': priority,
-                'score': 0,
                 'message': f"🎁 시즌 음료를 구입하면 프리퀀시가 3개 남아요!",
                 'type': 'event',
                 'color': (255, 245, 220)  # 부드러운 연한 노랑 (글래스모피즘)
@@ -180,7 +176,6 @@ class RecommendationEngine:
                 events.append({
                     'rule_id': 'EVENT_INFO',
                     'priority': priority,
-                    'score': 0,
                     'message': f"🎓 학생 할인쿠폰이 적용가능한 상품이에요",
                     'type': 'event',
                     'color': (220, 230, 255)  # 부드러운 연한 파랑 (글래스모피즘)
@@ -212,7 +207,6 @@ class RecommendationEngine:
             recommendations.append({
                 'rule_id': 'WEATHER_RECOMM',
                 'priority': priority,
-                'score': 0,
                 'message': f"❄️ 쌀쌀한 날씨, 따뜻한 라떼는 어떠세요?",
                 'type': 'recommendation',
                 'color': (210, 230, 255)  # 부드러운 하늘색 (글래스모피즘)
@@ -235,7 +229,6 @@ class RecommendationEngine:
                 recommendations.append({
                     'rule_id': 'WEATHER_RECOMM',
                     'priority': priority,
-                    'score': 0,
                     'product_id': 'P2',
                     'product_name': products['P2']['name'],
                     'message': f"🍫 오후 시간, 달콤한 메뉴로 당충전 어떠세요?",
@@ -282,7 +275,6 @@ class RecommendationEngine:
             crowd_info.append({
                 'rule_id': 'CROWD_LEVEL',
                 'priority': info['priority'],
-                'score': 0,
                 'message': info['message'],
                 'type': 'info',
                 'color': info['color']

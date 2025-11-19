@@ -1,38 +1,34 @@
 {
-  "user_id": "user01",
-  "persona_type": "student-male",
-  "persona_name": "서강대 학생 김민수",
-  "gender": "male",
-  "age": 22,
+  "user_id": "young-female",
+  "persona_type": "young-female",
+  "persona_name": "우리은행 사원 강유미",
+  "gender": "female",
+  "age": 28,
   "age_group": "20s",
   "occupation": [
-    "student",
-    "sogang university"
+    "worker",
+    "bank"
   ],
   "living_type": [
-    "dorm",
-    "in a relationship"
+    "single_household",
+    "single"
   ],
-  "allergies": [
-    "nut"
-  ],
+  "allergies": [],
   "vegan": false,
   "low_sugar_preference": true,
   "low_caffeine_preference": false,
   "price_sensitivity": "high",
   "attribute_preferences": [
     "ice",
-    "not-sweet",
-    "protein",
-    "americano",
-    "coldbrew",
-    "webtoon",
-    "gaming",
-    "IT",
-    "sports",
-    "nike",
-    "adidas",
-    "running"
+    "sweet",
+    "spicy",
+    "latte",
+    "dessert",
+    "cafe",
+    "musical",
+    "beauty",
+    "xexymix",
+    "andar"
   ],
   "context": {
     "current_time": "afternoon",

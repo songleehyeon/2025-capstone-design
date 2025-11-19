@@ -987,7 +987,6 @@ body {
     min-width: 30px;
 }
 
-/* 페이드 아웃 애니메이션 */
 .backend-loading-overlay.fade-out {
     animation: fadeOut 0.5s ease-out forwards;
 }
@@ -997,4 +996,42 @@ body {
         opacity: 0;
         visibility: hidden;
     }
+}
+
+
+/* Glassmorphism */
+.overlay-card {
+    position: absolute; /* 오버레이 위치 */
+    
+    min-width: 100px;  /* 최소 너비 */
+    max-width: 220px;  /* 최대 너비 (기존 280px에서 축소) */
+    
+    padding: 7px 12px; 
+
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3); /* [수정] 그림자 축소 */
+    border-radius: 20px; 
+    background: #ffffff05; 
+    border-top: 1px solid #ffffff80;
+    border-left: 1px solid #ffffff80;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    /* font */
+    color: #fff;
+    font-size: 0.7em;   
+    font-weight: 500;
+    line-height: 1.4;   
+    
+    word-wrap: break-word;
+    word-break: keep-all;
+}
+
+@keyframes bounceFloat {
+  100% {
+    transform: translateY(-5px);
+  }
 }

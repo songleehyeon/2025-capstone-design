@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AR Ad Simulator - Capstone Prototype</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Pretendard', sans-serif; }
+        
+        /* UI 오버레이 스타일 개선 */
+        #ui-overlay {
+            position: fixed; top: 20px; left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            color: white; padding: 20px;
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000; min-width: 200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        h3 { margin: 0 0 10px 0; font-size: 18px; color: #00ff88; }
+        p { margin: 5px 0; font-size: 14px; color: #ddd; }
+        
+        #instructions {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff; padding: 12px 25px;
+            border-radius: 30px; font-size: 14px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui-overlay">
+        <h3>🎮 스마트 AR 광고 시뮬레이터</h3>
+        <p id="persona-info">👤 페르소나 설정 중...</p>
+        <p id="location-info">📍 현재 위치: 강남대로 시뮬레이션</p>
+        <hr style="border-color: rgba(255,255,255,0.2);">
+        <p id="ad-info">👁️ 발견한 광고: 0 / 10</p>
+    </div>
+
+    <div id="instructions">
+        🕹️ <b>WASD</b> 이동 | <b>마우스</b> 시점 전환 | <b>클릭</b> 광고 상세 정보
+    </div>
+
+    <a-scene background="color: #87CEEB" fog="type: exponential; color: #87CEEB; density: 0.015">
+        
+        <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
+        <a-light type="directional" color="#xffffff" intensity="0.8" position="-1 1 1" cast-shadow="true"></a-light>
+
+        <a-plane position="0 0 -50" rotation="-90 0 0" width="40" height="200" color="#2d2d2d"></a-plane>
+        <a-plane position="0 0.02 -50" rotation="-90 0 0" width="0.3" height="200" color="#ffcc00"></a-plane>
+        
+        <a-plane position="-12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
+        <a-plane position="12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
+
+        
+        <a-box position="-18 10 -20" width="10" height="20" depth="30" color="#4a4a4a"></a-box>
+        <a-box position="18 10 -20" width="10" height="20" depth="30" color="#5a5a5a"></a-box>
+        <a-box position="0 15 -80" width="30" height="30" depth="10" color="#333333"></a-box>
+
+
+        <a-plane position="-12.9 12 -20" rotation="0 90 0" width="10" height="5" color="#fff"
+                 class="billboard" data-id="1" data-desc="좌측 대형 파사드">
+            <a-text value="Ad #1\nFacade" align="center" color="black" width="20"></a-text>
+        </a-plane>
+
+        <a-plane position="12.9 12 -20" rotation="0 -90 0" width="10" height="5" color="#fff"
+                 class="billboard" data-id="2" data-desc="우측 대형 파사드">
+            <a-text value="Ad #2\nFacade" align="center" color="black" width="20"></a-text>
+        </a-plane>
+
+        <a-plane position="-12.9 3.5 -10" rotation="0 90 0" width="4" height="1.5" color="#eeeeee"
+                 class="billboard" data-id="3" data-desc="좌측 매장 간판">
+            <a-text value="Ad #3 Store" align="center" color="black" width="10"></a-text>
+        </a-plane>
+
+        <a-plane position="12.9 2.5 -10" rotation="0 -90 0" width="3" height="2" color="#aaddff"
+                 class="billboard" data-id="4" data-desc="우측 쇼윈도 디스플레이">
+            <a-text value="Ad #4\nDigital Window" align="center" color="black" width="8"></a-text>
+        </a-plane>
+
+        <a-plane position="0 15 -74.9" rotation="0 0 0" width="20" height="10" color="#ff9999"
+                 class="billboard" data-id="5" data-desc="중앙 랜드마크 전광판">
+            <a-text value="Ad #5\nMain Billboard" align="center" color="black" width="40"></a-text>
+        </a-plane>
+
+        <a-box position="-9 1.5 -18" width="0.2" height="3" depth="2" color="#222"></a-box>
+        <a-box position="-9 3 -18" width="3" height="0.2" depth="4" color="#222"></a-box>
+        <a-plane position="-8.8 1.5 -18" rotation="0 90 0" width="1.8" height="2.2" color="#fff"
+                 class="billboard" data-id="6" data-desc="버스 정류장 광고">
+            <a-text value="Ad #6\nBus Stop" align="center" color="black" width="6"></a-text>
+        </a-plane>
+
+        <a-entity position="-8 0.8 -5" rotation="0 30 0">
+            <a-plane position="0 0 0.1" width="0.6" height="1.2" color="#ffff00"
+                     class="billboard" data-id="7" data-desc="좌측 입간판">
+                <a-text value="Ad #7\nSale" align="center" color="black" width="4"></a-text>
+            </a-plane>
+            <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
+        </a-entity>
+
+        <a-entity position="8 0.8 -5" rotation="0 -30 0">
+            <a-plane position="0 0 0.1" width="0.6" height="1.2" color="#ffff00"
+                     class="billboard" data-id="8" data-desc="우측 입간판">
+                <a-text value="Ad #8\nMenu" align="center" color="black" width="4"></a-text>
+            </a-plane>
+            <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
+        </a-entity>
+
+        <a-box position="8 1.5 -25" width="0.8" height="2.5" depth="0.2" color="#111">
+            <a-plane position="0 0.2 0.11" width="0.7" height="1.5" color="#00ff00"
+                     class="billboard" data-id="9" data-desc="디지털 키오스크">
+                <a-text value="Ad #9\nKiosk" align="center" color="black" width="5"></a-text>
+            </a-plane>
+        </a-box>
+
+        <a-cylinder position="-12 2 -30" radius="0.6" height="4" color="#666"></a-cylinder>
+        <a-plane position="-11.3 2 -30" rotation="0 90 0" width="0.8" height="1.2" color="#ff00ff"
+                 class="billboard" data-id="10" data-desc="기둥 포스터">
+             <a-text value="Ad #10\nPoster" align="center" color="black" width="4"></a-text>
+        </a-plane>
+
+
+        <a-entity id="rig" movement-controls="speed: 0.4; fly: false;" position="0 0 5">
+            <a-entity camera position="0 1.6 0" look-controls>
+                <a-cursor color="#FF0000" scale="0.8 0.8 0.8" raycaster="objects: .billboard"></a-cursor>
+            </a-entity>
+        </a-entity>
+
+    </a-scene>
+
+    <script>
+        // 광고판 클릭 이벤트 핸들러
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 모의 데이터 주입 (백엔드 없이 데모용)
+            setTimeout(() => {
+                const mockPersona = { name: "김서강", age: 24, gender: "남성" };
+                document.getElementById('persona-info').innerText = 
+                    `👤 페르소나: ${mockPersona.name} (${mockPersona.age}세/${mockPersona.gender})`;
+            }, 500);
+
+            // 2. 광고판 인터랙션 설정
+            const billboards = document.querySelectorAll('.billboard');
+            let foundCount = 0;
+
+            billboards.forEach(ad => {
+                // 마우스 오버 시 크기 살짝 커짐 (Hover 효과)
+                ad.addEventListener('mouseenter', function () {
+                    this.setAttribute('scale', '1.1 1.1 1.1');
+                    this.setAttribute('opacity', '0.8');
+                });
+
+                // 마우스 아웃 시 원래대로
+                ad.addEventListener('mouseleave', function () {
+                    this.setAttribute('scale', '1 1 1');
+                    this.setAttribute('opacity', '1');
+                });
+
+                // 클릭 시 상세 정보
+                ad.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const desc = this.getAttribute('data-desc');
+                    
+                    // 오버레이 업데이트
+                    // 실제 프로젝트에선 여기서 모달을 띄우거나 상세 페이지로 이동
+                    alert(`[광고판 #${id} 스캔 성공]\n\n"${desc}"\n\n페르소나 맞춤형 오버레이가 스마트폰에 전송되었습니다.`);
+                    
+                    // 카운트 증가 (중복 체크 로직은 생략)
+                    foundCount++;
+                    document.getElementById('ad-info').innerText = `👁️ 발견한 광고: ${foundCount} / 10`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

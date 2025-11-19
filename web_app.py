@@ -3,8 +3,6 @@
 
 Camo camera를 통한 웹캠 스트림을 받아 OCR 처리 후
 개인화된 오버레이 데이터를 JSON으로 반환
-
-User Profile: user02 (서강대 학생 김민수)
 """
 
 from flask import Flask, render_template, request, jsonify
@@ -69,6 +67,12 @@ def index():
 def admin():
     """관리 페이지 (PC 페르소나 설정)"""
     return render_template('admin.html')
+
+
+@app.route('/3d-demo')
+def demo_3d():
+    """3D 광고판 시뮬레이터 (POV 방식)"""
+    return render_template('3d_demo.html')
 
 
 @app.route('/api/process_frame', methods=['POST'])
@@ -267,17 +271,56 @@ def health_check():
     })
 
 
+@app.route('/api/clear_cache', methods=['POST'])
+def clear_cache():
+    """
+    OCR 캐시 초기화
+
+    초기화 버튼을 눌렀을 때 백엔드의 OCR 캐시를 완전히 제거
+    """
+    try:
+        ocr_processor.clear_cache()
+        return jsonify({
+            'success': True,
+            'message': 'OCR 캐시가 초기화되었습니다.'
+        })
+    except Exception as e:
+        print(f"캐시 초기화 오류: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
 @app.route('/api/personas', methods=['GET'])
 def get_personas():
     """모든 페르소나 목록 조회"""
     try:
-        personas_path = Path(__file__).parent / 'config' / 'personas.json'
-        with open(personas_path, 'r', encoding='utf-8') as f:
-            personas_data = json.load(f)
+        personas_dir = Path(__file__).parent / 'config' / 'personas'
+        personas = {}
+
+        if not personas_dir.exists():
+            print(f"경고: 페르소나 디렉토리를 찾을 수 없습니다: {personas_dir}")
+            return jsonify({
+                'success': True,
+                'personas': {}
+            })
+
+        # personas/ 폴더의 모든 JSON 파일 로드
+        for persona_file in personas_dir.glob("*.json"):
+            try:
+                with open(persona_file, 'r', encoding='utf-8') as f:
+                    persona_data = json.load(f)
+                    persona_id = persona_data.get('id')
+                    if persona_id:
+                        personas[persona_id] = persona_data
+            except Exception as e:
+                print(f"페르소나 파일 로드 오류 ({persona_file.name}): {e}")
+                continue
 
         return jsonify({
             'success': True,
-            'personas': personas_data.get('personas', {})
+            'personas': personas
         })
     except Exception as e:
         print(f"페르소나 로드 오류: {e}")
@@ -352,19 +395,18 @@ def select_persona():
             }), 400
 
         # 페르소나 데이터 로드
-        personas_path = Path(__file__).parent / 'config' / 'personas.json'
-        with open(personas_path, 'r', encoding='utf-8') as f:
-            personas_data = json.load(f)
+        persona_file_path = Path(__file__).parent / 'config' / 'personas' / f'{persona_id}.json'
 
-        personas = personas_data.get('personas', {})
-        if persona_id not in personas:
+        if not persona_file_path.exists():
             return jsonify({
                 'success': False,
                 'error': f'페르소나를 찾을 수 없습니다: {persona_id}'
             }), 404
 
+        with open(persona_file_path, 'r', encoding='utf-8') as f:
+            persona_data = json.load(f)
+
         # 페르소나를 user_profile 형식으로 변환
-        persona_data = personas[persona_id]
         user_profile = convert_persona_to_profile(persona_data)
 
         # personalization_engine의 프로필 업데이트

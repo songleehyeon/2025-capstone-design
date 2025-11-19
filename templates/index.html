@@ -82,6 +82,8 @@
             <button id="start-btn" class="btn btn-primary">카메라 시작</button>
             <button id="stop-btn" class="btn btn-secondary" disabled>카메라 중지</button>
             <button id="toggle-ocr" class="btn btn-toggle">OCR ON</button>
+            
+            <button id="clear-btn" class="btn btn-secondary">🧹 초기화</button>
 
             <div class="stats">
                 <span>FPS: <span id="fps">0</span></span>
@@ -102,7 +104,7 @@
             </div>
         </div>
     </div>
-
+    <script src="{{ url_for('static', filename='js/vanilla-tilt.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
