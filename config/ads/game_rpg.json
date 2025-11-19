@@ -1,7 +1,7 @@
 {
   "brand": "GameRPG",
   "category": "game",
-  "detection_keywords": ["rpg", "게임", "game", "리니지", "검은사막"],
+  "detection_keywords": ["rpg", "게임", "사전예약"],
   "rules": [
     {
       "rule_id": "GENERAL_RECOMM",
@@ -19,7 +19,7 @@
     {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 25,
-      "message": "⚔️ '리니지', '검은사막'과 유사한 장르예요",
+      "message": "⚔️ 관심 게임 '리니지', '검은사막'과 유사한 게임이에요",
       "conditions": {
         "type": "and",
         "rules": [
@@ -31,9 +31,23 @@
     },
     {
       "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "⚔️ 관심 게임 '로스트아크'와 유사한 게임이에요",
+      "conditions": {"type": "array_contains", "user_field": "attributes", "value": "로스트아크"},
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
       "message": "⬇️ '김승규'님이 다운받은 게임이에요!",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "download_김승규" },
+      "color": [220, 255, 255]
+    },
+        {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "⬇️ '장대규'님이 다운받은 게임이에요!",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "download_장대규" },
       "color": [220, 255, 255]
     },
     {
@@ -45,6 +59,19 @@
         "rules": [
           {"type": "array_contains", "user_field": "attributes", "value": "graphics"},
           {"type": "array_contains", "user_field": "attributes", "value": "action"}
+        ]
+      },
+      "color": [240, 220, 255]
+    },
+        {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "✨ #스토리 중심 RPG #다크 판타지",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "array_contains", "user_field": "attributes", "value": "story"},
+          {"type": "array_contains", "user_field": "attributes", "value": "fantasy"}
         ]
       },
       "color": [240, 220, 255]
@@ -67,6 +94,20 @@
       "priority": 30,
       "message": "🎁 가입 시 '고양이와 스프' 호박 마차 아이템 증정",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "고양이와 스프" },
+      "color": [220, 255, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 10,
+      "message": "🎁 가입 시 3,000 다이아 즉시 지급",
+      "conditions": { "type": "always_true" },
+      "color": [220, 255, 220]
+    },
+    {
+      "rule_id": "PURCHASE_INFO",
+      "priority": 10,
+      "message": "🎁 예약 정보: [link]",
+      "conditions": { "type": "always_true" },
       "color": [220, 255, 220]
     }
   ]

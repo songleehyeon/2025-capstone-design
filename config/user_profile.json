@@ -1,46 +1,41 @@
 {
   "user_id": "user01",
-  "persona_type": "user02",
-  "persona_name": "서강대 학생 김서강",
+  "persona_type": "user00",
+  "persona_name": "광성고 학생 김철수",
   "gender": "male",
-  "age": 23,
+  "age": 17,
   "age_group": "20s",
   "occupation": [
     "student",
-    "sogang university"
+    "high school"
   ],
   "living_type": [
-    "dorm",
-    "couple"
+    "family"
   ],
   "allergies": [],
   "vegan": false,
   "low_sugar_preference": false,
   "low_caffeine_preference": false,
-  "price_sensitivity": "high",
+  "price_sensitivity": "low",
   "attribute_preferences": [
     "ice",
     "matcha",
-    "gift_홍대의",
-    "frequency_3",
-    "protein",
-    "member_2150",
+    "sweet",
+    "gift_수학 선생님",
+    "spicy",
+    "not_member",
+    "webtoon",
+    "로스트아크",
+    "story",
+    "fantasy",
     "wicked_1",
-    "musical",
-    "muscle",
     "sns",
     "wisdom",
-    "scaling_8",
-    "리니지",
-    "검은사막",
-    "webtoon",
-    "download_장대규",
-    "graphics",
-    "action"
+    "scaling_8"
   ],
   "context": {
-    "current_time": "afternoon",
-    "day_type": "weekend",
+    "current_time": "evening",
+    "day_type": "weekday",
     "weather": "sunny"
   },
   "personalization_level": "high"

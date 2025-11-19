@@ -232,7 +232,6 @@ def update_profile():
         print(f"✓ 프로필 업데이트 완료: {data.get('user_id', 'Unknown')}")
         print(f"  성별: {data.get('gender', 'Unknown')}, 나이: {data.get('age', 'Unknown')}")
         print(f"  선호 속성: {data.get('attribute_preferences', [])}")
-        print(f"  가격 민감도: {data.get('price_sensitivity', 'medium')}")
 
         return jsonify({
             'success': True,

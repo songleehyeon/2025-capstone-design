@@ -24,7 +24,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1400px; /* 너비를 넓힘 */
     margin: 0 auto;
 }
 
@@ -268,10 +268,9 @@ body {
 /* 폼 섹션 */
 .form-section {
     margin-bottom: 40px;
-    padding: 25px;
+    padding: 0px;
     background: #F8F9FA;
     border-radius: 15px;
-    border-left: 4px solid var(--primary-color);
 }
 
 .form-section h3 {
@@ -288,7 +287,7 @@ body {
 .form-group small {
     display: block;
     margin-top: 5px;
-    font-size: 0.85rem;
+    font-size: 0.6rem;
     color: #7F8C8D;
     font-style: italic;
 }
@@ -336,4 +335,40 @@ body {
     .header h1 {
         font-size: 2rem;
     }
+}
+/* ========== 애니메이션 정의 (Fade In Up) ========== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== 애니메이션 적용 ========== */
+
+/* 1. 전체 컨테이너: 가장 먼저 부드럽게 등장 */
+.container {
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 2. 헤더: 약간의 딜레이를 주어 자연스럽게 이어짐 */
+.header {
+    opacity: 0; /* 애니메이션 시작 전 숨김 */
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+}
+
+/* 3. 폼 컨테이너: 헤더보다 조금 더 늦게 올라와 리듬감 형성 */
+.form-container {
+    opacity: 0; /* 애니메이션 시작 전 숨김 */
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+}
+
+/* 4. 하단 링크: 가장 마지막에 등장 */
+.footer-links {
+    opacity: 0;
+    animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }

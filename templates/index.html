@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- 백엔드 초기화 로딩 오버레이 -->
     <div id="backend-loading" class="backend-loading-overlay">
         <div class="backend-loading-content">
             <div class="loading-spinner"></div>
@@ -33,15 +32,11 @@
         </div>
     </div>
 
-    <!-- 메인 컨테이너 -->
     <div class="container">
-        <!-- 헤더 -->
         <header class="header">
             <h1>📱 스마트 광고 AR 시스템</h1>
-            <p class="subtitle">[링크]에 접속하여 스마트폰 카메라를 연결하세요</p>
         </header>
 
-        <!-- 페르소나 정보 표시 -->
         <div id="persona-display" class="persona-display">
             <div class="persona-info">
                 <span id="persona-name" class="persona-name">로딩 중...</span>
@@ -50,49 +45,30 @@
             <a href="/admin" class="admin-link">⚙️ 페르소나 설정</a>
         </div>
 
-        <!-- 비디오 컨테이너 (웹캠 + 오버레이) -->
         <div class="video-container">
-            <!-- 웹캠 스트림 -->
-            <video id="webcam" autoplay playsinline></video>
+            <video id="webcam" autoplay playsinline muted></video>
 
-            <!-- 캔버스 (프레임 캡처용, 숨김) -->
             <canvas id="canvas" style="display: none;"></canvas>
 
-            <!-- 오버레이 레이어 -->
             <div id="overlay-layer" class="overlay-layer">
-                <!-- 오버레이들이 여기에 동적으로 추가됩니다 -->
-            </div>
+                </div>
 
-            <!-- 로딩 인디케이터 -->
             <div id="loading" class="loading-indicator">
                 <div class="spinner"></div>
                 <p>OCR 처리 중...</p>
             </div>
         </div>
 
-        <!-- 컨트롤 패널 -->
         <div class="control-panel">
-            <div class="camera-selector">
-                <label for="camera-select">카메라 선택:</label>
-                <select id="camera-select" class="camera-dropdown">
-                    <option value="">카메라를 불러오는 중...</option>
-                </select>
-            </div>
-
             <button id="start-btn" class="btn btn-primary">카메라 시작</button>
             <button id="stop-btn" class="btn btn-secondary" disabled>카메라 중지</button>
-            <button id="toggle-ocr" class="btn btn-toggle">OCR ON</button>
             
             <button id="clear-btn" class="btn btn-secondary">🧹 초기화</button>
-
-            <div class="stats">
-                <span>FPS: <span id="fps">0</span></span>
-                <span>OCR 호출: <span id="ocr-count">0</span></span>
-                <span>오버레이: <span id="overlay-count">0</span></span>
-            </div>
+            <a href="/3d-demo" class="btn btn-toggle" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                🎮 3D 시뮬레이션 시작
+            </a>
         </div>
 
-        <!-- 디버그 패널 -->
         <div class="debug-panel">
             <h3>🔍 디버그 정보</h3>
             <div id="debug-info">

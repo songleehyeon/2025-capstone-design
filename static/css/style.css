@@ -826,6 +826,7 @@ body {
 }
 
 /* ========== 반응형 디자인 ========== */
+/* ========== 반응형 디자인 ========== */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -878,19 +879,31 @@ body {
     .bottom-center { bottom: 10px; left: 50%; transform: translateX(-50%); }
     .bottom-right { bottom: 10px; right: 10px; }
 
+    /* [수정됨] 컨트롤 패널: 가로 배치로 변경 */
     .control-panel {
-        flex-direction: column;
+        flex-direction: row; /* 가로 방향 정렬 */
+        flex-wrap: wrap;     /* 공간 부족 시 줄바꿈 */
+        gap: 10px;           /* 버튼 간격 */
+        justify-content: space-between;
     }
 
-    .stats {
-        flex-direction: column;
-        gap: 5px;
-        font-size: 0.8rem;
-    }
-
-    .btn {
+    /* [추가됨] 버튼 스타일: 공간을 균등하게 차지 */
+    .control-panel .btn {
         font-size: 0.9rem;
-        padding: 10px 20px;
+        padding: 12px 10px;
+        flex: 1 0 45%;       /* 버튼이 너비의 약 45%를 차지하며 유동적으로 늘어남 */
+        min-width: 100px;    /* 최소 너비 설정 */
+        margin: 0;
+    }
+
+    /* [수정됨] 통계 정보: 맨 아래로 내리고 가로 정렬 시도 */
+    .stats {
+        width: 100%;         /* 전체 너비 차지 */
+        flex-direction: row; /* 내부 텍스트 가로 정렬 */
+        justify-content: center;
+        gap: 15px;
+        font-size: 0.8rem;
+        margin-top: 5px;
     }
 }
 

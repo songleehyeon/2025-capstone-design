@@ -9,26 +9,77 @@
     <style>
         body { margin: 0; overflow: hidden; font-family: 'Pretendard', sans-serif; }
         
-        /* UI 오버레이 스타일 개선 */
+        /* UI 오버레이 */
         #ui-overlay {
             position: fixed; top: 20px; left: 20px;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
             color: white; padding: 20px;
             border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            z-index: 1000; min-width: 200px;
+            z-index: 100; min-width: 200px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            pointer-events: none; /* 마우스 통과 */
         }
         h3 { margin: 0 0 10px 0; font-size: 18px; color: #00ff88; }
         p { margin: 5px 0; font-size: 14px; color: #ddd; }
         
+        /* 조작 설명 */
         #instructions {
             position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             color: #fff; padding: 12px 25px;
             border-radius: 30px; font-size: 14px;
             pointer-events: none;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        /* 광고 모달창 */
+        #ad-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        #ad-modal.active {
+            opacity: 1;
+            visibility: visible;
+            cursor: pointer;
+        }
+
+        #modal-image {
+            height: 90vh;
+            width: auto;
+            max-width: 95vw;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            object-fit: contain;
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #ad-modal.active #modal-image {
+            transform: scale(1);
+        }
+
+        #modal-text {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -38,78 +89,66 @@
         <p id="persona-info">👤 페르소나 설정 중...</p>
         <p id="location-info">📍 현재 위치: 강남대로 시뮬레이션</p>
         <hr style="border-color: rgba(255,255,255,0.2);">
-        <p id="ad-info">👁️ 발견한 광고: 0 / 10</p>
+        <p id="ad-info">👁️ 발견한 광고: 0 / 12</p>
     </div>
 
     <div id="instructions">
-        🕹️ <b>WASD</b> 이동 | <b>마우스</b> 시점 전환 | <b>클릭</b> 광고 상세 정보
+        🕹️ <b>WASD</b> 이동 | <b>마우스</b> 시점 드래그 | <b>클릭</b> 광고 보기
     </div>
 
-    <a-scene background="color: #87CEEB" fog="type: exponential; color: #87CEEB; density: 0.015">
+    <div id="ad-modal">
+        <img id="modal-image" src="" alt="광고 상세 이미지">
+        <div id="modal-text">광고 제목</div>
+    </div>
+
+    <a-scene background="color: #87CEEB" 
+             fog="type: exponential; color: #87CEEB; density: 0.015"
+             cursor="rayOrigin: mouse" 
+             raycaster="objects: .billboard">
         
         <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
         <a-light type="directional" color="#xffffff" intensity="0.8" position="-1 1 1" cast-shadow="true"></a-light>
 
         <a-plane position="0 0 -50" rotation="-90 0 0" width="40" height="200" color="#2d2d2d"></a-plane>
         <a-plane position="0 0.02 -50" rotation="-90 0 0" width="0.3" height="200" color="#ffcc00"></a-plane>
-        
         <a-plane position="-12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
         <a-plane position="12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
 
-        
         <a-box position="-18 10 -20" width="10" height="20" depth="30" color="#4a4a4a"></a-box>
         <a-box position="18 10 -20" width="10" height="20" depth="30" color="#5a5a5a"></a-box>
         <a-box position="0 15 -80" width="30" height="30" depth="10" color="#333333"></a-box>
-
 
         <a-plane position="-12.9 12 -20" rotation="0 90 0" width="10" height="5" color="#fff"
                  class="billboard" data-id="1" data-desc="좌측 대형 파사드">
             <a-text value="Ad #1\nFacade" align="center" color="black" width="20"></a-text>
         </a-plane>
-
         <a-plane position="12.9 12 -20" rotation="0 -90 0" width="10" height="5" color="#fff"
                  class="billboard" data-id="2" data-desc="우측 대형 파사드">
             <a-text value="Ad #2\nFacade" align="center" color="black" width="20"></a-text>
         </a-plane>
-
         <a-plane position="-12.9 3.5 -10" rotation="0 90 0" width="4" height="1.5" color="#eeeeee"
                  class="billboard" data-id="3" data-desc="좌측 매장 간판">
             <a-text value="Ad #3 Store" align="center" color="black" width="10"></a-text>
         </a-plane>
-
         <a-plane position="12.9 2.5 -10" rotation="0 -90 0" width="3" height="2" color="#aaddff"
                  class="billboard" data-id="4" data-desc="우측 쇼윈도 디스플레이">
             <a-text value="Ad #4\nDigital Window" align="center" color="black" width="8"></a-text>
         </a-plane>
-
-        <a-plane src="static\images\hera.jpg" position="0 15 -30.9" rotation="0 0 0" width="6.67" height="10"
-                 class="billboard" data-id="5" data-desc="중앙 랜드마크 전광판">
-        </a-plane>
+        <a-plane src="{{ url_for('static', filename='images/hera.jpg') }}" position="0 15 -30.9" rotation="0 0 0" width="6.67" height="10"
+                 class="billboard" data-id="5" data-desc="중앙 랜드마크 전광판"></a-plane>
 
         <a-box position="-9 1.5 -18" width="0.2" height="3" depth="2" color="#222"></a-box>
         <a-box position="-9 3 -18" width="3" height="0.2" depth="4" color="#222"></a-box>
-        <a-plane src="static\images\goodday.jpg" position="-8.8 1.5 -18" rotation="0 90 0" width="1.8" height="2.2"
-                 class="billboard" data-id="6" data-desc="버스 정류장 광고">
-        </a-plane>
+        <a-plane src="{{ url_for('static', filename='images/goodday.jpg') }}" position="-8.8 1.5 -18" rotation="0 90 0" width="1.8" height="2.2"
+                 class="billboard" data-id="6" data-desc="버스 정류장 광고"></a-plane>
 
         <a-box position="9 1.5 -2" width="0.2" height="3" depth="3.5" color="#1a1a1a"></a-box>
         <a-box position="8.5 3 -2" width="3" height="0.1" depth="4" color="#1a1a1a"></a-box>
         <a-box position="9 1.5 -2" width="0.05" height="2.8" depth="3.4" color="#88ccff" opacity="0.3"></a-box>
-
-        <a-plane src="static/images/hyundai.jpg" 
-                 position="8.85 1.5 -1.2" 
-                 rotation="0 -90 0" 
-                 width="1.2" height="1.5"
-                 class="billboard" data-id="11" data-desc="신규 광고 #1 (세로형)">
-        </a-plane>
-
-        <a-plane src="static/images/kyobo.jpg"" 
-                 position="8.85 1.5 -2.7" 
-                 rotation="0 -90 0" 
-                 width="1.42" height="1.5"
-                 class="billboard" data-id="12" data-desc="신규 광고 #2 (대형)">
-        </a-plane>
-
+        <a-plane src="{{ url_for('static', filename='images/hyundai.jpg') }}" position="8.85 1.5 -1.2" rotation="0 -90 0" width="1.2" height="1.5"
+                 class="billboard" data-id="11" data-desc="신규 광고 #1 (세로형)"></a-plane>
+        <a-plane src="{{ url_for('static', filename='images/kyobo.jpg') }}" position="8.85 1.5 -2.7" rotation="0 -90 0" width="1.42" height="1.5"
+                 class="billboard" data-id="12" data-desc="신규 광고 #2 (대형)"></a-plane>
 
         <a-entity position="-8 0.8 -5" rotation="0 30 0">
             <a-plane position="0 0 0.1" width="0.6" height="1.2" color="#ffff00"
@@ -118,74 +157,79 @@
             </a-plane>
             <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
         </a-entity>
-
         <a-entity position="8 0.8 -5" rotation="0 -30 0">
-            <a-plane src="static\images\game.jpg" position="0 0 0.1" width="0.6" height="1.2"
-                     class="billboard" data-id="8" data-desc="우측 입간판">
-            </a-plane>
+            <a-plane src="{{ url_for('static', filename='images/game_rpg.png') }}" position="0 0 0.1" width="0.6" height="1.2"
+                     class="billboard" data-id="8" data-desc="우측 입간판"></a-plane>
             <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
         </a-entity>
 
         <a-box position="8 1.5 -25" width="0.8" height="2.5" depth="0.2" color="#111">
-            <a-plane src="static\images\subway.jpg" position="0 0.2 0.11" width="0.7" height="1.5"
-                     class="billboard" data-id="9" data-desc="디지털 키오스크">
-            </a-plane>
+            <a-plane src="{{ url_for('static', filename='images/subway.jpg') }}" position="0 0.2 0.11" width="0.7" height="1.5"
+                     class="billboard" data-id="9" data-desc="디지털 키오스크"></a-plane>
         </a-box>
-
         <a-cylinder position="-12 2 -30" radius="0.6" height="4" color="#666"></a-cylinder>
-        <a-plane src="static\images\starbucks.jpg" position="-11.3 2 -30" rotation="0 90 0" width="0.8" height="1.2" 
-                 class="billboard" data-id="10" data-desc="기둥 포스터">
-        </a-plane>
-
+        <a-plane src="{{ url_for('static', filename='images/starbucks.jpg') }}" position="-11.3 2 -30" rotation="0 90 0" width="0.8" height="1.2" 
+                 class="billboard" data-id="10" data-desc="기둥 포스터"></a-plane>
 
         <a-entity id="rig" movement-controls="speed: 0.4; fly: false;" position="0 0 5">
-            <a-entity camera position="0 1.6 0" look-controls>
-                <a-cursor color="#FF0000" scale="0.8 0.8 0.8" raycaster="objects: .billboard"></a-cursor>
-            </a-entity>
+            <a-entity id="player-camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
+                </a-entity>
         </a-entity>
 
     </a-scene>
 
     <script>
-        // 광고판 클릭 이벤트 핸들러
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. 모의 데이터 주입 (백엔드 없이 데모용)
             setTimeout(() => {
                 const mockPersona = { name: "김서강", age: 24, gender: "남성" };
                 document.getElementById('persona-info').innerText = 
                     `👤 페르소나: ${mockPersona.name} (${mockPersona.age}세/${mockPersona.gender})`;
             }, 500);
 
-            // 2. 광고판 인터랙션 설정
             const billboards = document.querySelectorAll('.billboard');
-            let foundCount = 0;
+            const modal = document.getElementById('ad-modal');
+            const modalImg = document.getElementById('modal-image');
+            const modalText = document.getElementById('modal-text');
+            const cameraEl = document.getElementById('player-camera');
+            
+            document.getElementById('ad-info').innerText = `👁️ 발견한 광고: 0 / ${billboards.length}`;
 
             billboards.forEach(ad => {
-                // 마우스 오버 시 크기 살짝 커짐 (Hover 효과)
-                ad.addEventListener('mouseenter', function () {
-                    this.setAttribute('scale', '1.1 1.1 1.1');
-                    this.setAttribute('opacity', '0.8');
+                // 마우스 호버 효과
+                ad.addEventListener('mouseenter', () => {
+                    ad.setAttribute('animation', {
+                        property: 'scale', to: '1.15 1.15 1.15', dur: 400, easing: 'easeOutQuad'
+                    });
+                    document.body.style.cursor = 'pointer';
+                });
+                ad.addEventListener('mouseleave', () => {
+                    ad.setAttribute('animation', {
+                        property: 'scale', to: '1 1 1', dur: 400, easing: 'easeOutQuad'
+                    });
+                    document.body.style.cursor = 'default';
                 });
 
-                // 마우스 아웃 시 원래대로
-                ad.addEventListener('mouseleave', function () {
-                    this.setAttribute('scale', '1 1 1');
-                    this.setAttribute('opacity', '1');
-                });
+                // 클릭 이벤트
+                ad.addEventListener('click', () => {
+                    const id = ad.getAttribute('data-id');
+                    const desc = ad.getAttribute('data-desc');
+                    
+                    let imgSrc = ad.getAttribute('src');
+                    if (!imgSrc) imgSrc = "https://via.placeholder.com/600x800?text=No+Image";
 
-                // 클릭 시 상세 정보
-                ad.addEventListener('click', function () {
-                    const id = this.getAttribute('data-id');
-                    const desc = this.getAttribute('data-desc');
-                    
-                    // 오버레이 업데이트
-                    // 실제 프로젝트에선 여기서 모달을 띄우거나 상세 페이지로 이동
-                    alert(`[광고판 #${id} 스캔 성공]\n\n"${desc}"\n\n페르소나 맞춤형 오버레이가 스마트폰에 전송되었습니다.`);
-                    
-                    // 카운트 증가 (중복 체크 로직은 생략)
-                    foundCount++;
-                    document.getElementById('ad-info').innerText = `👁️ 발견한 광고: ${foundCount} / 10`;
+                    modalImg.src = imgSrc;
+                    modalText.innerText = desc || `광고 #${id}`;
+
+                    modal.classList.add('active');
+                    cameraEl.setAttribute('look-controls', 'enabled: false');
                 });
+            });
+
+            // 모달 닫기
+            modal.addEventListener('click', () => {
+                modal.classList.remove('active');
+                cameraEl.setAttribute('look-controls', 'enabled: true');
+                setTimeout(() => { modalImg.src = ""; }, 500);
             });
         });
     </script>
