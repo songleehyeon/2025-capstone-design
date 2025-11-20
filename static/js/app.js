@@ -367,16 +367,52 @@ class SmartAdARSystem {
 
     // [수정] 슬롯 기반 배치를 위해 idx 전달
     renderOverlays(overlays) {
-        this.clearOverlays();
+        if (!overlays) overlays = [];
 
-        if (!overlays || overlays.length === 0) return;
+        const existingElements = Array.from(this.overlayLayer.children);
+        
+        // 1. 개수가 다르면 싹 지우고 새로 그립니다 (초기화 등 급격한 변화 시)
+        if (existingElements.length !== overlays.length) {
+            this.clearOverlays();
+            overlays.forEach((overlay, idx) => {
+                const element = this.createOverlayElement(overlay, idx);
+                this.overlayLayer.appendChild(element);
+            });
+            return;
+        }
 
-        this.overlayCountElement.textContent = overlays.length;
-
+        // 2. 개수가 같으면 "위치와 내용만" 부드럽게 업데이트 (핵심!)
         overlays.forEach((overlay, idx) => {
-            const element = this.createOverlayElement(overlay, idx);
-            this.overlayLayer.appendChild(element);
+            const div = existingElements[idx];
+            
+            // 내용이 다를 때만 업데이트 (깜빡임 방지)
+            const newContent = overlay.content ? overlay.content.replace(/\n/g, '<br>') : '';
+            if (div.innerHTML !== newContent) {
+                div.innerHTML = newContent;
+            }
+
+            // 목표 위치 계산
+            let targetLeft, targetTop;
+            if (overlay.bbox) {
+                const points = overlay.bbox;
+                const x = Math.min(...points.map(p => p[0]));
+                const y = Math.min(...points.map(p => p[1]));
+                targetLeft = `${x}px`;
+                targetTop = `${y}px`;
+            } else {
+                // 슬롯 위치 (BBox 없을 때)
+                const slots = [[5, 10], [75, 10], [10, 35], [70, 35], [5, 60], [75, 60]];
+                const slot = slots[idx % slots.length];
+                targetLeft = `${slot[0]}%`;
+                targetTop = `${slot[1]}%`;
+            }
+
+            // 위치만 변경 -> CSS transition이 동작하여 스르륵 움직임
+            div.style.left = targetLeft;
+            div.style.top = targetTop;
         });
+
+        if(this.overlayCountElement) this.overlayCountElement.textContent = overlays.length;
     }
 
     // [수정] 슬롯 기반 위치 + 부드러운 바운스 애니메이션

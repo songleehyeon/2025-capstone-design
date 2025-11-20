@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 class UniversalRecommendationEngine:
-    """설정 기반 통합 추천 엔진 (Priority Sort & Random Tie-break 적용)"""
+    """설정 기반 통합 추천 엔진 (Priority Sort & Deterministic Random Tie-break 적용)"""
 
     def __init__(self, ads_config_dir: str = "config/ads"):
         if not Path(ads_config_dir).is_absolute():
@@ -43,7 +43,7 @@ class UniversalRecommendationEngine:
 
     def get_recommendations(self, brand: str, user_profile: Dict) -> List[Dict]:
         """
-        브랜드별 추천 생성 (Priority Sort + Random Tie-break + Max 4)
+        브랜드별 추천 생성 (Priority Sort + Seeded Random Tie-break + Max 4)
         """
         if brand not in self.ad_configs:
             return []
@@ -64,7 +64,7 @@ class UniversalRecommendationEngine:
                 
                 # 템플릿 메시지 처리
                 if 'message_template' in rule:
-                    rec['message'] = rule['message_template'] # 단순 템플릿
+                    rec['message'] = rule['message_template'] 
                 elif 'message_templates' in rule:
                     rec['message'] = self._select_message_template(rule['message_templates'], user_profile)
 
@@ -84,7 +84,14 @@ class UniversalRecommendationEngine:
                 priority_map[p] = []
             priority_map[p].append(rec)
 
-        # 3. Priority 내림차순으로 순회하며 최대 4개 추출 (동점자 랜덤)
+        # 3. [핵심 수정] 고정 시드 난수 생성기 사용
+        # 사용자 ID와 브랜드명을 조합하여 시드(Seed)를 만듭니다.
+        # 이 시드가 같으면 랜덤 셔플 결과도 항상 똑같습니다. -> 깜빡임 해결!
+        user_id = user_profile.get('user_id', 'guest')
+        seed_value = f"{user_id}_{brand}"
+        rng = random.Random(seed_value) 
+
+        # 4. Priority 내림차순으로 순회하며 최대 4개 추출
         final_recommendations = []
         sorted_priorities = sorted(priority_map.keys(), reverse=True)
         MAX_ITEMS = 4
@@ -96,14 +103,13 @@ class UniversalRecommendationEngine:
             items = priority_map[p]
             remaining_slots = MAX_ITEMS - len(final_recommendations)
             
+            # 동점 항목들을 고정된 패턴으로 섞음 (Seeded Shuffle)
+            rng.shuffle(items)
+
             if len(items) <= remaining_slots:
-                # 현재 그룹을 모두 추가해도 공간이 남거나 딱 맞는 경우
-                # (순서는 섞어서 자연스럽게)
-                random.shuffle(items)
                 final_recommendations.extend(items)
             else:
-                # 공간이 부족한 경우 -> 랜덤으로 선택하여 채움
-                random.shuffle(items)
+                # 공간이 부족하면 섞인 순서대로 잘라서 넣음
                 final_recommendations.extend(items[:remaining_slots])
 
         return final_recommendations
@@ -120,7 +126,6 @@ class UniversalRecommendationEngine:
         elif condition_type == 'or':
             return any(self._evaluate_conditions(r, user_profile, ad_config) for r in conditions.get('rules', []))
 
-        # 기본 필드 비교
         elif condition_type == 'equals':
             user_field = conditions.get('user_field')
             return user_profile.get(user_field) == conditions.get('value')
@@ -131,19 +136,16 @@ class UniversalRecommendationEngine:
 
         elif condition_type == 'array_contains':
             user_field = conditions.get('user_field')
-            # attributes와 attribute_preferences 호환 처리
             field_key = 'attribute_preferences' if user_field == 'attributes' else user_field
             user_array = user_profile.get(field_key, [])
             return conditions.get('value') in user_array
 
-        # Context 비교 (Time, Weather, Season)
         elif condition_type == 'context_equals':
             field = conditions.get('field')
             value = conditions.get('value')
             context = user_profile.get('context', {})
             return context.get(field) == value
 
-        # Store 정보 비교 (Crowd level 등)
         elif condition_type == 'store_field_equals':
             field = conditions.get('field')
             store = ad_config.get('store', {})
@@ -152,7 +154,6 @@ class UniversalRecommendationEngine:
         return False
 
     def _select_message_template(self, templates: Dict, user_profile: Dict) -> str:
-        # 단순화된 템플릿 선택기
         gender = user_profile.get('gender')
         age_group = user_profile.get('age_group')
         
