@@ -12,12 +12,13 @@
   "living": { "type": ["dorm", "couple"] },
   "dietary": { "allergies": [], "vegan": false },
   "preferences": {
-    "price_sensitivity": "high",
     "attribute_preferences": [
       "ice", "matcha", "gift_홍대의", "frequency_3",
       "protein", "member_2150",
-      "wicked_1", "musical", "muscle",
-      "sns", "wisdom", "scaling_8",
+      "wicked_1", "miss",
+      "muscle",
+      "sns", 
+      "wisdom", "scaling_8",
       "리니지", "검은사막", "webtoon", "download_장대규", "graphics", "action"
     ]
   },

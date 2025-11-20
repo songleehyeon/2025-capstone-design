@@ -1,12 +1,19 @@
 {
   "brand": "Wicked2",
   "category": "movie",
-  "detection_keywords": ["wicked", "위키드", "cinema", "cgv"],
+  "detection_keywords": ["위키드", "포굿", "19일"],
   "rules": [
     {
       "rule_id": "GENERAL_RECOMM",
       "priority": 10,
       "message": "🔥 11월 한 달 예매율 1위!",
+      "conditions": { "type": "always_true" },
+      "color": [255, 230, 230]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 10,
+      "message": "🔗 지금 위치에서 가장 가까운 상영시간 보기 > [예매 링크]",
       "conditions": { "type": "always_true" },
       "color": [255, 230, 230]
     },
@@ -32,16 +39,37 @@
       "color": [220, 240, 255]
     },
     {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🎬 <미스 페레그린>을 재밌게 보신 당신! 이 영화도 분명 좋아할거예요.",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "miss" },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🎶 뮤지컬 영화를 좋아하시는 당신께 추천해요!",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "musical" },
+      "color": [220, 240, 255]
+    },
+        {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🎬 <나우유씨미 2> 감독 존 M. 추의 작품이에요",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "director" },
+      "color": [220, 240, 255]
+    },
+    {
       "rule_id": "EVENT_INFO",
       "priority": 30,
-      "message": "🎫 KT 회원 티켓 최대 40% 할인",
+      "message": "🎫 KT 회원 티켓 최대 40% 할인!",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "kt" },
       "color": [230, 230, 255]
     },
     {
       "rule_id": "CONTEXT_RECOMM",
       "priority": 30,
-      "message": "⏳ 주말 저녁 매진 임박! [좌석 보기]",
+      "message": "⏳ 주말 저녁 매진 임박! [예매 가능 좌석 바로보기]",
       "conditions": {
         "type": "and",
         "rules": [

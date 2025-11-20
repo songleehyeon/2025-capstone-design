@@ -99,14 +99,14 @@
     {
       "rule_id": "EVENT_INFO",
       "priority": 10,
-      "message": "🎁 가입 시 3,000 다이아 즉시 지급",
+      "message": "💎 가입 시 3,000 다이아 즉시 지급",
       "conditions": { "type": "always_true" },
       "color": [220, 255, 220]
     },
     {
       "rule_id": "PURCHASE_INFO",
       "priority": 10,
-      "message": "🎁 예약 정보: [link]",
+      "message": "🔗 예약 정보: [link]",
       "conditions": { "type": "always_true" },
       "color": [220, 255, 220]
     }

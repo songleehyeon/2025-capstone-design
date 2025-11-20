@@ -1,7 +1,7 @@
 {
   "brand": "Starbucks",
   "category": "cafe",
-  "detection_keywords": ["starbucks", "스타벅스", "coffee"],
+  "detection_keywords": ["BOOST", "My", "Day!", "에스프레소", "cream latte"],
   "store": { "crowd_level": "high" },
   "rules": [
     {
@@ -34,7 +34,7 @@
     {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
-      "message": "☕ 달달한 커피를 좋아하는 고객님께 추천해요",
+      "message": "☕ 달달한 커피를 좋아하는 고객님께, '더블 에스프레소 크림 라떼'를 추천해요",
       "conditions": {
         "type": "and",
         "rules": [
@@ -47,7 +47,7 @@
     {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
-      "message": "🌿 말차를 좋아하는 고객님께 추천해요",
+      "message": "🌿 말차를 좋아하는 고객님께, '말차 초콜릿 라떼'를 추천해요",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "matcha" },
       "color": [220, 240, 255]
     },
@@ -55,7 +55,7 @@
       "rule_id": "WARN",
       "priority": 100,
       "type": "warning",
-      "message": "⚠️ 주의! 글루텐이 들어간 제품이에요",
+      "message": "⚠️ 주의! '홀그레인 오트 라떼'는 글루텐이 들어간 제품이에요",
       "conditions": { "type": "array_contains", "user_field": "allergies", "value": "gluten" },
       "color": [255, 200, 200]
     },
@@ -63,21 +63,28 @@
       "rule_id": "WARN",
       "priority": 100,
       "type": "warning",
-      "message": "⚠️ 주의! 고카페인 함유 (디카페인 변경 가능)",
+      "message": "⚠️ 주의! '더블 에스프레소 크림 라떼'는 고카페인이 들어간 제품이에요 (디카페인 변경 가능)",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "decaf" },
       "color": [255, 220, 200]
     },
     {
       "rule_id": "EVENT_INFO",
       "priority": 20,
-      "message": "🎁 시즌 음료 구입 시 프리퀀시 적립 가능",
+      "message": "🎁 시즌 음료로 프리퀀시 1개 적립! 이제 3개만 더 모으면 완성돼요. ",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "frequency_3" },
       "color": [255, 245, 220]
     },
     {
       "rule_id": "EVENT_INFO",
+      "priority": 20,
+      "message": "🎁 시즌 음료로 프리퀀시 1개 적립! 이제 5개만 더 모으면 완성돼요. ",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "frequency_5" },
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
       "priority": 30,
-      "message": "🎓 학생 할인쿠폰 적용 가능",
+      "message": "🎓 학생 할인쿠폰이 적용 가능한 상품이에요",
       "conditions": { "type": "array_contains", "user_field": "occupation", "value": "student" },
       "color": [220, 230, 255]
     },
@@ -86,6 +93,20 @@
       "priority": 30,
       "message": "🎁 '수학 선생님'님으로부터 받은 기프티콘 사용 > [바로가기]",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "gift_수학 선생님" },
+      "color": [255, 220, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "🎁 '홍대의'님으로부터 받은 기프티콘 사용 > [바로가기]",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "gift_홍대의" },
+      "color": [255, 220, 220]
+    },
+        {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "🎁 '김마포'님으로부터 받은 기프티콘 사용 > [바로가기]",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "gift_김마포" },
       "color": [255, 220, 220]
     },
     {
@@ -112,7 +133,7 @@
     {
       "rule_id": "CONTEXT_RECOMM",
       "priority": 30,
-      "message": "🍫 오후 시간, 달콤한 메뉴로 당충전 어떠세요?",
+      "message": "🍫 오후 시간, 달콤한 '말차 초콜릿 라떼'로 당 충전 어떠세요?",
       "conditions": {
         "type": "and",
         "rules": [

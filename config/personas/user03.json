@@ -12,7 +12,6 @@
   "living": { "type": ["family"] },
   "dietary": { "allergies": ["gluten"], "vegan": true },
   "preferences": {
-    "price_sensitivity": "medium",
     "attribute_preferences": [
       "hot", "frequency_3", "decaf",
       "health", "not_member",

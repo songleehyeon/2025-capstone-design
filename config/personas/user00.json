@@ -12,12 +12,11 @@
   "living": { "type": ["family"] },
   "dietary": { "allergies": [], "vegan": false },
   "preferences": {
-    "price_sensitivity": "low",
     "attribute_preferences": [
       "ice", "matcha", "sweet", "gift_수학 선생님",
       "spicy", "not_member",
       "webtoon", "로스트아크", "story", "fantasy",
-      "wicked_1", "sns", "wisdom", "scaling_8"
+      "wicked_1"
     ]
   },
   "context": {

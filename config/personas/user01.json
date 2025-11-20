@@ -12,7 +12,6 @@
   "living": { "type": ["single"] },
   "dietary": { "allergies": [], "vegan": false },
   "preferences": {
-    "price_sensitivity": "medium",
     "attribute_preferences": [
       "ice", "sweet", "latte", "coffee", "frequency_5", "gift_expire_송이현",
       "spicy", "member_1080",

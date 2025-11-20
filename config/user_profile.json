@@ -16,7 +16,7 @@
   "vegan": false,
   "low_sugar_preference": false,
   "low_caffeine_preference": false,
-  "price_sensitivity": "low",
+  "price_sensitivity": "medium",
   "attribute_preferences": [
     "ice",
     "matcha",
@@ -28,10 +28,7 @@
     "로스트아크",
     "story",
     "fantasy",
-    "wicked_1",
-    "sns",
-    "wisdom",
-    "scaling_8"
+    "wicked_1"
   ],
   "context": {
     "current_time": "evening",

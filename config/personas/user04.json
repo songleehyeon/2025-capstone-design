@@ -12,10 +12,10 @@
   "living": { "type": ["family"] },
   "dietary": { "allergies": ["nut", "shrimp"], "vegan": false },
   "preferences": {
-    "price_sensitivity": "low",
     "attribute_preferences": [
       "ice", "gift_김마포",
-      "not_member", "health", "kt"
+      "not_member", "health", 
+      "kt"
     ]
   },
   "context": {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart AR Ad Simulator - Capstone Prototype</title>
+    <title>Smart AR Ad Simulator - High Quality</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
     <style>
@@ -12,34 +12,58 @@
         /* UI 오버레이 */
         #ui-overlay {
             position: fixed; top: 20px; left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
+            background: rgba(20, 20, 30, 0.85); /* 다크 테마로 변경하여 세련미 더함 */
+            backdrop-filter: blur(10px);
             color: white; padding: 20px;
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-            z-index: 100; min-width: 200px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            pointer-events: none; /* 마우스 통과 */
+            border-radius: 16px; 
+            border: 1px solid rgba(255,255,255,0.15);
+            z-index: 100; min-width: 220px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            pointer-events: none;
         }
-        h3 { margin: 0 0 10px 0; font-size: 18px; color: #00ff88; }
-        p { margin: 5px 0; font-size: 14px; color: #ddd; }
+        h3 { margin: 0 0 12px 0; font-size: 18px; color: #00ffcc; font-weight: 700; letter-spacing: -0.5px; }
+        p { margin: 6px 0; font-size: 13px; color: #ccc; font-weight: 400; }
         
+        /* 버튼 스타일 개선 */
+        #change-persona-btn {
+            background: linear-gradient(135deg, #00ffcc 0%, #00ccaa 100%);
+            border: none;
+            color: #1a1a1a;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 12px;
+            width: 100%;
+            pointer-events: auto;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.2);
+        }
+        #change-persona-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 255, 204, 0.4);
+        }
+
         /* 조작 설명 */
         #instructions {
-            position: fixed; bottom: 30px; left: 50%;
+            position: fixed; bottom: 40px; left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff; padding: 12px 25px;
-            border-radius: 30px; font-size: 14px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff; padding: 12px 30px;
+            border-radius: 50px; font-size: 14px;
             pointer-events: none;
             z-index: 100;
             white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
         }
 
-        /* 광고 모달창 */
+        /* 광고 모달 */
         #ad-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: rgba(10, 10, 15, 0.95); /* 어두운 배경으로 집중도 향상 */
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -47,7 +71,7 @@
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #ad-modal.active {
@@ -57,171 +81,272 @@
         }
 
         #modal-image {
-            height: 90vh;
+            height: 85vh;
             width: auto;
-            max-width: 95vw;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             object-fit: contain;
-            transform: scale(0.9);
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         #ad-modal.active #modal-image {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
         }
 
         #modal-text {
-            position: absolute;
-            bottom: 20px;
-            background: rgba(0,0,0,0.6);
+            margin-top: 20px;
             color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: 600;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease 0.2s;
+        }
+        #ad-modal.active #modal-text {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
     <div id="ui-overlay">
-        <h3>🎮 스마트 AR 광고 시뮬레이터</h3>
-        <p id="persona-info">👤 페르소나 설정 중...</p>
-        <p id="location-info">📍 현재 위치: 강남대로 시뮬레이션</p>
-        <hr style="border-color: rgba(255,255,255,0.2);">
-        <p id="ad-info">👁️ 발견한 광고: 0 / 12</p>
+        <h3>🎮 Smart AR Simulator</h3>
+        <p id="persona-info">👤 로딩 중...</p>
+        <p id="location-info">📍 SEOUL, GANGNAM-GU</p>
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+        <p id="ad-info">👁️ 탐색한 광고: 0 / 12</p>
+        
+        <button id="change-persona-btn">
+            ⚙️ 페르소나 변경
+        </button>
     </div>
 
     <div id="instructions">
-        🕹️ <b>WASD</b> 이동 | <b>마우스</b> 시점 드래그 | <b>클릭</b> 광고 보기
+        🖱️ <b>HOVER / CLICK</b> 광고판 · 🕹️ <b>WASD</b> 이동 · 🖐️ <b>DRAG</b> 시점
     </div>
 
     <div id="ad-modal">
         <img id="modal-image" src="" alt="광고 상세 이미지">
         <div id="modal-text">광고 제목</div>
+        <p style="color: #888; margin-top: 10px; font-size: 0.9rem;">(화면을 클릭하면 닫힙니다)</p>
     </div>
 
-    <a-scene background="color: #87CEEB" 
-             fog="type: exponential; color: #87CEEB; density: 0.015"
+    <a-scene background="color: #aaccff" 
+             fog="type: exponential; color: #aaccff; density: 0.008"
              cursor="rayOrigin: mouse" 
-             raycaster="objects: .billboard">
+             raycaster="objects: .billboard"
+             shadow="type: pcfsoft">
+
+        <a-assets>
+            <img id="img-hera" src="{{ url_for('static', filename='images/hera.png') }}">
+            <img id="img-hyundai" src="{{ url_for('static', filename='images/hyundai.png') }}">
+            <img id="img-wicked2" src="{{ url_for('static', filename='images/wicked2.png') }}">
+            <img id="img-starbucks" src="{{ url_for('static', filename='images/starbucks.png') }}">
+            <img id="img-subway" src="{{ url_for('static', filename='images/subway.png') }}">
+            <img id="img-game" src="{{ url_for('static', filename='images/game_rpg.png') }}">
+            <img id="img-goodday" src="{{ url_for('static', filename='images/goodday.png') }}">
+            <img id="img-dental" src="{{ url_for('static', filename='images/dental.png') }}">
+            <img id="img-gym" src="{{ url_for('static', filename='images/gym.png') }}">
+            <img id="img-hennessy" src="{{ url_for('static', filename='images/hennessy.png') }}">
+        </a-assets>
+
+        <a-light type="hemisphere" color="#ddeeff" ground-color="#555555" intensity="0.6"></a-light>
         
-        <a-light type="ambient" color="#ffffff" intensity="0.6"></a-light>
-        <a-light type="directional" color="#xffffff" intensity="0.8" position="-1 1 1" cast-shadow="true"></a-light>
+        <a-light type="directional" color="#fffaf0" intensity="1.1" position="-5 15 8" 
+                 cast-shadow="true" shadow-mapSize="2048 2048" shadow-bias="-0.0001"></a-light>
 
-        <a-plane position="0 0 -50" rotation="-90 0 0" width="40" height="200" color="#2d2d2d"></a-plane>
-        <a-plane position="0 0.02 -50" rotation="-90 0 0" width="0.3" height="200" color="#ffcc00"></a-plane>
-        <a-plane position="-12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
-        <a-plane position="12 0.01 -50" rotation="-90 0 0" width="10" height="200" color="#555"></a-plane>
+        <a-plane position="0 0 -50" rotation="-90 0 0" width="50" height="200" 
+                 color="#222428" material="roughness: 0.8; metalness: 0.2" shadow="receive: true"></a-plane>
+        
+        <a-plane position="0 0.01 -50" rotation="-90 0 0" width="0.3" height="200" 
+                 color="#ffcc00" material="emissive: #ffcc00; emissiveIntensity: 0.2"></a-plane>
 
-        <a-box position="-18 10 -20" width="10" height="20" depth="30" color="#4a4a4a"></a-box>
-        <a-box position="18 10 -20" width="10" height="20" depth="30" color="#5a5a5a"></a-box>
-        <a-box position="0 15 -80" width="30" height="30" depth="10" color="#333333"></a-box>
+        <a-box position="-13 0.1 -50" width="12" height="0.2" depth="200" color="#999999" shadow="receive: true"></a-box>
+        <a-box position="13 0.1 -50" width="12" height="0.2" depth="200" color="#999999" shadow="receive: true"></a-box>
+        <a-box position="-6.9 0.15 -50" width="0.2" height="0.3" depth="200" color="#cccccc"></a-box>
+        <a-box position="6.9 0.15 -50" width="0.2" height="0.3" depth="200" color="#cccccc"></a-box>
 
-        <a-plane position="-12.9 12 -20" rotation="0 90 0" width="10" height="5" color="#fff"
-                 class="billboard" data-id="1" data-desc="좌측 대형 파사드">
-            <a-text value="Ad #1\nFacade" align="center" color="black" width="20"></a-text>
+        <a-box position="-18 12 -20" width="14" height="24" depth="30" 
+               color="#2c3e50" material="metalness: 0.6; roughness: 0.2; opacity: 0.9" shadow="cast: true; receive: true"></a-box>
+        <a-entity position="-18 12 -20">
+             <a-box position="7.1 0 0" width="0.2" height="24" depth="0.5" color="#555"></a-box>
+             <a-box position="0 5 15.1" width="14" height="0.5" depth="0.2" color="#555"></a-box>
+             <a-box position="0 -5 15.1" width="14" height="0.5" depth="0.2" color="#555"></a-box>
+        </a-entity>
+
+        <a-box position="18 12 -20" width="14" height="24" depth="30" 
+               color="#eeeeee" material="roughness: 0.5" shadow="cast: true; receive: true"></a-box>
+        <a-box position="17.9 3.5 -20" width="0.2" height="7" depth="28" color="#111" material="metalness: 0.9; roughness: 0.1"></a-box>
+
+        <a-box position="0 20 -90" width="40" height="60" depth="20" 
+               color="#34495e" material="metalness: 0.3; roughness: 0.6" shadow="cast: true"></a-box>
+
+
+        <a-entity id="trees">
+            <a-entity position="-10 0 -10">
+                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
+                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#4CAF50" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
+                <a-dodecahedron position="0 5 0" radius="1.2" color="#66BB6A" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
+            </a-entity>
+            
+            <a-entity position="-10 0 -25">
+                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
+                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#4CAF50" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
+            </a-entity>
+
+             <a-entity position="10 0 -15">
+                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
+                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#81C784" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
+            </a-entity>
+        </a-entity>
+
+        <a-plane position="-10.9 12 -20" rotation="0 90 0" width="12" height="6" color="#fff"
+                 class="billboard" data-id="1" data-desc="좌측 대형 파사드" material="shader: flat">
+             <a-text value="BRAND SPACE" align="center" color="#ccc" width="20"></a-text>
         </a-plane>
-        <a-plane position="12.9 12 -20" rotation="0 -90 0" width="10" height="5" color="#fff"
-                 class="billboard" data-id="2" data-desc="우측 대형 파사드">
-            <a-text value="Ad #2\nFacade" align="center" color="black" width="20"></a-text>
+
+        <a-plane src="#img-hennessy" position="10.9 12 -20" rotation="0 -90 0" width="7.36" height="10.41" color="#fff"
+                 class="billboard" data-id="2" data-desc="우측 대형 파사드" material="shader: flat">
+            <a-text value="ADVERTISING" align="center" color="#ccc" width="20"></a-text>
         </a-plane>
-        <a-plane position="-12.9 3.5 -10" rotation="0 90 0" width="4" height="1.5" color="#eeeeee"
+
+        <a-plane position="-10.9 3.5 -10" rotation="0 90 0" width="4" height="1.5" color="#f5f5f5"
                  class="billboard" data-id="3" data-desc="좌측 매장 간판">
-            <a-text value="Ad #3 Store" align="center" color="black" width="10"></a-text>
+            <a-text value="SHOP" align="center" color="#333" width="10"></a-text>
         </a-plane>
-        <a-plane position="12.9 2.5 -10" rotation="0 -90 0" width="3" height="2" color="#aaddff"
+
+        <a-plane position="10.9 2.5 -10" rotation="0 -90 0" width="3" height="2" color="#aaddff"
                  class="billboard" data-id="4" data-desc="우측 쇼윈도 디스플레이">
-            <a-text value="Ad #4\nDigital Window" align="center" color="black" width="8"></a-text>
+             <a-text value="Digital" align="center" color="#0055aa" width="8"></a-text>
         </a-plane>
-        <a-plane src="{{ url_for('static', filename='images/hera.jpg') }}" position="0 15 -30.9" rotation="0 0 0" width="6.67" height="10"
-                 class="billboard" data-id="5" data-desc="중앙 랜드마크 전광판"></a-plane>
 
-        <a-box position="-9 1.5 -18" width="0.2" height="3" depth="2" color="#222"></a-box>
-        <a-box position="-9 3 -18" width="3" height="0.2" depth="4" color="#222"></a-box>
-        <a-plane src="{{ url_for('static', filename='images/goodday.jpg') }}" position="-8.8 1.5 -18" rotation="0 90 0" width="1.8" height="2.2"
-                 class="billboard" data-id="6" data-desc="버스 정류장 광고"></a-plane>
+        <a-plane src="#img-hera" position="0 27 -69" rotation="0 0 0" width="13.34" height="20"
+                 class="billboard" data-id="5" data-desc="[전광판] 헤라 블랙 쿠션" material="shader: flat" shadow="cast: true">
+        </a-plane>
 
-        <a-box position="9 1.5 -2" width="0.2" height="3" depth="3.5" color="#1a1a1a"></a-box>
-        <a-box position="8.5 3 -2" width="3" height="0.1" depth="4" color="#1a1a1a"></a-box>
-        <a-box position="9 1.5 -2" width="0.05" height="2.8" depth="3.4" color="#88ccff" opacity="0.3"></a-box>
-        <a-plane src="{{ url_for('static', filename='images/hyundai.jpg') }}" position="8.85 1.5 -1.2" rotation="0 -90 0" width="1.2" height="1.5"
-                 class="billboard" data-id="11" data-desc="신규 광고 #1 (세로형)"></a-plane>
-        <a-plane src="{{ url_for('static', filename='images/kyobo.jpg') }}" position="8.85 1.5 -2.7" rotation="0 -90 0" width="1.42" height="1.5"
-                 class="billboard" data-id="12" data-desc="신규 광고 #2 (대형)"></a-plane>
+        <a-entity position="-9 0 -18">
+             <a-box position="0 2 0" width="0.2" height="4" depth="4" color="#222"></a-box> <a-box position="1 3.8 0" width="3" height="0.1" depth="5" color="#333" opacity="0.9"></a-box> <a-box position="0 1.5 0" width="0.1" height="2" depth="3.5" color="#88ccff" opacity="0.3"></a-box> <a-plane src="#img-goodday" position="0.15 1.8 0" rotation="0 90 0" width="1.6" height="2.2"
+                      class="billboard" data-id="6" data-desc="버스 정류장 광고" material="shader: flat">
+             </a-plane>
+             <a-box position="0.8 0.4 0" width="0.6" height="0.1" depth="2" color="#8B4513"></a-box>
+        </a-entity>
+
+
+        <a-entity position="9 0 -4">
+            <a-box position="0 2 0" width="0.2" height="4" depth="6" color="#1a1a1a"></a-box>
+            <a-box position="-1.5 3.8 0" width="3.5" height="0.1" depth="7" color="#1a1a1a"></a-box>
+            <a-box position="0 1.5 0" width="0.05" height="2.5" depth="5.5" color="#88ccff" opacity="0.2"></a-box>
+
+            <a-plane src="#img-hyundai" position="-0.15 1.8 1.5" rotation="0 -90 0" width="1.2" height="1.6"
+                     class="billboard" data-id="11" data-desc="현대백화점 팝업스토어" material="shader: flat"></a-plane>
+            
+            <a-plane src="#img-wicked2" position="-0.15 1.8 -1.5" rotation="0 -90 0" width="1.2" height="1.6"
+                     class="billboard" data-id="12" data-desc="교보돌봄 간병보험" material="shader: flat"></a-plane>
+        </a-entity>
+
 
         <a-entity position="-8 0.8 -5" rotation="0 30 0">
-            <a-plane position="0 0 0.1" width="0.6" height="1.2" color="#ffff00"
-                     class="billboard" data-id="7" data-desc="좌측 입간판">
-                <a-text value="Ad #7\nSale" align="center" color="black" width="4"></a-text>
-            </a-plane>
-            <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
-        </a-entity>
-        <a-entity position="8 0.8 -5" rotation="0 -30 0">
-            <a-plane src="{{ url_for('static', filename='images/game_rpg.png') }}" position="0 0 0.1" width="0.6" height="1.2"
-                     class="billboard" data-id="8" data-desc="우측 입간판"></a-plane>
-            <a-box position="0 0 -0.1" width="0.6" height="1.2" depth="0.05" color="#333"></a-box>
+            <a-plane src="#img-gym" position="0 0 0.06" width="0.7" height="1.4"
+                     class="billboard" data-id="7" data-desc="피트니스 센터" material="shader: flat"></a-plane>
+            <a-box position="0 0 -0.05" width="0.7" height="1.4" depth="0.1" color="#333"></a-box>
         </a-entity>
 
-        <a-box position="8 1.5 -25" width="0.8" height="2.5" depth="0.2" color="#111">
-            <a-plane src="{{ url_for('static', filename='images/subway.jpg') }}" position="0 0.2 0.11" width="0.7" height="1.5"
-                     class="billboard" data-id="9" data-desc="디지털 키오스크"></a-plane>
+        <a-entity position="8 0.8 -10" rotation="0 -30 0">
+            <a-plane src="#img-game" position="0 0 0.06" width="0.7" height="1.4"
+                     class="billboard" data-id="8" data-desc="V4 RPG 게임" material="shader: flat"></a-plane>
+            <a-box position="0 0 -0.05" width="0.7" height="1.4" depth="0.1" color="#333"></a-box>
+        </a-entity>
+
+        <a-box position="8 1.5 -18" width="1.0" height="2.6" depth="0.3" color="#222" shadow="cast: true">
+            <a-plane src="#img-subway" position="0 0 0.16" width="0.9" height="2.0"
+                     class="billboard" data-id="9" data-desc="서브웨이 샌드위치" material="shader: flat"></a-plane>
         </a-box>
-        <a-cylinder position="-12 2 -30" radius="0.6" height="4" color="#666"></a-cylinder>
-        <a-plane src="{{ url_for('static', filename='images/starbucks.jpg') }}" position="-11.3 2 -30" rotation="0 90 0" width="0.8" height="1.2" 
-                 class="billboard" data-id="10" data-desc="기둥 포스터"></a-plane>
 
-        <a-entity id="rig" movement-controls="speed: 0.4; fly: false;" position="0 0 5">
-            <a-entity id="player-camera" camera position="0 1.6 0" look-controls="pointerLockEnabled: false">
-                </a-entity>
+        <a-cylinder position="-12 2 -12" radius="0.7" height="5" color="#555" shadow="cast: true"></a-cylinder>
+        <a-plane src="#img-starbucks" position="-11.2 2 -12" rotation="0 90 0" width="1.0" height="1.4"
+                 class="billboard" data-id="10" data-desc="스타벅스 신메뉴" material="shader: flat"></a-plane>
+        
+        <a-plane src="#img-dental" position="-12.9 6 -25" rotation="0 90 0" width="6" height="2"
+                 class="billboard" data-id="13" data-desc="가지런이 치과" material="shader: flat"></a-plane>
+
+
+        <a-entity id="rig" movement-controls="speed: 0.5" position="0 0 5">
+            <a-entity id="player-camera" camera position="0 1.7 0" look-controls="pointerLockEnabled: false">
+            </a-entity>
         </a-entity>
 
     </a-scene>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const mockPersona = { name: "김서강", age: 24, gender: "남성" };
-                document.getElementById('persona-info').innerText = 
-                    `👤 페르소나: ${mockPersona.name} (${mockPersona.age}세/${mockPersona.gender})`;
-            }, 500);
+            // 페르소나 정보 로드
+            loadPersonaInfo();
+
+            // 페르소나 변경 버튼
+            document.getElementById('change-persona-btn').addEventListener('click', () => {
+                window.location.href = '/admin';
+            });
+
+            async function loadPersonaInfo() {
+                try {
+                    const response = await fetch('/api/user_profile');
+                    const data = await response.json();
+                    if (data.success) {
+                        const p = data.profile;
+                        const infoText = `${p.persona_name || '커스텀'} (${p.age}세/${p.gender === 'male' ? '남' : '여'})`;
+                        document.getElementById('persona-info').innerText = `👤 ${infoText}`;
+                    }
+                } catch (e) { console.error(e); }
+            }
 
             const billboards = document.querySelectorAll('.billboard');
             const modal = document.getElementById('ad-modal');
             const modalImg = document.getElementById('modal-image');
             const modalText = document.getElementById('modal-text');
             const cameraEl = document.getElementById('player-camera');
-            
-            document.getElementById('ad-info').innerText = `👁️ 발견한 광고: 0 / ${billboards.length}`;
+            let foundCount = 0;
 
+            document.getElementById('ad-info').innerText = `👁️ 탐색한 광고: 0 / ${billboards.length}`;
+
+            // 이벤트 연결
             billboards.forEach(ad => {
-                // 마우스 호버 효과
+                // 호버 효과 (크기 + 밝기 증가)
                 ad.addEventListener('mouseenter', () => {
                     ad.setAttribute('animation', {
-                        property: 'scale', to: '1.15 1.15 1.15', dur: 400, easing: 'easeOutQuad'
+                        property: 'scale', to: '1.1 1.1 1.1', dur: 400, easing: 'easeOutElastic'
                     });
                     document.body.style.cursor = 'pointer';
                 });
+                
                 ad.addEventListener('mouseleave', () => {
                     ad.setAttribute('animation', {
-                        property: 'scale', to: '1 1 1', dur: 400, easing: 'easeOutQuad'
+                        property: 'scale', to: '1 1 1', dur: 300, easing: 'easeOutQuad'
                     });
                     document.body.style.cursor = 'default';
                 });
 
-                // 클릭 이벤트
+                // 클릭 효과
                 ad.addEventListener('click', () => {
                     const id = ad.getAttribute('data-id');
                     const desc = ad.getAttribute('data-desc');
                     
-                    let imgSrc = ad.getAttribute('src');
-                    if (!imgSrc) imgSrc = "https://via.placeholder.com/600x800?text=No+Image";
+                    let src = ad.getAttribute('src');
+                    if (src && src.startsWith('#')) {
+                        const asset = document.querySelector(src);
+                        if (asset) src = asset.getAttribute('src');
+                    }
+                    if (!src) src = "https://via.placeholder.com/600x800?text=No+Image";
 
-                    modalImg.src = imgSrc;
+                    modalImg.src = src;
                     modalText.innerText = desc || `광고 #${id}`;
-
+                    
                     modal.classList.add('active');
                     cameraEl.setAttribute('look-controls', 'enabled: false');
+
+                    foundCount++;
+                    // 카운트 업데이트 (선택사항: 중복 체크 로직 추가 가능)
+                    // document.getElementById('ad-info').innerText = ...
                 });
             });
 
@@ -229,7 +354,7 @@
             modal.addEventListener('click', () => {
                 modal.classList.remove('active');
                 cameraEl.setAttribute('look-controls', 'enabled: true');
-                setTimeout(() => { modalImg.src = ""; }, 500);
+                setTimeout(() => { modalImg.src = ""; }, 400);
             });
         });
     </script>

@@ -14,7 +14,7 @@
       "rule_id": "WARN",
       "priority": 100,
       "type": "warning",
-      "message": "⚠️ 주의! 새우·해산물 알레르기",
+      "message": "⚠️ 주의! 새우가 함유되어 있어요. 다른 메뉴를 선택해주세요.",
       "conditions": { "type": "array_contains", "user_field": "allergies", "value": "shrimp" },
       "color": [255, 200, 200]
     },
@@ -52,6 +52,20 @@
       "color": [220, 230, 255]
     },
     {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🥗 채소 비중이 높은 샐러드 옵션을 추천해요.",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "diet" },
+      "color": [220, 230, 255]
+    },
+        {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🌶️ 매운 맛을 좋아하는 당신! New 스파이시 쉬림프를 추천해요.",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "spicy" },
+      "color": [220, 230, 255]
+    },
+    {
       "rule_id": "EVENT_INFO",
       "priority": 20,
       "message": "📱 앱 가입 시 첫 주문 15% 할인 > [바로가기]",
@@ -61,8 +75,15 @@
     {
       "rule_id": "EVENT_INFO",
       "priority": 30,
-      "message": "💰 포인트 1,080P 사용 가능해요!",
+      "message": "💰 서브웨이 포인트가 1,080P 쌓여 있어요! 오늘의 New 쉬림프 주문에 사용하실 수 있어요.",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "member_1080" },
+      "color": [255, 245, 220]
+    },
+        {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "💰 서브웨이 포인트가 2,150P 쌓여 있어요! 오늘의 New 쉬림프 주문에 사용하실 수 있어요.",
+      "conditions": { "type": "array_contains", "user_field": "attributes", "value": "member_2150" },
       "color": [255, 245, 220]
     }
   ]
