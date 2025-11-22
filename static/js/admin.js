@@ -224,12 +224,13 @@ class AdminPanel {
 
             // 프로필 객체 생성
             const profile = {
-                user_id: 'user01',
+                user_id: (this.selectedPersona === 'custom') ? 'user01' : this.selectedPersona,
                 persona_type: this.selectedPersona,
                 persona_name: personaName,
                 gender: this.gender.value,
                 age: age,
                 age_group: ageGroup,
+                // ... (나머지 필드 그대로 유지)
                 occupation: this.occupation.value.split(',').map(s => s.trim()).filter(s => s),
                 living_type: this.livingType.value.split(',').map(s => s.trim()).filter(s => s),
                 allergies: this.allergies.value.split(',').map(s => s.trim()).filter(s => s),

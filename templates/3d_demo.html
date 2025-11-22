@@ -33,10 +33,6 @@
         <button id="change-persona-btn">⚙️ 페르소나 변경</button>
     </div>
 
-    <div id="instructions">
-        🖱️ <b>HOVER / CLICK</b> 광고판 · 🕹️ <b>WASD</b> 이동 · 🖐️ <b>DRAG</b> 시점
-    </div>
-
     <div id="ad-modal">
         <img id="modal-image" src="" alt="광고 상세 이미지">
         <div id="modal-text">광고 제목</div>
@@ -154,7 +150,9 @@
 
                     // [수정됨] API 주소 변경: /api/recommended_ads -> /api/demo_suggestions
                     // "ads"라는 단어를 피해서 광고 차단기(AdBlock) 우회
-                    const recomRes = await fetch('/api/demo_suggestions');
+                    const timestamp = new Date().getTime(); 
+                    const recomRes = await fetch(`/api/demo_suggestions?t=${timestamp}`);
+
                     const recomData = await recomRes.json();
 
                     if (recomData.success && recomData.recommended_ads) {
