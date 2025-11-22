@@ -434,39 +434,33 @@ def select_persona():
         }), 500
 
 
-@app.route('/api/recommended_ads', methods=['GET'])
-def get_recommended_ads():
+@app.route('/api/demo_suggestions', methods=['GET'])
+def get_demo_suggestions():
     """
-    현재 페르소나에 따른 추천 광고 목록 반환
-
-    Response:
-        {
-            "success": true,
-            "recommended_ads": ["10", "9", "8", "12", ...]
-        }
+    현재 페르소나에 따른 추천 목록 반환 (이름 변경됨: recommended_ads -> demo_suggestions)
     """
     try:
         user_id = personalization_engine.user_profile.get('user_id', 'user00')
 
-        # 페르소나별 추천 광고 매핑 (data-id 기준)
+        # 페르소나별 추천 광고 매핑
         recommendations = {
-            'user00': ['10', '9', '8', '12'],  # 스타벅스, 서브웨이, RPG게임, 위키드2
-            'user01': ['10', '9', '8', '11', '12', '7', '5', '6'],  # + 더현대서울, 헬스장, 헤라, 좋은데이
-            'user02': ['10', '9', '8', '11', '12', '7', '6'],  # + 더현대서울, 헬스장, 좋은데이
-            'user03': ['10', '9', '11', '12', '5', '6', '2'],  # + 더현대서울, 헤라, 좋은데이, 헤네시
-            'user04': ['10', '9', '12', '6', '2'],  # 스타벅스, 서브웨이, 위키드2, 좋은데이, 헤네시
+            'user00': ['10', '9', '8', '12'],
+            'user01': ['10', '9', '8', '11', '12', '7', '5', '6'],
+            'user02': ['10', '9', '8', '11', '12', '7', '6'],
+            'user03': ['10', '9', '11', '12', '5', '6', '2'],
+            'user04': ['10', '9', '12', '6', '2'],
         }
 
         recommended = recommendations.get(user_id, [])
 
         return jsonify({
             'success': True,
-            'recommended_ads': recommended,
+            'recommended_ads': recommended, # 키 값은 프론트엔드 호환성을 위해 유지해도 됩니다
             'user_id': user_id
         })
 
     except Exception as e:
-        print(f"추천 광고 조회 오류: {e}")
+        print(f"추천 목록 조회 오류: {e}")
         return jsonify({
             'success': False,
             'error': str(e),

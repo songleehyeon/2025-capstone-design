@@ -7,106 +7,20 @@
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
     <style>
+        /* 기존 스타일 유지 */
         body { margin: 0; overflow: hidden; font-family: 'Pretendard', sans-serif; }
-        
-        /* UI 오버레이 */
-        #ui-overlay {
-            position: fixed; top: 20px; left: 20px;
-            background: rgba(20, 20, 30, 0.85); /* 다크 테마로 변경하여 세련미 더함 */
-            backdrop-filter: blur(10px);
-            color: white; padding: 20px;
-            border-radius: 16px; 
-            border: 1px solid rgba(255,255,255,0.15);
-            z-index: 100; min-width: 220px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            pointer-events: none;
-        }
+        #ui-overlay { position: fixed; top: 20px; left: 20px; background: rgba(20, 20, 30, 0.85); backdrop-filter: blur(10px); color: white; padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.15); z-index: 100; min-width: 220px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); pointer-events: none; }
         h3 { margin: 0 0 12px 0; font-size: 18px; color: #00ffcc; font-weight: 700; letter-spacing: -0.5px; }
         p { margin: 6px 0; font-size: 13px; color: #ccc; font-weight: 400; }
-        
-        /* 버튼 스타일 개선 */
-        #change-persona-btn {
-            background: linear-gradient(135deg, #00ffcc 0%, #00ccaa 100%);
-            border: none;
-            color: #1a1a1a;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            margin-top: 12px;
-            width: 100%;
-            pointer-events: auto;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.2);
-        }
-        #change-persona-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 255, 204, 0.4);
-        }
-
-        /* 조작 설명 */
-        #instructions {
-            position: fixed; bottom: 40px; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.75);
-            color: #fff; padding: 12px 30px;
-            border-radius: 50px; font-size: 14px;
-            pointer-events: none;
-            z-index: 100;
-            white-space: nowrap;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(4px);
-        }
-
-        /* 광고 모달 */
-        #ad-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(10, 10, 15, 0.95); /* 어두운 배경으로 집중도 향상 */
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #ad-modal.active {
-            opacity: 1;
-            visibility: visible;
-            cursor: pointer;
-        }
-
-        #modal-image {
-            height: 85vh;
-            width: auto;
-            max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            object-fit: contain;
-            transform: scale(0.95) translateY(20px);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        #ad-modal.active #modal-image {
-            transform: scale(1) translateY(0);
-        }
-
-        #modal-text {
-            margin-top: 20px;
-            color: white;
-            font-size: 1.0rem;
-            font-weight: 250;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s ease 0.2s;
-        }
-        #ad-modal.active #modal-text {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        #change-persona-btn { background: linear-gradient(135deg, #00ffcc 0%, #00ccaa 100%); border: none; color: #1a1a1a; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; margin-top: 12px; width: 100%; pointer-events: auto; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0, 255, 204, 0.2); }
+        #change-persona-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 255, 204, 0.4); }
+        #instructions { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: #fff; padding: 12px 30px; border-radius: 50px; font-size: 14px; pointer-events: none; z-index: 100; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(4px); }
+        #ad-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(10, 10, 15, 0.95); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #ad-modal.active { opacity: 1; visibility: visible; cursor: pointer; }
+        #modal-image { height: 85vh; width: auto; max-width: 90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.5); object-fit: contain; transform: scale(0.95) translateY(20px); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        #ad-modal.active #modal-image { transform: scale(1) translateY(0); }
+        #modal-text { margin-top: 20px; color: white; font-size: 1.0rem; font-weight: 250; opacity: 0; transform: translateY(10px); transition: all 0.4s ease 0.2s; }
+        #ad-modal.active #modal-text { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -116,10 +30,7 @@
         <p id="location-info">📍 SEOUL, GANGNAM-GU</p>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
         <p id="ad-info">👁️ 탐색한 광고: 0 / 12</p>
-        
-        <button id="change-persona-btn">
-            ⚙️ 페르소나 변경
-        </button>
+        <button id="change-persona-btn">⚙️ 페르소나 변경</button>
     </div>
 
     <div id="instructions">
@@ -145,7 +56,6 @@
             <img id="img-subway" src="{{ url_for('static', filename='images/subway.png') }}">
             <img id="img-game" src="{{ url_for('static', filename='images/game_rpg.png') }}">
             <img id="img-goodday" src="{{ url_for('static', filename='images/goodday.png') }}">
-            <img id="img-dental" src="{{ url_for('static', filename='images/dental.png') }}">
             <img id="img-gym" src="{{ url_for('static', filename='images/gym.png') }}">
             <img id="img-hennessy" src="{{ url_for('static', filename='images/hennessy.png') }}">
             <img id="img-fest" src="{{ url_for('static', filename='images/fest.webp') }}">
@@ -154,98 +64,48 @@
         </a-assets>
 
         <a-light type="hemisphere" color="#ddeeff" ground-color="#555555" intensity="0.6"></a-light>
-        
-        <a-light type="directional" color="#fffaf0" intensity="1.1" position="-5 15 8" 
-                 cast-shadow="true" shadow-mapSize="2048 2048" shadow-bias="-0.0001"></a-light>
+        <a-light type="directional" color="#fffaf0" intensity="1.1" position="-5 15 8" cast-shadow="true"></a-light>
 
-        <a-plane position="0 0 -50" rotation="-90 0 0" width="50" height="200" 
-                 color="#222428" material="roughness: 0.8; metalness: 0.2" shadow="receive: true"></a-plane>
-        
-        <a-plane position="0 0.01 -50" rotation="-90 0 0" width="0.3" height="200" 
-                 color="#ffcc00" material="emissive: #ffcc00; emissiveIntensity: 0.2"></a-plane>
+        <a-plane position="0 0 -50" rotation="-90 0 0" width="50" height="200" color="#222428" shadow="receive: true"></a-plane>
+        <a-plane position="0 0.01 -50" rotation="-90 0 0" width="0.3" height="200" color="#ffcc00"></a-plane>
 
         <a-box position="-13 0.1 -50" width="12" height="0.2" depth="200" color="#999999" shadow="receive: true"></a-box>
         <a-box position="13 0.1 -50" width="12" height="0.2" depth="200" color="#999999" shadow="receive: true"></a-box>
-        <a-box position="-6.9 0.15 -50" width="0.2" height="0.3" depth="200" color="#cccccc"></a-box>
-        <a-box position="6.9 0.15 -50" width="0.2" height="0.3" depth="200" color="#cccccc"></a-box>
 
-        <a-box position="-18 12 -20" width="14" height="24" depth="30" 
-               color="#2c3e50" material="metalness: 0.6; roughness: 0.2; opacity: 0.9" shadow="cast: true; receive: true"></a-box>
-        <a-entity position="-18 12 -20">
-             <a-box position="7.1 0 0" width="0.2" height="24" depth="0.5" color="#555"></a-box>
-             <a-box position="0 5 15.1" width="14" height="0.5" depth="0.2" color="#555"></a-box>
-             <a-box position="0 -5 15.1" width="14" height="0.5" depth="0.2" color="#555"></a-box>
-        </a-entity>
-
-        <a-box position="18 12 -20" width="14" height="24" depth="30" 
-               color="#eeeeee" material="roughness: 0.5" shadow="cast: true; receive: true"></a-box>
-        <a-box position="17.9 3.5 -20" width="0.2" height="7" depth="28" color="#111" material="metalness: 0.9; roughness: 0.1"></a-box>
-
-        <a-box position="0 20 -90" width="40" height="60" depth="20" 
-               color="#34495e" material="metalness: 0.3; roughness: 0.6" shadow="cast: true"></a-box>
-
-
-        <a-entity id="trees">
-            <a-entity position="-10 0 -10">
-                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
-                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#4CAF50" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
-                <a-dodecahedron position="0 5 0" radius="1.2" color="#66BB6A" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
-            </a-entity>
-            
-            <a-entity position="-10 0 -25">
-                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
-                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#4CAF50" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
-            </a-entity>
-
-             <a-entity position="10 0 -15">
-                <a-cylinder position="0 1.5 0" radius="0.2" height="3" color="#5D4037"></a-cylinder>
-                <a-dodecahedron position="0 3.5 0" radius="1.5" color="#81C784" material="flatShading: true" shadow="cast: true"></a-dodecahedron>
-            </a-entity>
-        </a-entity>
+        <a-box position="-18 12 -20" width="14" height="24" depth="30" color="#2c3e50" opacity="0.9"></a-box>
+        <a-box position="18 12 -20" width="14" height="24" depth="30" color="#eeeeee"></a-box>
+        <a-box position="0 20 -90" width="40" height="60" depth="20" color="#34495e"></a-box>
 
         <a-plane src="#img-sangkwe" position="-10.9 13 -20" rotation="0 90 0" width="12.8" height="7.2"
-                 class="billboard" data-id="1" data-desc="대형 파사드 광고" material="shader: flat">
-        </a-plane>
+                 class="billboard" data-id="1" data-desc="대형 파사드 광고" material="shader: flat"></a-plane>
 
         <a-plane src="#img-hennessy" position="10.9 12 -20" rotation="0 -90 0" width="7.36" height="10.41"
-                 class="billboard" data-id="2" data-desc="대형 파사드 광고" material="shader: flat">
-        </a-plane>
+                 class="billboard" data-id="2" data-desc="대형 파사드 광고" material="shader: flat"></a-plane>
 
         <a-plane src="#img-campaign" position="10.9 2.5 -10" rotation="0 -90 0" width="2.138" height="2.953"
-                 class="billboard" data-id="4" data-desc="쇼윈도 디스플레이" material="shader: flat">
-        </a-plane>
+                 class="billboard" data-id="4" data-desc="쇼윈도 디스플레이" material="shader: flat"></a-plane>
 
         <a-plane src="#img-fest" position="10.9 3 -13.2" rotation="0 -90 0" width="3.05" height="4.33"
-                 class="billboard" data-id="14" data-desc="축제 안내 포스터" material="shader: flat">
-        </a-plane>
+                 class="billboard" data-id="14" data-desc="축제 안내 포스터" material="shader: flat"></a-plane>
 
         <a-plane src="#img-hera" position="0 27 -69" rotation="0 0 0" width="13.34" height="20"
-                 class="billboard" data-id="5" data-desc="대형 파사드 광고" material="shader: flat" shadow="cast: true">
-        </a-plane>
+                 class="billboard" data-id="5" data-desc="대형 파사드 광고" material="shader: flat"></a-plane>
 
         <a-entity position="-9 0 -18">
             <a-box position="0 2 0" width="0.2" height="4" depth="4" color="#222"></a-box>
-            <a-box position="1 3.8 0" width="3" height="0.1" depth="5" color="#333" opacity="0.9"></a-box>
-            <a-box position="0 1.5 0" width="0.1" height="2" depth="3.5" color="#88ccff" opacity="0.3"></a-box>
+            <a-box position="1 3.8 0" width="3" height="0.1" depth="5" color="#333"></a-box>
             <a-plane src="#img-goodday" position="0.15 1.8 0" rotation="0 90 0" width="1.6" height="2.2"
-                     class="billboard" data-id="6" data-desc="버스 정류장 광고" material="shader: flat">
-            </a-plane>
-            <a-box position="0.8 0.4 0" width="0.6" height="0.1" depth="2" color="#8B4513"></a-box>
+                     class="billboard" data-id="6" data-desc="버스 정류장 광고" material="shader: flat"></a-plane>
         </a-entity>
-
 
         <a-entity position="9 0 -4">
             <a-box position="0 2 0" width="0.2" height="4" depth="6" color="#1a1a1a"></a-box>
             <a-box position="-1.5 3.8 0" width="3.5" height="0.1" depth="7" color="#1a1a1a"></a-box>
-            <a-box position="0 1.5 0" width="0.05" height="2.5" depth="5.5" color="#88ccff" opacity="0.2"></a-box>
-
             <a-plane src="#img-hyundai" position="-0.15 1.8 1.5" rotation="0 -90 0" width="1.2" height="1.6"
                      class="billboard" data-id="11" data-desc="버스 정류장 광고" material="shader: flat"></a-plane>
-            
             <a-plane src="#img-wicked2" position="-0.15 1.8 -1.5" rotation="0 -90 0" width="1.2" height="1.6"
                      class="billboard" data-id="12" data-desc="버스 정류장 광고" material="shader: flat"></a-plane>
         </a-entity>
-
 
         <a-entity position="-8 0.8 -5" rotation="0 30 0">
             <a-plane src="#img-gym" position="0 0 0.06" width="0.7" height="1.4"
@@ -259,79 +119,124 @@
             <a-box position="0 0 -0.05" width="0.7" height="1.4" depth="0.1" color="#333"></a-box>
         </a-entity>
 
-        <a-box position="8 1.5 -18" width="1.0" height="2.6" depth="0.3" color="#222" shadow="cast: true">
+        <a-box position="8 1.5 -18" width="1.0" height="2.6" depth="0.3" color="#222">
             <a-plane src="#img-subway" position="0 0 0.16" width="0.9" height="2.0"
                      class="billboard" data-id="9" data-desc="서브웨이 샌드위치" material="shader: flat"></a-plane>
         </a-box>
 
-        <a-cylinder position="-12 2 -12" radius="0.7" height="5" color="#555" shadow="cast: true"></a-cylinder>
-        <a-plane src="#img-starbucks" position="-11.2 2 -12" rotation="0 90 0" width="1.21" height="1.43"
+        <a-cylinder position="-10 2 -12" radius="0.7" height="5" color="#555"></a-cylinder>
+        <a-plane src="#img-starbucks" position="-9.2 1.5 -12" rotation="0 90 0" width="1.21" height="1.43"
                  class="billboard" data-id="10" data-desc="스타벅스 신메뉴" material="shader: flat"></a-plane>
 
-        <a-plane src="#img-dental" position="-12.9 6 -25" rotation="0 90 0" width="6" height="2"
-                 class="billboard" data-id="13" data-desc="가지런이 치과" material="shader: flat"></a-plane>
-
-
         <a-entity id="rig" movement-controls="speed: 0.5" position="0 0 5">
-            <a-entity id="player-camera" camera position="0 1.7 0" look-controls="pointerLockEnabled: false">
-            </a-entity>
+            <a-entity id="player-camera" camera position="0 1.7 0" look-controls="pointerLockEnabled: false"></a-entity>
         </a-entity>
 
     </a-scene>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 페르소나 정보 로드
-            loadPersonaInfo();
+            const scene = document.querySelector('a-scene');
 
-            // 페르소나 변경 버튼
             document.getElementById('change-persona-btn').addEventListener('click', () => {
                 window.location.href = '/admin';
             });
 
-            async function loadPersonaInfo() {
+            async function loadData() {
                 try {
-                    const response = await fetch('/api/user_profile');
-                    const data = await response.json();
-                    if (data.success) {
-                        const p = data.profile;
+                    const profileRes = await fetch('/api/user_profile');
+                    const profileData = await profileRes.json();
+                    if (profileData.success) {
+                        const p = profileData.profile;
                         const infoText = `${p.persona_name || '커스텀'} (${p.age}세/${p.gender === 'male' ? '남' : '여'})`;
                         document.getElementById('persona-info').innerText = `👤 ${infoText}`;
                     }
-                } catch (e) { console.error(e); }
+
+                    // [수정됨] API 주소 변경: /api/recommended_ads -> /api/demo_suggestions
+                    // "ads"라는 단어를 피해서 광고 차단기(AdBlock) 우회
+                    const recomRes = await fetch('/api/demo_suggestions');
+                    const recomData = await recomRes.json();
+
+                    if (recomData.success && recomData.recommended_ads) {
+                        console.log('추천 목록:', recomData.recommended_ads);
+                        if (scene.hasLoaded) {
+                            drawArrows(recomData.recommended_ads);
+                        } else {
+                            scene.addEventListener('loaded', () => {
+                                drawArrows(recomData.recommended_ads);
+                            });
+                        }
+                    }
+                } catch (e) { console.error('데이터 로드 실패:', e); }
             }
+
+            function drawArrows(adIds) {
+                document.querySelectorAll('.arrow-indicator').forEach(el => el.remove());
+
+                adIds.forEach(id => {
+                    const targetAd = document.querySelector(`.billboard[data-id="${id}"]`);
+                    
+                    if (targetAd) {
+                        targetAd.object3D.updateMatrixWorld(true);
+                        const worldPos = new THREE.Vector3();
+                        targetAd.object3D.getWorldPosition(worldPos);
+                        
+                        const height = parseFloat(targetAd.getAttribute('height')) || 2.0;
+                        
+                        const arrowEntity = document.createElement('a-entity');
+                        // 작은 화살표, 가까운 위치 (0.6 여백)
+                        const startY = worldPos.y + (height / 2) + 0.6; 
+
+                        arrowEntity.setAttribute('position', `${worldPos.x} ${startY} ${worldPos.z}`);
+                        arrowEntity.classList.add('arrow-indicator');
+
+                        const cone = document.createElement('a-cone');
+                        cone.setAttribute('color', '#FF0033');
+                        cone.setAttribute('radius-bottom', '0.02'); 
+                        cone.setAttribute('radius-top', '0.2');     
+                        cone.setAttribute('height', '0.4');
+                        cone.setAttribute('rotation', '0 0 0');
+                        
+                        cone.setAttribute('material', 'emissive: #FF0033; emissiveIntensity: 0.8');
+
+                        cone.setAttribute('animation', {
+                            property: 'position',
+                            from: '0 0.15 0',
+                            to: '0 0 0',
+                            dur: 800,
+                            dir: 'alternate',
+                            loop: true,
+                            easing: 'easeInOutSine'
+                        });
+
+                        arrowEntity.appendChild(cone);
+                        scene.appendChild(arrowEntity);
+                    }
+                });
+            }
+
+            loadData();
 
             const billboards = document.querySelectorAll('.billboard');
             const modal = document.getElementById('ad-modal');
             const modalImg = document.getElementById('modal-image');
             const modalText = document.getElementById('modal-text');
             const cameraEl = document.getElementById('player-camera');
-            let foundCount = 0;
 
             document.getElementById('ad-info').innerText = `👁️ 탐색한 광고: 0 / ${billboards.length}`;
 
-            // 이벤트 연결
             billboards.forEach(ad => {
-                // 호버 효과 (크기 + 밝기 증가)
                 ad.addEventListener('mouseenter', () => {
-                    ad.setAttribute('animation', {
-                        property: 'scale', to: '1.1 1.1 1.1', dur: 400, easing: 'easeOutElastic'
-                    });
+                    ad.setAttribute('animation', { property: 'scale', to: '1.1 1.1 1.1', dur: 400, easing: 'easeOutElastic' });
                     document.body.style.cursor = 'pointer';
                 });
-                
                 ad.addEventListener('mouseleave', () => {
-                    ad.setAttribute('animation', {
-                        property: 'scale', to: '1 1 1', dur: 300, easing: 'easeOutQuad'
-                    });
+                    ad.setAttribute('animation', { property: 'scale', to: '1 1 1', dur: 300, easing: 'easeOutQuad' });
                     document.body.style.cursor = 'default';
                 });
-
-                // 클릭 효과
                 ad.addEventListener('click', () => {
                     const id = ad.getAttribute('data-id');
                     const desc = ad.getAttribute('data-desc');
-                    
                     let src = ad.getAttribute('src');
                     if (src && src.startsWith('#')) {
                         const asset = document.querySelector(src);
@@ -341,17 +246,11 @@
 
                     modalImg.src = src;
                     modalText.innerText = desc || `광고 #${id}`;
-                    
                     modal.classList.add('active');
                     cameraEl.setAttribute('look-controls', 'enabled: false');
-
-                    foundCount++;
-                    // 카운트 업데이트 (선택사항: 중복 체크 로직 추가 가능)
-                    // document.getElementById('ad-info').innerText = ...
                 });
             });
 
-            // 모달 닫기
             modal.addEventListener('click', () => {
                 modal.classList.remove('active');
                 cameraEl.setAttribute('look-controls', 'enabled: true');
