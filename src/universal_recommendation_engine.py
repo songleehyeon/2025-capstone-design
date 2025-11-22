@@ -94,7 +94,7 @@ class UniversalRecommendationEngine:
         # 4. Priority 내림차순으로 순회하며 최대 4개 추출
         final_recommendations = []
         sorted_priorities = sorted(priority_map.keys(), reverse=True)
-        MAX_ITEMS = 4
+        MAX_ITEMS = 5
 
         for p in sorted_priorities:
             if len(final_recommendations) >= MAX_ITEMS:

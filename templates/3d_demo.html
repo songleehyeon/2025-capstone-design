@@ -149,6 +149,9 @@
             <img id="img-dental" src="{{ url_for('static', filename='images/dental.png') }}">
             <img id="img-gym" src="{{ url_for('static', filename='images/gym.png') }}">
             <img id="img-hennessy" src="{{ url_for('static', filename='images/hennessy.png') }}">
+            <img id="img-fest" src="{{ url_for('static', filename='images/fest.webp') }}">
+            <img id="img-campaign" src="{{ url_for('static', filename='images/campaign.jpg') }}">
+            <img id="img-sangkwe" src="{{ url_for('static', filename='images/sangkwe.png') }}">
         </a-assets>
 
         <a-light type="hemisphere" color="#ddeeff" ground-color="#555555" intensity="0.6"></a-light>
@@ -201,35 +204,34 @@
             </a-entity>
         </a-entity>
 
-        <a-plane position="-10.9 12 -20" rotation="0 90 0" width="12" height="6" color="#fff"
-                 class="billboard" data-id="1" data-desc="좌측 대형 파사드" material="shader: flat">
-             <a-text value="BRAND SPACE" align="center" color="#ccc" width="20"></a-text>
+        <a-plane src="#img-sangkwe" position="-10.9 13 -20" rotation="0 90 0" width="12.8" height="7.2"
+                 class="billboard" data-id="1" data-desc="대형 파사드 광고" material="shader: flat">
         </a-plane>
 
-        <a-plane src="#img-hennessy" position="10.9 12 -20" rotation="0 -90 0" width="7.36" height="10.41" color="#fff"
-                 class="billboard" data-id="2" data-desc="우측 대형 파사드" material="shader: flat">
-            <a-text value="ADVERTISING" align="center" color="#ccc" width="20"></a-text>
+        <a-plane src="#img-hennessy" position="10.9 12 -20" rotation="0 -90 0" width="7.36" height="10.41"
+                 class="billboard" data-id="2" data-desc="대형 파사드 광고" material="shader: flat">
         </a-plane>
 
-        <a-plane position="-10.9 3.5 -10" rotation="0 90 0" width="4" height="1.5" color="#f5f5f5"
-                 class="billboard" data-id="3" data-desc="좌측 매장 간판">
-            <a-text value="SHOP" align="center" color="#333" width="10"></a-text>
+        <a-plane src="#img-campaign" position="10.9 2.5 -10" rotation="0 -90 0" width="2.138" height="2.953"
+                 class="billboard" data-id="4" data-desc="쇼윈도 디스플레이" material="shader: flat">
         </a-plane>
 
-        <a-plane position="10.9 2.5 -10" rotation="0 -90 0" width="3" height="2" color="#aaddff"
-                 class="billboard" data-id="4" data-desc="우측 쇼윈도 디스플레이">
-             <a-text value="Digital" align="center" color="#0055aa" width="8"></a-text>
+        <a-plane src="#img-fest" position="10.9 3 -13.2" rotation="0 -90 0" width="3.05" height="4.33"
+                 class="billboard" data-id="14" data-desc="축제 안내 포스터" material="shader: flat">
         </a-plane>
 
         <a-plane src="#img-hera" position="0 27 -69" rotation="0 0 0" width="13.34" height="20"
-                 class="billboard" data-id="5" data-desc="[전광판] 헤라 블랙 쿠션" material="shader: flat" shadow="cast: true">
+                 class="billboard" data-id="5" data-desc="대형 파사드 광고" material="shader: flat" shadow="cast: true">
         </a-plane>
 
         <a-entity position="-9 0 -18">
-             <a-box position="0 2 0" width="0.2" height="4" depth="4" color="#222"></a-box> <a-box position="1 3.8 0" width="3" height="0.1" depth="5" color="#333" opacity="0.9"></a-box> <a-box position="0 1.5 0" width="0.1" height="2" depth="3.5" color="#88ccff" opacity="0.3"></a-box> <a-plane src="#img-goodday" position="0.15 1.8 0" rotation="0 90 0" width="1.6" height="2.2"
-                      class="billboard" data-id="6" data-desc="버스 정류장 광고" material="shader: flat">
-             </a-plane>
-             <a-box position="0.8 0.4 0" width="0.6" height="0.1" depth="2" color="#8B4513"></a-box>
+            <a-box position="0 2 0" width="0.2" height="4" depth="4" color="#222"></a-box>
+            <a-box position="1 3.8 0" width="3" height="0.1" depth="5" color="#333" opacity="0.9"></a-box>
+            <a-box position="0 1.5 0" width="0.1" height="2" depth="3.5" color="#88ccff" opacity="0.3"></a-box>
+            <a-plane src="#img-goodday" position="0.15 1.8 0" rotation="0 90 0" width="1.6" height="2.2"
+                     class="billboard" data-id="6" data-desc="버스 정류장 광고" material="shader: flat">
+            </a-plane>
+            <a-box position="0.8 0.4 0" width="0.6" height="0.1" depth="2" color="#8B4513"></a-box>
         </a-entity>
 
 
@@ -239,10 +241,10 @@
             <a-box position="0 1.5 0" width="0.05" height="2.5" depth="5.5" color="#88ccff" opacity="0.2"></a-box>
 
             <a-plane src="#img-hyundai" position="-0.15 1.8 1.5" rotation="0 -90 0" width="1.2" height="1.6"
-                     class="billboard" data-id="11" data-desc="현대백화점 팝업스토어" material="shader: flat"></a-plane>
+                     class="billboard" data-id="11" data-desc="버스 정류장 광고" material="shader: flat"></a-plane>
             
             <a-plane src="#img-wicked2" position="-0.15 1.8 -1.5" rotation="0 -90 0" width="1.2" height="1.6"
-                     class="billboard" data-id="12" data-desc="교보돌봄 간병보험" material="shader: flat"></a-plane>
+                     class="billboard" data-id="12" data-desc="버스 정류장 광고" material="shader: flat"></a-plane>
         </a-entity>
 
 
@@ -264,9 +266,9 @@
         </a-box>
 
         <a-cylinder position="-12 2 -12" radius="0.7" height="5" color="#555" shadow="cast: true"></a-cylinder>
-        <a-plane src="#img-starbucks" position="-11.2 2 -12" rotation="0 90 0" width="1.0" height="1.4"
+        <a-plane src="#img-starbucks" position="-11.2 2 -12" rotation="0 90 0" width="1.21" height="1.43"
                  class="billboard" data-id="10" data-desc="스타벅스 신메뉴" material="shader: flat"></a-plane>
-        
+
         <a-plane src="#img-dental" position="-12.9 6 -25" rotation="0 90 0" width="6" height="2"
                  class="billboard" data-id="13" data-desc="가지런이 치과" material="shader: flat"></a-plane>
 

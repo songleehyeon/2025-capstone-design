@@ -15,7 +15,9 @@
     "attribute_preferences": [
       "ice", "gift_김마포",
       "not_member", "health", 
-      "kt"
+      "kt",
+      "not_sweet",
+      "wedding_27", "has_history", "cocktail", "wine"
     ]
   },
   "context": {

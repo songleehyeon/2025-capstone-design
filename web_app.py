@@ -436,8 +436,21 @@ def select_persona():
 
 if __name__ == '__main__':
     import socket
-    hostname = socket.gethostname()
-    local_ip = socket.gethostbyname(hostname)
+
+    # VPN이 있어도 실제 Wi-Fi IP를 정확하게 가져오기
+    def get_local_ip():
+        try:
+            # 외부 연결을 시도해서 로컬 IP 가져오기 (실제로 연결하지는 않음)
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+            s.close()
+            return local_ip
+        except Exception:
+            # 실패 시 기본 방법 사용
+            return socket.gethostbyname(socket.gethostname())
+
+    local_ip = get_local_ip()
 
     print("\n🚀 Flask 서버 시작...")
     print(f"📱 PC 브라우저: https://localhost:5000")

@@ -1,0 +1,95 @@
+{
+  "brand": "Fitness Gym",
+  "category": "fitness",
+  "detection_keywords": ["SUPER", "SALE", "헬스", "클로버짐", "PT"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 25,
+      "message": "💼 직장인들을 위한 퇴근 후 1시간 코스 추천!",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "worker"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 20,
+      "message": "💪 헬스 월 3만 원, PT 1회 4만 원 (민생회복 소비쿠폰 사용 가능)",
+      "conditions": {
+        "type": "always"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "👩 여성 다이어트 전문 코칭–체지방 감량하고 싶은 분은 지금 PT 체험 프로그램을 신청하세요!",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "equals", "user_field": "gender", "value": "female"},
+          {"type": "array_contains", "user_field": "attributes", "value": "diet"}
+        ]
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "💪 벌크업·근력 향상 목표라면, 웨이트 전문 트레이너와 함께!",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "muscle"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🔰 운동이 처음이라면, 기초 자세부터 1:1로 봐주는 PT 체험 세션을 추천해요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "beginner"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 25,
+      "message": "🎁 첫 등록 시 네이버 예약으로 상담 신청하면 운동 밴드를 드려요! > [상담 예약 바로가기]",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "not_member_gym"
+      },
+      "color": [255, 245, 220]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "priority": 30,
+      "message": "🎓 서강대 학생 첫 달 30% 할인+PT 1회 무료 이벤트 진행 중",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "sogang university"
+      },
+      "color": [220, 230, 255]
+    },
+    {
+      "rule_id": "LOC_INFO",
+      "priority": 30,
+      "message": "📍 서강대 정문에서 도보 5분 거리 위치",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "sogang university"
+      },
+      "color": [255, 245, 220]
+    }
+  ]
+}

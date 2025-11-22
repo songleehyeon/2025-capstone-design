@@ -1,7 +1,7 @@
 {
   "brand": "GameRPG",
   "category": "game",
-  "detection_keywords": ["rpg", "게임", "사전예약"],
+  "detection_keywords": ["rpg", "게임", "사전예약", "넷게임즈"],
   "rules": [
     {
       "rule_id": "GENERAL_RECOMM",

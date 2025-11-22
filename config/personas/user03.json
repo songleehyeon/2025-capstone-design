@@ -16,13 +16,16 @@
       "hot", "frequency_3", "decaf",
       "health", "not_member",
       "director", "wicked_1", "kt",
-      "minimal", "classic", "sns", "one_day_left"
+      "minimal", "classic", "sns", "one_day_left",
+      "hera", "sensitive", "natural",
+      "overtime", "not_sweet",
+      "alcohol", "meeting", "no_history"
     ]
   },
   "context": {
-    "current_time": "morning",
+    "current_time": "evening",
     "day_type": "weekday",
     "weather": "cloudy",
-    "season": "fall"
+    "season": "summer"
   }
 }

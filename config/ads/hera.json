@@ -1,0 +1,115 @@
+{
+  "brand": "HERA",
+  "category": "cosmetics",
+  "detection_keywords": ["H E R A", "본연의 나를"],
+  "rules": [
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 25,
+      "message": "💄 2-30대가 많이 찾는 깔끔 풀커버 베이스예요.",
+      "conditions": {
+        "type": "in_array",
+        "user_field": "age_group",
+        "values": ["20s", "30s"]
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 20,
+      "message": "✨ 하루종일 무너지지 않는 고커버 베이스!\n지속력: ★★★★ 커버력: ★★★★★ 촉촉함: ★★★",
+      "conditions": {
+        "type": "always"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "📱 화해 리뷰를 지금 확인하세요! > [앱으로 이동]",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "hwahe"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "✨ 평소 번들거림이 고민이신 00님, 보송하게 오래 가는 커버를 찾고 계신다면 추천해요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "oily"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "🌿 두껍게 올리는 베이스가 부담스럽다면, 얇게 여러 번 레이어링해도 무너지지 않는 헤라 블랙 라인으로 가볍게 커버해 보세요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "natural"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "💚 민감성 피부에게 헤라 블랙 라인을 추천드리는 이유! > [유튜브 링크 바로가기]",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "sensitive"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🎥 00님이 평소 즐겨보시는 뷰티 유튜버 헤일리의 원픽!",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "youtuber"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "💄 이미 블랙 쿠션을 사용 중이신 00님! 블랙 컨실러·블랙 파운데이션과 함께 레이어링해 시너지를 느껴보세요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "has_black_cushion"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "☀️ 여름철 땀·유분으로 무너지는 메이크업, 헤라 블랙 라인으로 고민 해결!",
+      "conditions": {
+        "type": "context_equals",
+        "field": "season",
+        "value": "summer"
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "LOC_INFO",
+      "priority": 30,
+      "message": "📍 현재 위치에서 도보 5분, OO백화점 1층 HERA 매장에서 직접 테스트해 보실 수 있어요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "hera"
+      },
+      "color": [255, 245, 220]
+    }
+  ]
+}

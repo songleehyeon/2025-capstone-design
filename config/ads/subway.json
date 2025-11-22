@@ -1,7 +1,7 @@
 {
   "brand": "Subway",
   "category": "food",
-  "detection_keywords": ["subway", "서브웨이", "sandwich"],
+  "detection_keywords": ["커지고", "맛있어진", "BIGGER"],
   "rules": [
     {
       "rule_id": "GENERAL_RECOMM",

@@ -35,30 +35,59 @@
     {
       "rule_id": "PERSONAL_RECOMM",
       "type": "recommendation",
-      "priority": 25,
+      "priority": 30,
       "category": "similar_brands",
       "conditions": {
         "type": "or",
         "rules": [
-          {"type": "array_contains", "user_field": "attribute_preferences", "value": "nike"},
-          {"type": "array_contains", "user_field": "attribute_preferences", "value": "adidas"},
-          {"type": "array_contains", "user_field": "attribute_preferences", "value": "sports"}
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "xexymix"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "andar"}
         ]
       },
       "message": "👟 ZEXYMIX, ANDAR와 유사한 브랜드예요",
       "color": [220, 240, 255]
     },
     {
+      "rule_id": "PERSONAL_RECOMM",
+      "type": "recommendation",
+      "priority": 30,
+      "category": "mood",
+      "conditions": {
+        "type": "or",
+        "rules": [
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "classic"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "minimal"}
+        ]
+      },
+      "message": "#데일리 클래식 #미니멀한 무드",
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "type": "recommendation",
+      "priority": 30,
+      "category": "mood",
+      "conditions": {
+        "type": "or",
+        "rules": [
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "feminine"},
+          {"type": "array_contains", "user_field": "attribute_preferences", "value": "chic"}
+        ]
+      },
+      "message": "#페미닌한 무드 #프렌치 시크",
+      "color": [220, 240, 255]
+    },
+    {
       "rule_id": "EVENT_INFO",
       "type": "event",
-      "priority": 30,
+      "priority": 20,
       "category": "sns_gift",
       "conditions": {
-        "type": "equals",
-        "user_field": "price_sensitivity",
-        "value": "high"
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "sns"
       },
-      "message": "🎁 SNS 방문 인증 시 기프트 증정",
+      "message": "🎁 SNS 방문 인증 시 기프트 증정 > [더 알아보기]",
       "color": [255, 245, 220]
     },
     {
@@ -69,14 +98,42 @@
       "conditions": {
         "type": "always_true"
       },
-      "message": "✨ 2025 Winter 에디션 상품을 만나보세요",
+      "message": "Repere 24 F/W 신상 첫 공개. 초여름에 가장 잘 어울리는 무드를 담았어요.",
+      "color": [240, 250, 255]
+    },
+    {
+      "rule_id": "EVENT_INFO",
+      "type": "event",
+      "priority": 20,
+      "category": "one_day_left",
+      "conditions": {
+        "conditions": {
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "one_day_left"
+      }
+     },
+      "message": "종료 임박! 내일이면 끝나는 이벤트예요.",
+      "color": [240, 250, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "type": "recommendation",
+      "priority": 30,
+      "category": "calendar",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attribute_preferences",
+        "value": "meet_백온유"
+      },
+      "message": "6월 9일 토요일에 '백온유'님과 영등포 역에서 약속이 있네요! 잠깐 들러보는 건 어때요?",
       "color": [240, 250, 255]
     },
     {
       "rule_id": "LOC_INFO",
       "type": "info",
       "priority": 20,
-      "category": "sogang_distance",
+      "category": "distance",
       "conditions": {
         "type": "array_contains",
         "user_field": "occupation",
@@ -86,9 +143,35 @@
       "color": [230, 245, 230]
     },
     {
+      "rule_id": "LOC_INFO",
+      "type": "info",
+      "priority": 20,
+      "category": "distance",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "woori_sogang"
+      },
+      "message": "🚇 우리은행 서강대지점에서 지하철 34분 거리",
+      "color": [230, 245, 230]
+    },
+    {
+      "rule_id": "LOC_INFO",
+      "type": "info",
+      "priority": 20,
+      "category": "distance",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "occupation",
+        "value": "woori_sogang"
+      },
+      "message": "🚇 한겨레출판사에서 차로 11분 거리",
+      "color": [230, 245, 230]
+    },
+    {
       "rule_id": "PURCHASE_INFO",
       "type": "info",
-      "priority": 10,
+      "priority": 15,
       "category": "reservation_link",
       "conditions": {
         "type": "always_true"
@@ -96,18 +179,28 @@
       "message": "📱 예약 정보: https://hyundai.com/popup",
       "color": [245, 245, 245]
     },
+
     {
-      "rule_id": "WEATHER_RECOMM",
-      "type": "recommendation",
+      "rule_id": "CONTEXT_RECOMM",
+      "type": "info",
       "priority": 15,
-      "category": "winter_new_arrival",
+      "category": "reservation_link",
       "conditions": {
-        "type": "context_equals",
-        "field": "weather",
-        "value": "cold"
+        "type": "always_true"
       },
-      "message": "❄️ 겨울맞이 다양한 신상이 공개되었어요",
-      "color": [210, 230, 255]
+      "message": "6월 10일 일요일 날씨가 화창하네요! 여유로운 휴일, 팝업 이벤트로 색다른 주말을 보내보세요.",
+      "color": [245, 245, 245]
+    },
+        {
+      "rule_id": "PURCHASE_INFO",
+      "type": "info",
+      "priority": 15,
+      "category": "information",
+      "conditions": {
+        "type": "always_true"
+      },
+      "message": "인기 상품은 입구 오른편에서 확인 가능",
+      "color": [245, 245, 245]
     }
   ]
 }

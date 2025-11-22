@@ -1,16 +1,16 @@
 {
   "user_id": "user01",
-  "persona_type": "user00",
-  "persona_name": "광성고 학생 김철수",
-  "gender": "male",
-  "age": 17,
-  "age_group": "20s",
+  "persona_type": "user01",
+  "persona_name": "우리은행 사원 강우리",
+  "gender": "female",
+  "age": 30,
+  "age_group": "30s",
   "occupation": [
-    "student",
-    "high school"
+    "worker",
+    "woori_sogang"
   ],
   "living_type": [
-    "family"
+    "single"
   ],
   "allergies": [],
   "vegan": false,
@@ -19,21 +19,38 @@
   "price_sensitivity": "medium",
   "attribute_preferences": [
     "ice",
-    "matcha",
     "sweet",
-    "gift_수학 선생님",
+    "latte",
+    "coffee",
+    "frequency_5",
+    "gift_expire_송이현",
     "spicy",
-    "not_member",
-    "webtoon",
-    "로스트아크",
-    "story",
-    "fantasy",
-    "wicked_1"
+    "member_1080",
+    "wicked_1",
+    "musical",
+    "director",
+    "sns",
+    "xexymix",
+    "andar",
+    "feminine",
+    "chic",
+    "meet_백온유",
+    "beauty",
+    "scaling_6",
+    "wisdom",
+    "고양이와 스프",
+    "download_김승규",
+    "diet",
+    "beginner",
+    "not_member_gym",
+    "oily",
+    "youtuber",
+    "has_black_cushion"
   ],
   "context": {
     "current_time": "evening",
     "day_type": "weekday",
-    "weather": "sunny"
+    "weather": "rainy"
   },
   "personalization_level": "high"
 }

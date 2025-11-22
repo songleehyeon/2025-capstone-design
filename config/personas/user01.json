@@ -19,11 +19,12 @@
       "sns", "xexymix", "andar", "feminine", "chic", "meet_백온유",
       "beauty", "scaling_6", "wisdom",
       "고양이와 스프", "download_김승규",
-      "diet", "beginner"
+      "diet", "beginner", "not_member_gym",
+      "oily", "youtuber", "has_black_cushion"
     ]
   },
   "context": {
-    "current_time": "afternoon",
+    "current_time": "evening",
     "day_type": "weekday",
     "weather": "rainy",
     "season": "fall"

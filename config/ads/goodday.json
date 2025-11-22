@@ -1,0 +1,118 @@
+{
+  "brand": "GoodDay",
+  "category": "alcohol",
+  "detection_keywords": ["좋은 날", "그 잡채", "좋은데이", "과당제로"],
+  "rules": [
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 30,
+      "message": "🎓 오늘은 캡스톤디자인 프로젝트가 끝난 날! 좋은데이 제로와 함께 남은 하루를 즐겨봐요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "capstone"
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "👋 오늘 하루 고생하셨어요! 좋은데이 제로와 함께 하루를 행복하게 마무리하세요.",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "current_time", "value": "evening"},
+          {"type": "context_equals", "field": "day_type", "value": "weekday"}
+        ]
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 26,
+      "message": "💼 야근까지 버틴 오늘, 너무 무겁지 않게. 좋은데이 제로로 가볍게 하루를 털어내 보세요.",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "context_equals", "field": "current_time", "value": "evening"},
+          {"type": "context_equals", "field": "day_type", "value": "weekday"},
+          {"type": "array_contains", "user_field": "attributes", "value": "overtime"}
+        ]
+      },
+      "color": [255, 235, 210]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "❄️ 쌀쌀한 날에는 좋은데이 제로와 함께 뜨끈한 전골요리를!",
+      "conditions": {
+        "type": "context_equals",
+        "field": "season",
+        "value": "winter"
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🍶 당류 0% 소주가 필요할 때, 부담은 줄이고 분위기만 남기는 좋은데이 과당제로와 함께하세요.",
+      "conditions": {
+        "type": "always_true"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 20,
+      "message": "🍶 당류 0% 소주가 필요할 때, 부담은 줄이고 분위기만 남기는 좋은데이 과당제로와 함께하세요.",
+      "conditions": {
+        "type": "always"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🏃 다이어트 중이라도, 좋은데이 제로는 부담없이 즐길 수 있어요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "diet"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "💪 운동 루틴은 지키고 싶지만 술자리는 놓치기 싫을 때, 00님을 위한 당류 0% 좋은데이 제로!",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "muscle"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "✨ 00님 취향에는 과당은 빼고 담백함은 더한, 깔끔한 좋은데이 제로가 잘 어울려요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "not_sweet"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "📱 SNS 화제의 조합! 좋은데이 요구르트 하이볼 공식 레시피를 보시려면 > [바로가기]",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "sns"
+      },
+      "color": [220, 240, 255]
+    }
+  ]
+}

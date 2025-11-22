@@ -1,0 +1,141 @@
+{
+  "brand": "Hennessy",
+  "category": "alcohol",
+  "detection_keywords": ["Hennessy"],
+  "rules": [
+    {
+      "rule_id": "WARN",
+      "priority": 100,
+      "type": "warning",
+      "message": "⚠️ 알코올 도수가 43도로 높은 편이니, 주량이 약한 분들은 특히 주의해서 즐겨 주세요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "alcohol"
+      },
+      "color": [255, 200, 200]
+    },
+    {
+      "rule_id": "GENERAL_RECOMM",
+      "priority": 20,
+      "message": "🍾 새롭게 선보이는 헤네시 블랙, 플로럴 향이 돋보이는 신상 라인업입니다.",
+      "conditions": {
+        "type": "always"
+      },
+      "color": [200, 240, 200]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "💼 퇴근 후 나에게 하는 작은 대접. 오늘은 헤네시 블랙 어떠세요?",
+      "conditions": {
+        "type": "and",
+        "rules": [
+          {"type": "array_contains", "user_field": "occupation", "value": "worker"},
+          {"type": "context_equals", "field": "current_time", "value": "evening"},
+          {"type": "context_equals", "field": "day_type", "value": "weekday"}
+        ]
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 30,
+      "message": "💍 '결혼 27주년' 디너에 어울리는 한 잔!",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "wedding_27"
+      },
+      "color": [255, 220, 240]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 30,
+      "message": "👥 다가오는 주말 모임에 잘 어울릴 거예요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "meeting"
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🍷 와인을 사랑하는 당신께, 와인의 달콤함에 위스키의 깊이를 더한 헤네시 블랙을",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "wine"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🌸 자스민과 시트러스가 튀는 플로럴 꼬냑. 부드러운 단맛의 과일 향을 좋아하시는 당신께 헤네시 블랙을 추천드려요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "fruit"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 30,
+      "message": "🍸 칵테일과 특히 잘 어울리는 헤네시 블랙. 43도의 탄탄한 바디감이 하이볼·사워·믹스드 드링크의 베이스를 단단하게 받쳐줍니다.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "cocktail"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "✨ 헤네시가 처음이신 00님께, 부담 없이 시작할 수 있는 미니/하프 사이즈를 함께 준비했어요. > [더 알아보기]",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "no_history"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "PERSONAL_RECOMM",
+      "priority": 25,
+      "message": "🥃 이전에 헤네시 클래식을 즐겨주셨던 00님, 이번에는 헤네시 블랙으로 한층 깊어진 향과 바디를 경험해 보세요.",
+      "conditions": {
+        "type": "array_contains",
+        "user_field": "attributes",
+        "value": "has_history"
+      },
+      "color": [220, 240, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "☀️ 더운 날씨엔 시원한 하이볼이 제격! 자스민과 시트러스 향이 살아 있는 헤네시 블랙 하이볼로 더위를 날려보세요.",
+      "conditions": {
+        "type": "context_equals",
+        "field": "season",
+        "value": "summer"
+      },
+      "color": [210, 230, 255]
+    },
+    {
+      "rule_id": "CONTEXT_RECOMM",
+      "priority": 25,
+      "message": "❄️ 쌀쌀해지는 날씨엔 헤네시 블랙 온더락 한 잔으로 몸을 살짝 덥혀보세요.",
+      "conditions": {
+        "type": "context_equals",
+        "field": "season",
+        "value": "winter"
+      },
+      "color": [210, 230, 255]
+    }
+  ]
+}
