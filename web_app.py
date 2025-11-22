@@ -437,7 +437,9 @@ def select_persona():
 @app.route('/api/demo_suggestions', methods=['GET'])
 def get_demo_suggestions():
     """
-    현재 페르소나에 따른 추천 목록 반환 (이름 변경됨: recommended_ads -> demo_suggestions)
+    현재 페르소나에 따른 추천 목록 반환 
+    - 프리셋 페르소나: 지정된 추천 광고 ID 반환 (화살표 표시)
+    - 커스텀 프로필: 빈 리스트 반환 (화살표 없음, 자유 관람)
     """
     try:
         user_id = personalization_engine.user_profile.get('user_id', 'user00')
@@ -451,7 +453,10 @@ def get_demo_suggestions():
             'user04': ['10', '9', '12', '6', '2'],
         }
 
-        recommended = recommendations.get(user_id, [])
+        if user_id in recommendations:
+            recommended = recommendations[user_id]
+        else:
+            recommended = []
 
         return jsonify({
             'success': True,

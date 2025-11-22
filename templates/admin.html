@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>페르소나 관리 - 스마트 광고 AR</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        /* 화면 전환용 스타일 */
+        .view-section { display: none; animation: fadeIn 0.5s; }
+        .view-section.active { display: block; }
+
+        /* 커스텀 폼 스타일 */
+        .step-container { display: none; }
+        .step-container.active { display: block; animation: fadeIn 0.5s; }
+        
+        .keyword-section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .keyword-section h4 { margin-bottom: 10px; color: #6C63FF; font-size: 1rem; }
+        
+        /* 체크박스/라디오 그리드 */
+        .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        
+        /* 버튼형 라디오/체크박스 스타일 */
+        .toggle-label {
+            display: flex; align-items: center; gap: 8px; cursor: pointer;
+            background: #f8f9fa; padding: 10px 12px; border-radius: 8px; border: 1px solid #ddd;
+            transition: all 0.2s; font-size: 0.9rem; justify-content: center;
+        }
+        .toggle-label:hover { background: #e9ecef; border-color: #b0b0b0; }
+        
+        /* 선택된 상태 스타일 */
+        input[type="checkbox"]:checked + span,
+        input[type="radio"]:checked + span { 
+            font-weight: bold; color: #6C63FF; 
+        }
+        /* 라디오 버튼 선택 시 테두리 강조 */
+        label:has(input:checked) {
+            border-color: #6C63FF;
+            background-color: #f0f0ff;
+        }
+
+        /* 양자택일 그룹 스타일 */
+        .radio-group-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .radio-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff;
+            padding: 5px;
+        }
+        .radio-row span.label {
+            font-weight: 600;
+            width: 80px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .radio-options {
+            display: flex;
+            gap: 5px;
+            flex: 1;
+        }
+        .radio-options label {
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; justify-content: space-between; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -14,39 +80,31 @@
         </header>
 
         <div class="form-container">
-            <form id="persona-form">
+            
+            <div id="view-main" class="view-section active">
                 <div class="form-group">
-                    <label for="user-id">👤 사용자 ID</label>
-                    <input type="text" id="user-id" value="user00" readonly>
-                </div>
-
-                <div class="form-group">
-                    <label>🎯 페르소나 선택</label>
+                    <label>🎯 페르소나를 선택하세요</label>
                     <div class="persona-cards">
                         <div class="persona-card" data-persona="user00">
                             <div class="persona-icon">👦</div>
                             <h3>김철수 (17세)</h3>
                             <p>광성고 학생 · 게임, 웹툰</p>
                         </div>
-
                         <div class="persona-card" data-persona="user01">
                             <div class="persona-icon">👩‍💼</div>
                             <h3>강우리 (30세)</h3>
                             <p>우리은행 사원 · 뷰티, 뮤지컬</p>
                         </div>
-
                         <div class="persona-card" data-persona="user02">
                             <div class="persona-icon">👨‍🎓</div>
                             <h3>김서강 (23세)</h3>
                             <p>서강대 학생 · 운동, 게임</p>
                         </div>
-
                         <div class="persona-card" data-persona="user03">
                             <div class="persona-icon">👩‍💻</div>
                             <h3>편집장 (46세)</h3>
                             <p>한겨레 편집장 · 비건, 클래식</p>
                         </div>
-
                         <div class="persona-card" data-persona="user04">
                             <div class="persona-icon">👨‍🔧</div>
                             <h3>사장님 (56세)</h3>
@@ -55,122 +113,174 @@
 
                         <div class="persona-card" data-persona="custom">
                             <div class="persona-icon">⚙️</div>
-                            <h3>커스텀</h3>
-                            <p>직접 설정</p>
+                            <h3>커스텀 만들기</h3>
+                            <p>직접 프로필 생성</p>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="custom-settings">
-                    <div class="form-section">
-                        <h3>👤 기본 정보</h3>
-                        <div class="form-group">
-                            <label for="gender">성별</label>
-                            <select id="gender">
-                                <option value="female">여성</option>
-                                <option value="male">남성</option>
-                                <option value="other">기타</option>
-                            </select>
+            <div id="view-custom" class="view-section">
+                <div class="form-section">
+                    <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                        🛠️ 나만의 프로필 만들기
+                        <button class="btn" style="padding: 6px 14px; font-size: 0.85rem; flex: 0 0 auto; width: auto; margin: 0; min-width: 0;" onclick="adminPanel.showMainView()">
+                            ↩ 뒤로 가기
+                        </button>
+                    </h3>
+                    
+                    <form id="custom-profile-form">
+                        <div id="step-1" class="step-container active">
+                            <h4>1단계: 기본 정보 입력</h4>
+                            <div class="form-group">
+                                <label>이름</label>
+                                <input type="text" id="custom-name" placeholder="예: 홍길동">
+                            </div>
+                            <div class="form-group">
+                                <label>나이대</label>
+                                <select id="custom-age-group">
+                                    <option value="20s">20대</option>
+                                    <option value="30s">30대</option>
+                                    <option value="40s">40대</option>
+                                    <option value="50s">50대 이상</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>성별</label>
+                                <select id="custom-gender">
+                                    <option value="female">여성</option>
+                                    <option value="male">남성</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>직업</label>
+                                <select id="custom-occupation">
+                                    <option value="student">학생 (Student)</option>
+                                    <option value="worker">직장인 (Worker)</option>
+                                </select>
+                            </div>
+                            <div class="btn-group">
+                                <div></div> 
+                                <button type="button" class="btn btn-primary" onclick="adminPanel.nextStep()">다음 단계 👉</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="age">나이</label>
-                            <input type="number" id="age" min="1" max="120" placeholder="예: 28">
-                        </div>
-                        <div class="form-group">
-                            <label for="occupation">직업 (쉼표로 구분)</label>
-                            <input type="text" id="occupation" placeholder="예: worker, bank">
-                        </div>
-                        <div class="form-group">
-                            <label for="living-type">거주 형태 (쉼표로 구분)</label>
-                            <input type="text" id="living-type" placeholder="예: single_household, single">
-                        </div>
-                    </div>
 
-                    <div class="form-section">
-                        <h3>🥗 식이 선호도</h3>
-                        <div class="form-group">
-                            <label for="allergies">⚠️ 알레르기 성분 (쉼표로 구분)</label>
-                            <input type="text" id="allergies" placeholder="예: 우유, 견과류">
-                        </div>
-                        <div class="checkbox-group">
-                            <label><input type="checkbox" id="vegan"> 비건</label>
-                            <label><input type="checkbox" id="low-sugar"> 저당 선호</label>
-                            <label><input type="checkbox" id="low-caffeine"> 저카페인 선호</label>
-                        </div>
-                    </div>
+                        <div id="step-2" class="step-container">
+                            <h4>2단계: 선호 키워드 선택</h4>
+                            <p style="color: #666; font-size: 0.9rem; margin-bottom:15px;">* 양자택일 항목을 선택해주세요.</p>
 
-                    <div class="form-section">
-                        <h3>💡 속성 선호도</h3>
-                        <div class="form-group">
-                            <label for="attribute-preferences">관심 속성 (쉼표로 구분)</label>
-                            <input type="text" id="attribute-preferences" placeholder="예: ice, sweet, latte, game, beauty">
-                            <small>음료, 맛, 관심사, 브랜드 등을 자유롭게 입력하세요.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="price-sensitivity">💰 가격 민감도</label>
-                            <select id="price-sensitivity">
-                                <option value="low">낮음 (프리미엄 선호)</option>
-                                <option value="medium" selected>보통</option>
-                                <option value="high">높음 (가성비 중시)</option>
-                            </select>
-                        </div>
-                    </div>
+                            <div class="keyword-section">
+                                <h4>☕ 카페 취향 (필수 선택)</h4>
+                                <div class="radio-group-container">
+                                    <div class="radio-row">
+                                        <span class="label">온도</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="drink_temp" value="hot" checked> <span>🔥 따뜻한</span></label>
+                                            <label class="toggle-label"><input type="radio" name="drink_temp" value="ice"> <span>🧊 차가운</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">당도</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="drink_sweet" value="sweet" checked> <span>🍭 달달한</span></label>
+                                            <label class="toggle-label"><input type="radio" name="drink_sweet" value="not_sweet"> <span>🍵 달지 않은</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">카페인</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="drink_caff" value="coffee" checked> <span>☕ 카페인</span></label>
+                                            <label class="toggle-label"><input type="radio" name="drink_caff" value="decaf"> <span>💤 디카페인</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">프리퀀시</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="drink_freq" value="frequency_2" checked> <span>⭕ 수집함</span></label>
+                                            <label class="toggle-label"><input type="radio" name="drink_freq" value=""> <span>❌ 안 모음</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="form-section">
-                        <h3>🌤️ 상황 정보 (Context)</h3>
-                        <div class="form-group">
-                            <label for="current-time">현재 시간대</label>
-                            <select id="current-time">
-                                <option value="morning">아침</option>
-                                <option value="afternoon" selected>오후</option>
-                                <option value="evening">저녁</option>
-                                <option value="night">밤</option>
-                            </select>
+                            <div class="keyword-section">
+                                <h4>🍽️ 음식 & 엔터 & 패션 (다중 선택)</h4>
+                                <div class="checkbox-grid">
+                                    <label class="toggle-label"><input type="checkbox" value="spicy"> <span>🌶️ 매운맛</span></label>
+                                    <label class="toggle-label"><input type="checkbox" value="health"> <span>🥗 건강식</span></label>
+                                    <label class="toggle-label"><input type="checkbox" value="protein"> <span>💪 단백질</span></label>
+                                    <label class="toggle-label"><input type="checkbox" value="diet"> <span>📉 다이어트</span></label>
+                                    
+                                    <label class="toggle-label"><input type="checkbox" value="webtoon"> <span>📱 웹툰</span></label>
+                                    <label class="toggle-label"><input type="checkbox" value="musical"> <span>🎭 뮤지컬</span></label>
+                                    <label class="toggle-label"><input type="checkbox" data-group="story_genre"> <span>📖 스토리/장르</span></label>
+                                    <label class="toggle-label"><input type="checkbox" data-group="graphic_action"> <span>⚔️ 그래픽/액션</span></label>
+                                    
+                                    <label class="toggle-label"><input type="checkbox" value="sns"> <span>📸 SNS 활발</span></label>
+                                    <label class="toggle-label"><input type="checkbox" data-group="sporty"> <span>🏃 스포티룩</span></label>
+                                    <label class="toggle-label"><input type="checkbox" data-group="feminine_chic"> <span>👗 페미닌/시크</span></label>
+                                    <label class="toggle-label"><input type="checkbox" data-group="classic_minimal"> <span>👔 클래식/미니멀</span></label>
+
+                                    <label class="toggle-label"><input type="checkbox" value="cocktail"> <span>🍸 칵테일</span></label>
+                                    <label class="toggle-label"><input type="checkbox" value="wine"> <span>🍷 와인</span></label>
+                                </div>
+                            </div>
+
+                            <div class="keyword-section">
+                                <h4>🎨 라이프스타일 (필수 선택)</h4>
+                                <div class="radio-group-container">
+                                    <div class="radio-row">
+                                        <span class="label">피부타입</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="skin_type" value="oily"> <span>지성</span></label>
+                                            <label class="toggle-label"><input type="radio" name="skin_type" value=""> <span>건성</span></label>
+                                            <label class="toggle-label"><input type="radio" name="skin_type" value="" checked> <span>모른다</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">메이크업</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="makeup_style" value="natural" checked> <span>자연스러움</span></label>
+                                            <label class="toggle-label"><input type="radio" name="makeup_style" value=""> <span>화려함</span></label>
+                                            <label class="toggle-label"><input type="radio" name="makeup_style" value=""> <span>해당 없음</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">운동</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="exercise_type" value="muscle" checked> <span>관심 있음</span></label>
+                                            <label class="toggle-label"><input type="radio" name="exercise_type" value="beginner"> <span>초보(관심X)</span></label>
+                                        </div>
+                                    </div>
+                                    <div class="radio-row">
+                                        <span class="label">주량</span>
+                                        <div class="radio-options">
+                                            <label class="toggle-label"><input type="radio" name="alcohol_limit" value="alcohol"> <span>적음 (알쓰)</span></label>
+                                            <label class="toggle-label"><input type="radio" name="alcohol_limit" value="" checked> <span>많음</span></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary" onclick="adminPanel.prevStep()">👈 이전</button>
+                                <button type="button" id="save-custom-btn" class="btn btn-primary">💾 생성 및 적용</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="day-type">요일 유형</label>
-                            <select id="day-type">
-                                <option value="weekday" selected>평일</option>
-                                <option value="weekend">주말</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="weather">날씨</label>
-                            <select id="weather">
-                                <option value="sunny">맑음</option>
-                                <option value="cloudy">흐림</option>
-                                <option value="rainy">비</option>
-                                <option value="snowy">눈</option>
-                            </select>
-                        </div>
-                         <div class="form-group">
-                            <label for="season">계절</label>
-                            <select id="season">
-                                <option value="spring">봄</option>
-                                <option value="summer">여름</option>
-                                <option value="fall">가을</option>
-                                <option value="winter">겨울</option>
-                            </select>
-                        </div>
-                    </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="button-group">
-                    <button type="button" id="save-btn" class="btn btn-primary">💾 저장 및 적용</button>
-                    <button type="button" id="reset-btn" class="btn btn-secondary">🔄 초기화</button>
-                </div>
-            </form>
-             <div id="status-message" class="status-message"></div>
+            <div id="status-message" class="status-message"></div>
         </div>
+
         <div class="preview-section">
-            <h2>📋 현재 프로필</h2>
+            <h2>📋 현재 적용된 프로필</h2>
             <pre id="profile-preview">{}</pre>
         </div>
 
-        
         <div class="footer-links">
-            <a href="/" class="link">📱 스마트폰 뷰로 이동</a>
-            <a href="/3d-demo" class="link" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin-top: 10px;">
+            <a href="/3d-demo" class="link" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 🎮 3D 시뮬레이션 시작
             </a>
         </div>

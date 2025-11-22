@@ -1,310 +1,229 @@
-/**
- * 관리 페이지 JavaScript
- * 페르소나 설정 및 프로필 업데이트
- */
-
 class AdminPanel {
     constructor() {
-        // DOM 요소
+        // 뷰 영역
+        this.viewMain = document.getElementById('view-main');
+        this.viewCustom = document.getElementById('view-custom');
+        
+        // 커스텀 폼 단계
+        this.step1 = document.getElementById('step-1');
+        this.step2 = document.getElementById('step-2');
+
+        // 요소들
         this.personaCards = document.querySelectorAll('.persona-card');
-        this.saveBtn = document.getElementById('save-btn');
-        this.resetBtn = document.getElementById('reset-btn');
+        this.saveCustomBtn = document.getElementById('save-custom-btn');
         this.statusMessage = document.getElementById('status-message');
         this.profilePreview = document.getElementById('profile-preview');
 
-        // 폼 요소
-        this.gender = document.getElementById('gender');
-        this.age = document.getElementById('age');
-        this.occupation = document.getElementById('occupation');
-        this.livingType = document.getElementById('living-type');
-        this.allergies = document.getElementById('allergies');
-        this.vegan = document.getElementById('vegan');
-        this.lowSugar = document.getElementById('low-sugar');
-        this.lowCaffeine = document.getElementById('low-caffeine');
-        this.attributePreferences = document.getElementById('attribute-preferences');
-        this.priceSensitivity = document.getElementById('price-sensitivity');
-        this.currentTime = document.getElementById('current-time');
-        this.dayType = document.getElementById('day-type');
-        this.weather = document.getElementById('weather');
-
-        // 모든 입력 필드 목록
-        this.allInputs = [
-            this.gender, this.age, this.occupation, this.livingType,
-            this.allergies, this.vegan, this.lowSugar, this.lowCaffeine,
-            this.attributePreferences, this.priceSensitivity,
-            this.currentTime, this.dayType, this.weather
-        ];
-
-        // 상태
-        this.selectedPersona = 'custom';
-        this.personasData = null;
-
-        // API 엔드포인트
+        // API 설정
         const protocol = window.location.protocol;
         const host = window.location.host;
-        this.apiUrl = `${protocol}//${host}/api/update_profile`;
-        this.getProfileUrl = `${protocol}//${host}/api/user_profile`;
-        this.personasUrl = `${protocol}//${host}/api/personas`;
-        this.selectPersonaUrl = `${protocol}//${host}/api/select_persona`;
+        this.apiUrlSelect = `${protocol}//${host}/api/select_persona`;
+        this.apiUrlUpdate = `${protocol}//${host}/api/update_profile`;
+        this.apiUrlProfile = `${protocol}//${host}/api/user_profile`;
+
+        // [수정됨] 랜덤 배정될 속성 풀 ("sensitive" 추가됨)
+        this.randomAttributesPool = [
+            "sensitive", // [이동됨] 민감성 피부는 랜덤
+            "wicked_1",
+            "latte", "gift_expire_000", "gift_000", 
+            "member_1080", "not_member",
+            "miss", "kt", "director",
+            "meet_백온유", "one_day_left",
+            "고양이와 스프", "download_김승규", "로스트아크", "리니지", "검은사막",
+            "not_member_gym",
+            "hera", "youtuber", "has_black_cushion",
+            "wedding_27", "has_history", "meeting", "no_history"
+        ];
+
+        this.groupMapping = {
+            "story_genre": ["story", "fantasy"],
+            "graphic_action": ["graphics", "action"],
+            "feminine_chic": ["feminine", "chic"],
+            "classic_minimal": ["classic", "minimal"],
+            "sporty": ["xexymix", "andar"]
+        };
 
         this.init();
     }
 
-    async init() {
-        // 페르소나 데이터 로드
-        await this.loadPersonasData();
-
-        // 페르소나 카드 클릭 이벤트
+    init() {
         this.personaCards.forEach(card => {
-            card.addEventListener('click', () => this.selectPersona(card));
+            card.addEventListener('click', () => this.handleCardClick(card));
         });
 
-        // 버튼 이벤트
-        this.saveBtn.addEventListener('click', () => this.saveProfile());
-        this.resetBtn.addEventListener('click', () => this.resetProfile());
-
-        // 초기 프로필 로드
+        this.saveCustomBtn.addEventListener('click', () => this.generateAndSaveCustomProfile());
         this.loadCurrentProfile();
     }
 
-    async loadPersonasData() {
-        try {
-            const response = await fetch(this.personasUrl);
-            const data = await response.json();
-            if (data.success) {
-                this.personasData = data.personas;
-            } else {
-                console.error('페르소나 로드 실패:', data.error);
-            }
-        } catch (error) {
-            console.error('페르소나 데이터 로드 오류:', error);
-            this.showStatus('페르소나 데이터 로드 실패', 'error');
-        }
-    }
-
-    async selectPersona(card) {
-        // 모든 카드 비활성화
+    handleCardClick(card) {
         this.personaCards.forEach(c => c.classList.remove('active'));
-
-        // 선택한 카드 활성화
         card.classList.add('active');
+
         const personaId = card.dataset.persona;
-        this.selectedPersona = personaId;
-
-        // 커스텀이 아니면 API로 페르소나 선택 요청
-        if (personaId !== 'custom') {
-            try {
-                const response = await fetch(this.selectPersonaUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ persona_id: personaId })
-                });
-
-                const result = await response.json();
-                if (result.success) {
-                    console.log('✓ 페르소나 선택됨:', result.profile.persona_name);
-                    this.showStatus(`✓ ${result.profile.persona_name} 페르소나 적용됨`, 'success');
-
-                    // UI에 프로필 반영
-                    this.applyPersonaPreset(personaId);
-                } else {
-                    console.error('페르소나 선택 실패:', result.error);
-                    this.showStatus('페르소나 선택 실패', 'error');
-                }
-            } catch (error) {
-                console.error('페르소나 API 호출 오류:', error);
-                this.showStatus('페르소나 API 호출 실패', 'error');
-            }
+        if (personaId === 'custom') {
+            this.showCustomView();
         } else {
-            // 커스텀인 경우 프리셋 적용
-            this.applyPersonaPreset(personaId);
+            this.applyPresetPersona(personaId);
         }
-
-        // 커스텀이 아니면 필드 비활성화
-        this.toggleFieldsEditable(personaId === 'custom');
     }
 
-    toggleFieldsEditable(editable) {
-        this.allInputs.forEach(input => {
-            if (input) {
-                input.disabled = !editable;
-            }
-        });
+    showCustomView() {
+        this.viewMain.classList.remove('active');
+        this.viewCustom.classList.add('active');
+        this.step2.classList.remove('active');
+        this.step1.classList.add('active');
     }
 
-    applyPersonaPreset(persona) {
-        // 커스텀인 경우 현재 값 유지
-        if (persona === 'custom') {
+    showMainView() {
+        this.viewCustom.classList.remove('active');
+        this.viewMain.classList.add('active');
+    }
+
+    nextStep() {
+        const nameInput = document.getElementById('custom-name');
+        if (!nameInput.value.trim()) {
+            alert('유저 네임을 입력해주세요.');
+            nameInput.focus();
             return;
         }
-
-        // personas.json에서 데이터 가져오기
-        if (!this.personasData || !this.personasData[persona]) {
-            console.error('페르소나 데이터 없음:', persona);
-            return;
-        }
-
-        const personaData = this.personasData[persona];
-
-        // 기본 정보
-        this.gender.value = personaData.demographics.gender || 'female';
-        this.age.value = personaData.demographics.age || '';
-        this.occupation.value = (personaData.demographics.occupation || []).join(', ');
-        this.livingType.value = (personaData.living.type || []).join(', ');
-
-        // 식이 선호도
-        this.allergies.value = (personaData.dietary.allergies || []).join(', ');
-        this.vegan.checked = personaData.dietary.vegan || false;
-        this.lowSugar.checked = personaData.dietary.low_sugar_preference || false;
-        this.lowCaffeine.checked = personaData.dietary.low_caffeine_preference || false;
-
-        // 속성 선호도
-        this.attributePreferences.value = (personaData.preferences.attribute_preferences || []).join(', ');
-        this.priceSensitivity.value = personaData.preferences.price_sensitivity || 'medium';
-
-        // 상황 정보
-        this.currentTime.value = personaData.context.current_time || 'afternoon';
-        this.dayType.value = personaData.context.day_type || 'weekday';
-        this.weather.value = personaData.context.weather || 'normal';
+        this.step1.classList.remove('active');
+        this.step2.classList.add('active');
     }
 
-    async loadCurrentProfile() {
+    prevStep() {
+        this.step2.classList.remove('active');
+        this.step1.classList.add('active');
+    }
+
+    async applyPresetPersona(personaId) {
         try {
-            const response = await fetch(this.getProfileUrl);
-            const data = await response.json();
-
-            if (data.success) {
-                const profile = data.profile;
-
-                // 폼에 데이터 채우기
-                this.gender.value = profile.gender || 'female';
-                this.age.value = profile.age || '';
-                this.occupation.value = (profile.occupation || []).join(', ');
-                this.livingType.value = (profile.living_type || []).join(', ');
-                this.allergies.value = (profile.allergies || []).join(', ');
-                this.vegan.checked = profile.vegan || false;
-                this.lowSugar.checked = profile.low_sugar_preference || false;
-                this.lowCaffeine.checked = profile.low_caffeine_preference || false;
-                this.attributePreferences.value = (profile.attribute_preferences || []).join(', ');
-                this.priceSensitivity.value = profile.price_sensitivity || 'medium';
-
-                // 상황 정보
-                const context = profile.context || {};
-                this.currentTime.value = context.current_time || 'afternoon';
-                this.dayType.value = context.day_type || 'weekday';
-                this.weather.value = context.weather || 'normal';
-
-                // 미리보기 업데이트
-                this.updatePreview(profile);
+            const response = await fetch(this.apiUrlSelect, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ persona_id: personaId })
+            });
+            const result = await response.json();
+            if (result.success) {
+                this.showStatus(`✅ '${result.profile.persona_name}' 적용 완료!`, 'success');
+                this.updatePreview(result.profile);
+            } else {
+                throw new Error(result.error);
             }
         } catch (error) {
-            console.error('프로필 로드 오류:', error);
-            this.showStatus('프로필 로드 실패', 'error');
+            console.error(error);
+            this.showStatus('❌ 적용 실패', 'error');
         }
     }
 
-    async saveProfile() {
+    // [핵심 수정] 커스텀 프로필 생성 로직
+    async generateAndSaveCustomProfile() {
         try {
-            // age_group 계산
-            const age = parseInt(this.age.value) || 0;
-            let ageGroup = '20s';
-            if (age >= 60) ageGroup = '60s+';
-            else if (age >= 50) ageGroup = '50s';
-            else if (age >= 40) ageGroup = '40s';
-            else if (age >= 30) ageGroup = '30s';
-            else if (age >= 20) ageGroup = '20s';
+            // 1. 기본 정보
+            const name = document.getElementById('custom-name').value.trim();
+            const ageGroup = document.getElementById('custom-age-group').value;
+            const gender = document.getElementById('custom-gender').value;
+            const occupation = document.getElementById('custom-occupation').value;
 
-            // 페르소나 이름 가져오기
-            let personaName = '커스텀';
-            if (this.selectedPersona !== 'custom' && this.personasData && this.personasData[this.selectedPersona]) {
-                personaName = this.personasData[this.selectedPersona].displayName || this.personasData[this.selectedPersona].name;
-            }
+            let age = 25;
+            if (ageGroup === '30s') age = 35;
+            else if (ageGroup === '40s') age = 45;
+            else if (ageGroup === '50s') age = 55;
 
-            // 프로필 객체 생성
+            // 2. 속성 수집 (선택형)
+            let selectedAttributes = [];
+
+            // 2-1. 라디오 버튼 양자택일 처리
+            // 빈 문자열("") 값은 추가되지 않음 (예: 건성, 모른다, 화려함, 해당없음)
+            const radioNames = [
+                'drink_temp', 'drink_sweet', 'drink_caff', 'drink_freq',
+                'skin_type', 'makeup_style', 'exercise_type', 'alcohol_limit'
+            ];
+
+            radioNames.forEach(name => {
+                const checked = document.querySelector(`input[name="${name}"]:checked`);
+                if (checked && checked.value) {
+                    selectedAttributes.push(checked.value);
+                }
+            });
+
+            // 2-2. 다중 선택 체크박스 처리
+            const checkboxes = document.querySelectorAll('#custom-profile-form input[type="checkbox"]:checked');
+            checkboxes.forEach(cb => {
+                if (cb.value) selectedAttributes.push(cb.value);
+                const group = cb.getAttribute('data-group');
+                if (group && this.groupMapping[group]) {
+                    selectedAttributes.push(...this.groupMapping[group]);
+                }
+            });
+
+            // 3. 직업 자동 추가
+            if (occupation === 'student') selectedAttributes.push('capstone');
+            if (occupation === 'worker') selectedAttributes.push('overtime');
+
+            // 4. 랜덤 속성 배정 (50% 확률)
+            this.randomAttributesPool.forEach(attr => {
+                if (Math.random() < 0.5) selectedAttributes.push(attr);
+            });
+            
+            selectedAttributes = [...new Set(selectedAttributes)];
+
+            // 5. 프로필 객체 생성
             const profile = {
-                user_id: (this.selectedPersona === 'custom') ? 'user01' : this.selectedPersona,
-                persona_type: this.selectedPersona,
-                persona_name: personaName,
-                gender: this.gender.value,
-                age: age,
+                user_id: "custom",
+                persona_type: "custom",
+                persona_name: name,
                 age_group: ageGroup,
-                // ... (나머지 필드 그대로 유지)
-                occupation: this.occupation.value.split(',').map(s => s.trim()).filter(s => s),
-                living_type: this.livingType.value.split(',').map(s => s.trim()).filter(s => s),
-                allergies: this.allergies.value.split(',').map(s => s.trim()).filter(s => s),
-                vegan: this.vegan.checked,
-                low_sugar_preference: this.lowSugar.checked,
-                low_caffeine_preference: this.lowCaffeine.checked,
-                price_sensitivity: this.priceSensitivity.value,
-                attribute_preferences: this.attributePreferences.value.split(',').map(s => s.trim()).filter(s => s),
+                age: age,
+                gender: gender,
+                occupation: [occupation],
+                living_type: [],
+                allergies: [],
+                vegan: false,
+                attribute_preferences: selectedAttributes,
                 context: {
-                    current_time: this.currentTime.value,
-                    day_type: this.dayType.value,
-                    weather: this.weather.value
+                    current_time: "evening",
+                    day_type: "weekday",
+                    weather: "sunny",
+                    season: "winter"
                 },
                 personalization_level: 'high'
             };
 
-            // API 요청
-            const response = await fetch(this.apiUrl, {
+            // 6. 서버 전송
+            const response = await fetch(this.apiUrlUpdate, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(profile)
             });
-
             const data = await response.json();
 
             if (data.success) {
-                this.showStatus('✅ 저장 완료! 스마트폰에 실시간 반영되었습니다.', 'success');
+                this.showStatus('✅ 나만의 커스텀 프로필이 생성되었습니다!', 'success');
                 this.updatePreview(profile);
+                setTimeout(() => this.showMainView(), 1500);
             } else {
-                throw new Error(data.error || '저장 실패');
+                throw new Error(data.error);
             }
 
         } catch (error) {
-            console.error('저장 오류:', error);
-            this.showStatus('❌ 저장 실패: ' + error.message, 'error');
+            console.error(error);
+            this.showStatus('❌ 생성 실패: ' + error.message, 'error');
         }
     }
 
-    resetProfile() {
-        if (confirm('정말로 초기화하시겠습니까?')) {
-            this.gender.value = 'female';
-            this.age.value = '';
-            this.occupation.value = '';
-            this.livingType.value = '';
-            this.allergies.value = '';
-            this.vegan.checked = false;
-            this.lowSugar.checked = false;
-            this.lowCaffeine.checked = false;
-            this.attributePreferences.value = '';
-            this.priceSensitivity.value = 'medium';
-            this.currentTime.value = 'afternoon';
-            this.dayType.value = 'weekday';
-            this.weather.value = 'normal';
-
-            // 커스텀 페르소나 선택
-            this.personaCards.forEach(card => card.classList.remove('active'));
-            document.querySelector('[data-persona="custom"]').classList.add('active');
-            this.selectedPersona = 'custom';
-            this.toggleFieldsEditable(true);
-
-            this.showStatus('초기화되었습니다.', 'success');
-        }
+    async loadCurrentProfile() {
+        try {
+            const res = await fetch(this.apiUrlProfile);
+            const data = await res.json();
+            if (data.success) this.updatePreview(data.profile);
+        } catch (e) { console.error(e); }
     }
 
-    showStatus(message, type) {
-        this.statusMessage.textContent = message;
+    showStatus(msg, type) {
+        this.statusMessage.textContent = msg;
         this.statusMessage.className = `status-message ${type}`;
-
-        // 3초 후 숨김
-        setTimeout(() => {
-            this.statusMessage.className = 'status-message';
-        }, 3000);
+        this.statusMessage.style.display = 'block';
+        setTimeout(() => { this.statusMessage.style.display = 'none'; }, 3000);
     }
 
     updatePreview(profile) {
@@ -312,8 +231,4 @@ class AdminPanel {
     }
 }
 
-// 페이지 로드 시 초기화
-document.addEventListener('DOMContentLoaded', () => {
-    const admin = new AdminPanel();
-    console.log('관리 페이지 초기화 완료');
-});
+window.adminPanel = new AdminPanel();
