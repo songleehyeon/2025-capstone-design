@@ -44,7 +44,7 @@
           {"type": "array_contains", "user_field": "attribute_preferences", "value": "andar"}
         ]
       },
-      "message": "👟 ZEXYMIX, ANDAR와 유사한 브랜드예요",
+      "message": "🧘‍ ZEXYMIX, ANDAR와 유사한 브랜드예요",
       "color": [220, 240, 255]
     },
     {
@@ -59,7 +59,7 @@
           {"type": "array_contains", "user_field": "attribute_preferences", "value": "minimal"}
         ]
       },
-      "message": "#데일리 클래식 #미니멀한 무드",
+      "message": "👗 #데일리 클래식 #미니멀한 무드",
       "color": [220, 240, 255]
     },
     {
@@ -74,7 +74,7 @@
           {"type": "array_contains", "user_field": "attribute_preferences", "value": "chic"}
         ]
       },
-      "message": "#페미닌한 무드 #프렌치 시크",
+      "message": "👗 #페미닌한 무드 #프렌치 시크",
       "color": [220, 240, 255]
     },
     {
@@ -98,7 +98,7 @@
       "conditions": {
         "type": "always_true"
       },
-      "message": "Repere 24 F/W 신상 첫 공개. 초여름에 가장 잘 어울리는 무드를 담았어요.",
+      "message": "⛱️ Repere 24 F/W 신상 첫 공개. \n초여름에 가장 잘 어울리는 무드를 담았어요.",
       "color": [240, 250, 255]
     },
     {
@@ -113,7 +113,7 @@
         "value": "one_day_left"
       }
      },
-      "message": "종료 임박! 내일이면 끝나는 이벤트예요.",
+      "message": "⚠️ 종료 임박! 내일이면 끝나는 이벤트예요.",
       "color": [240, 250, 255]
     },
     {
@@ -126,7 +126,7 @@
         "user_field": "attribute_preferences",
         "value": "meet_백온유"
       },
-      "message": "6월 9일 토요일에 '백온유'님과 영등포 역에서 약속이 있네요! 잠깐 들러보는 건 어때요?",
+      "message": "🗓️ 6월 9일 토요일에 '백온유'님과 영등포 역에서 \n약속이 있네요! 잠깐 들러보는 건 어때요?",
       "color": [240, 250, 255]
     },
     {
@@ -165,7 +165,7 @@
         "user_field": "occupation",
         "value": "woori_sogang"
       },
-      "message": "🚇 한겨레출판사에서 차로 11분 거리",
+      "message": "🚗 한겨레출판사에서 차로 11분 거리",
       "color": [230, 245, 230]
     },
     {
@@ -176,7 +176,7 @@
       "conditions": {
         "type": "always_true"
       },
-      "message": "📱 예약 정보: https://hyundai.com/popup",
+      "message": "🔗 예약 정보: https://hyundai.com/popup",
       "color": [245, 245, 245]
     },
 
@@ -188,18 +188,7 @@
       "conditions": {
         "type": "always_true"
       },
-      "message": "6월 10일 일요일 날씨가 화창하네요! 여유로운 휴일, 팝업 이벤트로 색다른 주말을 보내보세요.",
-      "color": [245, 245, 245]
-    },
-        {
-      "rule_id": "PURCHASE_INFO",
-      "type": "info",
-      "priority": 15,
-      "category": "information",
-      "conditions": {
-        "type": "always_true"
-      },
-      "message": "인기 상품은 입구 오른편에서 확인 가능",
+      "message": "☀️ 6월 10일 일요일 날씨가 화창하네요! \n여유로운 휴일, 팝업 이벤트로 색다른 주말을 보내보세요.",
       "color": [245, 245, 245]
     }
   ]

@@ -460,7 +460,7 @@ def get_demo_suggestions():
 
         return jsonify({
             'success': True,
-            'recommended_ads': recommended, # 키 값은 프론트엔드 호환성을 위해 유지해도 됩니다
+            'recommended_ads': recommended,
             'user_id': user_id
         })
 

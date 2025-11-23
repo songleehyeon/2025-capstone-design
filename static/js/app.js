@@ -384,11 +384,11 @@ class SmartAdARSystem {
         // 2. 개수가 같으면 "위치와 내용만" 부드럽게 업데이트 (핵심!)
         overlays.forEach((overlay, idx) => {
             const div = existingElements[idx];
-            
+
             // 내용이 다를 때만 업데이트 (깜빡임 방지)
-            const newContent = overlay.content ? overlay.content.replace(/\n/g, '<br>') : '';
-            if (div.innerHTML !== newContent) {
-                div.innerHTML = newContent;
+            const newContent = overlay.content ? overlay.content : '';
+            if (div.textContent !== newContent) {
+                div.textContent = newContent;
             }
 
             // 목표 위치 계산
@@ -401,7 +401,7 @@ class SmartAdARSystem {
                 targetTop = `${y}px`;
             } else {
                 // 슬롯 위치 (BBox 없을 때)
-                const slots = [[5, 10], [75, 10], [10, 35], [70, 35], [5, 60], [75, 60]];
+                const slots = [[5, 10], [60, 10], [10, 35], [60, 35], [5, 60], [60, 60]];
                 const slot = slots[idx % slots.length];
                 targetLeft = `${slot[0]}%`;
                 targetTop = `${slot[1]}%`;
@@ -422,7 +422,7 @@ class SmartAdARSystem {
 
         // 내용 삽입
         if (overlay.content) {
-            div.innerHTML = overlay.content.replace(/\n/g, '<br>');
+            div.textContent = overlay.content;
         }
 
         // 위치 설정 (bbox 우선, 없으면 슬롯)
@@ -435,9 +435,9 @@ class SmartAdARSystem {
         } else {
             // 중앙(30~70%)을 피하는 좌우 슬롯
             const slots = [
-                [5, 10], [75, 10],  // 상단 좌우
-                [10, 35], [70, 35], // 중단 좌우
-                [5, 60], [75, 60]   // 하단 좌우
+                [5, 10], [60, 10],  // 상단 좌우
+                [10, 35], [60, 35], // 중단 좌우
+                [5, 60], [60, 60]   // 하단 좌우
             ];
             const slot = slots[idx % slots.length];
             div.style.position = 'absolute';

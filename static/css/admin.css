@@ -11,8 +11,8 @@
     --secondary-color: #FF6B6B;
     --success-color: #51CF66;
     --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --card-bg: rgba(255, 255, 255, 0.95);
-    --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    --card-bg: rgba(255, 255, 255, 0.3);
+    ;
 }
 
 body {
@@ -21,6 +21,9 @@ body {
     min-height: 100vh;
     padding: 40px 20px;
     color: #2C3E50;
+    display: flex;
+    justify-content: center; /* 수직 중앙 */
+    align-items: center;     /* 수평 중앙 */
 }
 
 .container {
@@ -53,6 +56,7 @@ body {
     padding: 40px;
     box-shadow: var(--shadow);
     margin-bottom: 30px;
+    
 }
 
 .form-group {
@@ -89,27 +93,57 @@ body {
     cursor: not-allowed;
 }
 
+@keyframes floatLayout {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); } /* 위로 둥실 */
+    100% { transform: translateY(0px); }
+}
+
 /* 페르소나 카드 */
 .persona-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    gap: 30px;
+    margin: 15px 25px auto 25px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 25px;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 1500px;
 }
 
 .persona-card {
-    background: #FFF;
-    border: 3px solid #E0E0E0;
+    position: relative;
+    height: 280px;
+    margin: 0 auto; /* 그리드 셀 내에서 중앙 정렬 */
+    width: 100%;
+    max-width: 220px; /* 카드 최대 너비 제한 */
+
+    background: #ffffff1b;
+    box-shadow: 10px 10px 10px #495c7c80;
     border-radius: 15px;
-    padding: 20px;
-    text-align: center;
+    border-top: 1px solid #ffffff80;
+    border-left: 1px solid #ffffff80;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     cursor: pointer;
-    transition: all 0.3s ease;
+    text-align: center;
+    color: #fff;
+    transition: 0.5s;
+    animation: none; /* 개별 카드는 애니메이션 없음 */
 }
 
 .persona-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    
 }
 
 .persona-card.active {
@@ -133,7 +167,6 @@ body {
     color: #7F8C8D;
 }
 
-/* 체크박스 그룹 */
 .checkbox-group {
     display: flex;
     gap: 20px;
@@ -170,11 +203,12 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
 }
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    
 }
 
 .btn-primary {

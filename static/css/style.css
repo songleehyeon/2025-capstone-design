@@ -150,7 +150,6 @@ body {
     z-index: 10;
 }
 
-/* ========== 오버레이 타입별 스타일 ========== */
 
 /* 프로모션 배너 - 고급 글래스모피즘 (liquidGL 스타일) */
 .overlay-promotion {
@@ -1014,35 +1013,30 @@ body {
 
 /* Glassmorphism */
 .overlay-card {
-    position: absolute; /* 오버레이 위치 */
-    
-    min-width: 100px;  /* 최소 너비 */
-    max-width: 220px;  /* 최대 너비 (기존 280px에서 축소) */
-    
-    padding: 7px 12px; 
+    position: absolute;
+    min-width: 100px;
+    max-width: none; /* 자동 줄바꿈 방지 - \n으로만 줄바꿈 */
 
-    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3); /* [수정] 그림자 축소 */
-    border-radius: 20px; 
-    background: #ffffff05; 
+    padding: 7px 12px;
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    background: #ffffff05;
     border-top: 1px solid #ffffff80;
     border-left: 1px solid #ffffff80;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    display: block; /* flexbox 제거 - 줄바꿈 제어를 위해 */
     text-align: left;
 
     /* font */
     color: #fff;
-    font-size: 0.7em;   
+    font-size: 0.7em;
     font-weight: 500;
-    line-height: 1.4;   
-    
-    word-wrap: break-word;
-    word-break: keep-all;
+    line-height: 1.4;
+
+    white-space: pre; /* \n을 줄바꿈으로 인식, 자동 줄바꿈은 안 함 */
     transition: left 0.3s ease-out, top 0.3s ease-out, transform 0.3s ease;
-    will-change: left, top; /* 성능 최적화 */
+    will-change: left, top;
     animation: bounceFloat 2s infinite ease-in-out;
 }
 
