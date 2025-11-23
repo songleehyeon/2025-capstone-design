@@ -17,40 +17,49 @@
 
 body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-image: linear-gradient(80deg, rgb(5, 124, 172), rgb(199, 10, 114));
+    /* [변경] 배경: Deep Black (빛을 강조하기 위함) */
+    background-color: #050505;
+    background-image: none; /* 기존 그라데이션 제거 */
     min-height: 100vh;
     padding: 40px 20px;
-    color: #2C3E50;
+    color: #ffffff; /* 텍스트는 흰색으로 고정 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
-    /* [중요] 애니메이션 요소가 화면 밖으로 나갈 때 스크롤 생기지 않도록 설정 */
     overflow: hidden;
+}
+
+/* 혼합 모드 추가: 빛이 겹칠 때 더 밝게 빛나도록 설정 (Neon 효과 핵심) */
+section {
+    mix-blend-mode: screen;
 }
 
 #up {
     position: absolute;
     height: 800px;
     width: 800px;
-    border-radius: 50%;
-    background-image: linear-gradient(80deg, rgb(5, 124, 172), rgb(43, 247, 202, 0.5));
-    filter: blur(80px);
-    animation: down 40s infinite;
-    z-index: -1; 
+    border-radius: 40%; /* 모양을 약간 불규칙하게 */
+    /* [변경] Electric Cyan + Blue (청록색 네온) */
+    background: radial-gradient(circle at center, rgba(0, 255, 255, 0.8), rgba(0, 100, 255, 0));
+    filter: blur(60px); /* 블러를 조금 줄여 선명도 확보 */
+    animation: down 15s infinite; 
+    z-index: -1;
+    opacity: 0.8; 
 }
 
 #down {
     position: absolute;
     right: 0;
-    height: 500px;
-    width: 500px;
-    border-radius: 50%;
-    background-image: linear-gradient(80deg, rgba(245, 207, 82, 0.8), rgba(199, 10, 114));
-    filter: blur(80px);
-    animation: up 30s infinite;
+    height: 600px;
+    width: 600px;
+    border-radius: 45%;
+    /* [변경] Neon Magenta + Purple (자주색 네온) */
+    background: radial-gradient(circle at center, rgba(255, 0, 255, 0.8), rgba(120, 0, 255, 0));
+    filter: blur(70px);
+    animation: up 12s infinite;
     z-index: -1;
+    opacity: 0.8;
 }
 
 #left {
@@ -58,21 +67,25 @@ body {
     height: 500px;
     width: 500px;
     border-radius: 50%;
-    background-image: linear-gradient(80deg, rgb(5, 124, 172), rgba(183, 253, 52, 0.8));
+    /* [변경] Deep Electric Blue (깊은 파랑) */
+    background: linear-gradient(135deg, rgba(50, 50, 255, 0.9), rgba(0, 200, 255, 0));
     filter: blur(80px);
-    animation: left 30s 1s infinite;
+    animation: left 12s 1s infinite;
     z-index: -1;
+    opacity: 0.7;
 }
 
 #right {
     position: absolute;
     height: 500px;
     width: 500px;
-    border-radius: 50%;
-    background-image: linear-gradient(80deg, rgba(26, 248, 18, 0.6), rgba(199, 10, 114, 0.5));
-    filter: blur(80px);
-    animation: right 40s .5s infinite;
+    border-radius: 30%;
+    /* [변경] Acid Green/Mint (포인트 컬러) - 레퍼런스의 밝은 빛 표현 */
+    background: radial-gradient(circle at center, rgba(0, 255, 150, 0.6), rgba(0, 20, 50, 0));
+    filter: blur(60px);
+    animation: right 15s .5s infinite;
     z-index: -1;
+    opacity: 0.6;
 }
 
 /* 3. [추가] 애니메이션 키프레임 */

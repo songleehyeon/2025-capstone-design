@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <section id="up"></section>
+    <section id="down"></section>
+    <section id="left"></section>
+    <section id="right"></section>
+
+    <button id="theme-toggle" class="theme-toggle-btn">🌙 Dark Mode</button>
+    <button id="toggle-debug" class="theme-toggle-btn debug-btn">🔧 Debug</button>
+
     <div id="backend-loading" class="backend-loading-overlay">
         <div class="backend-loading-content">
             <div class="loading-spinner"></div>
@@ -16,100 +24,95 @@
                 <div id="loading-progress-bar" class="progress-bar"></div>
             </div>
             <div class="loading-details">
-                <div class="loading-step">
-                    <span class="step-icon" id="ocr-icon">⏳</span>
-                    <span>OCR 엔진 초기화</span>
-                </div>
-                <div class="loading-step">
-                    <span class="step-icon" id="aruco-icon">⏳</span>
-                    <span>ArUco 마커 검출기</span>
-                </div>
-                <div class="loading-step">
-                    <span class="step-icon" id="personalization-icon">⏳</span>
-                    <span>개인화 엔진</span>
-                </div>
+                <div class="loading-step"><span class="step-icon" id="ocr-icon">⏳</span><span>OCR 엔진 초기화</span></div>
+                <div class="loading-step"><span class="step-icon" id="aruco-icon">⏳</span><span>ArUco 마커 검출기</span></div>
+                <div class="loading-step"><span class="step-icon" id="personalization-icon">⏳</span><span>개인화 엔진</span></div>
             </div>
         </div>
     </div>
 
     <div class="container">
         <header class="header">
-            <h1>세상 모든 오프라인 광고를 나에게 맞게, 두잇</h1>
+            <h1>세상 모든 오프라인 광고를 <br>나에게 맞게.</h1>
         </header>
 
-        <div id="persona-display" class="persona-display">
-            <div class="persona-info">
-                <span class="persona-label">현재 페르소나</span>
-                <span id="persona-name" class="persona-name">로딩 중...</span>
+        <div class="top-controls">
+            <div id="persona-display" class="persona-display">
+                <div class="persona-info">
+                    <span class="persona-label">현재 페르소나</span>
+                    <span id="persona-name" class="persona-name">로딩 중...</span>
+                </div>
+                <a href="/admin" class="admin-link">⚙️ 설정</a>
             </div>
-            <a href="/admin" class="admin-link">⚙️ 설정</a>
+
+            <div class="control-panel">
+                <div class="camera-selector">
+                    <label for="camera-select" style="display:none;">카메라 선택:</label>
+                    <select id="camera-select" class="camera-dropdown">
+                        <option value="">카메라 선택...</option>
+                    </select>
+                </div>
+
+                <button id="start-btn" class="btn btn-primary">시작</button>
+                <button id="stop-btn" class="btn btn-secondary" disabled>중지</button>
+                <button id="toggle-ocr" class="btn btn-toggle" style="display: none;">OCR</button>
+                <button id="clear-btn" class="btn btn-secondary" style="display: none;">초기화</button>
+                
+                <div class="stats" style="display: none;">
+                    <span id="fps">0</span> FPS
+                </div>
+            </div>
         </div>
 
         <div class="video-container">
             <video id="webcam" autoplay playsinline muted></video>
-
             <canvas id="canvas" style="display: none;"></canvas>
-
-            <div id="overlay-layer" class="overlay-layer">
-                </div>
-
+            <div id="overlay-layer" class="overlay-layer"></div>
             <div id="loading" class="loading-indicator">
                 <div class="spinner"></div>
                 <p>OCR 처리 중...</p>
             </div>
         </div>
 
-        <div class="control-panel">
-            <div class="camera-selector">
-                <label for="camera-select">카메라 선택:</label>
-                <select id="camera-select" class="camera-dropdown">
-                    <option value="">카메라 권한 확인 중...</option>
-                </select>
-            </div>
-
-            <button id="start-btn" class="btn btn-primary">카메라 시작</button>
-            <button id="stop-btn" class="btn btn-secondary" disabled>카메라 중지</button>
-            <button id="toggle-ocr" class="btn btn-toggle" style="display: none;">OCR ON</button>
-            <button id="clear-btn" class="btn btn-secondary" style="display: none;">🧹 초기화</button>
-            <button id="toggle-debug" class="btn btn-toggle">🔧 디버그 모드</button>
-
-            <div class="stats" style="display: none;">
-                <span>FPS: <span id="fps">0</span></span>
-                <span>OCR: <span id="ocr-count">0</span></span>
-                <span>오버레이: <span id="overlay-count">0</span></span>
-            </div>
-
-            <a href="/3d-demo" class="btn btn-toggle" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                🎮 3D 시뮬레이션 시작
-            </a>
-        </div>
-
         <div class="debug-panel" id="debug-panel" style="display: none;">
             <h3>🔍 디버그 정보</h3>
-            <div id="debug-info">
-                <p>준비 중...</p>
-            </div>
+            <div id="debug-info"><p>준비 중...</p></div>
             <h3>📋 OCR 결과</h3>
-            <div id="ocr-results">
-                <p>텍스트 인식 대기 중...</p>
-            </div>
+            <div id="ocr-results"><p>텍스트 인식 대기 중...</p></div>
         </div>
     </div>
+
     <script src="{{ url_for('static', filename='js/vanilla-tilt.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
-        // 디버그 모드 토글
+        // 디버그 모드 토글 및 스크롤 제어
         document.getElementById('toggle-debug').addEventListener('click', () => {
             const debugPanel = document.getElementById('debug-panel');
             const toggleBtn = document.getElementById('toggle-debug');
+            const body = document.body;
+
             if (debugPanel.style.display === 'none') {
+                // 디버그 모드 켜기
                 debugPanel.style.display = 'block';
-                toggleBtn.textContent = '🔧 디버그 숨기기';
-                toggleBtn.classList.add('off');
+                toggleBtn.textContent = '🔧 Hide';
+                
+                // 스크롤 활성화
+                body.classList.add('debug-active');
+                
+                // 패널로 부드럽게 스크롤 이동
+                setTimeout(() => {
+                    debugPanel.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
             } else {
+                // 디버그 모드 끄기
                 debugPanel.style.display = 'none';
-                toggleBtn.textContent = '🔧 디버그 모드';
-                toggleBtn.classList.remove('off');
+                toggleBtn.textContent = '🔧 Debug';
+                
+                // 스크롤 비활성화 (최상단으로 이동 후 잠금)
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    body.classList.remove('debug-active');
+                }, 500); // 스크롤 애니메이션 시간 고려
             }
         });
     </script>
