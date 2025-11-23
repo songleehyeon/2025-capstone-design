@@ -1,8 +1,8 @@
 {
   "id": "user04",
-  "name": "사장님",
-  "displayName": "인테리어 사장",
-  "icon": "👨‍🔧",
+  "name": "마포국어학원 학원장",
+  "displayName": "마포국어학원 학원장",
+  "icon": "👨‍🏫",
   "demographics": {
     "gender": "male",
     "age": 56,

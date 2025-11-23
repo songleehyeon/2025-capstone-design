@@ -483,14 +483,11 @@ class SmartAdARSystem {
 
     updatePersonaDisplay(profile) {
         const personaName = profile.persona_name || '커스텀';
-        this.personaName.textContent = personaName;
+        const gender = profile.gender === 'female' ? '여' : '남';
+        const age = profile.age || '?';
 
-        const tags = [];
-        if (profile.gender && profile.age) tags.push(`${profile.gender === 'female' ? '여성' : '남성'}, ${profile.age}세`);
-        if (profile.occupation) tags.push(profile.occupation.join(', '));
-        if (profile.attribute_preferences) tags.push(...profile.attribute_preferences.slice(0, 3));
-        
-        this.personaTags.innerHTML = tags.slice(0, 5).map(tag => `<span class="persona-tag">${tag}</span>`).join('');
+        // admin 페이지처럼 간단하게 표시: "이름 (성별, 나이)"
+        this.personaName.textContent = `${personaName} (${gender}, ${age}세)`;
     }
 
     updateDebugInfo(message) {

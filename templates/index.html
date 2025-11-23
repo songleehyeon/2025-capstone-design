@@ -34,15 +34,15 @@
 
     <div class="container">
         <header class="header">
-            <h1 style="display:none;">📱 스마트 광고 AR 시스템</h1>
+            <h1>세상 모든 오프라인 광고를 나에게 맞게, 두잇</h1>
         </header>
 
         <div id="persona-display" class="persona-display">
             <div class="persona-info">
+                <span class="persona-label">현재 페르소나</span>
                 <span id="persona-name" class="persona-name">로딩 중...</span>
-                <span id="persona-tags" class="persona-tags"></span>
             </div>
-            <a href="/admin" class="admin-link">⚙️ 페르소나 설정</a>
+            <a href="/admin" class="admin-link">⚙️ 설정</a>
         </div>
 
         <div class="video-container">
@@ -69,21 +69,22 @@
 
             <button id="start-btn" class="btn btn-primary">카메라 시작</button>
             <button id="stop-btn" class="btn btn-secondary" disabled>카메라 중지</button>
-            <button id="toggle-ocr" class="btn btn-toggle">OCR ON</button>
-            <button id="clear-btn" class="btn btn-secondary">🧹 초기화</button>
+            <button id="toggle-ocr" class="btn btn-toggle" style="display: none;">OCR ON</button>
+            <button id="clear-btn" class="btn btn-secondary" style="display: none;">🧹 초기화</button>
+            <button id="toggle-debug" class="btn btn-toggle">🔧 디버그 모드</button>
 
-            <a href="/3d-demo" class="btn btn-toggle" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
-                🎮 3D 시뮬레이션 시작
-            </a>
-
-            <div class="stats">
+            <div class="stats" style="display: none;">
                 <span>FPS: <span id="fps">0</span></span>
                 <span>OCR: <span id="ocr-count">0</span></span>
                 <span>오버레이: <span id="overlay-count">0</span></span>
             </div>
+
+            <a href="/3d-demo" class="btn btn-toggle" style="text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                🎮 3D 시뮬레이션 시작
+            </a>
         </div>
 
-        <div class="debug-panel">
+        <div class="debug-panel" id="debug-panel" style="display: none;">
             <h3>🔍 디버그 정보</h3>
             <div id="debug-info">
                 <p>준비 중...</p>
@@ -96,5 +97,21 @@
     </div>
     <script src="{{ url_for('static', filename='js/vanilla-tilt.js') }}"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // 디버그 모드 토글
+        document.getElementById('toggle-debug').addEventListener('click', () => {
+            const debugPanel = document.getElementById('debug-panel');
+            const toggleBtn = document.getElementById('toggle-debug');
+            if (debugPanel.style.display === 'none') {
+                debugPanel.style.display = 'block';
+                toggleBtn.textContent = '🔧 디버그 숨기기';
+                toggleBtn.classList.add('off');
+            } else {
+                debugPanel.style.display = 'none';
+                toggleBtn.textContent = '🔧 디버그 모드';
+                toggleBtn.classList.remove('off');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -5,43 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <style>
-        /* 화면 전환용 스타일 */
         .view-section { display: none; animation: fadeIn 0.5s; }
         .view-section.active { display: block; }
 
-        /* 커스텀 폼 스타일 */
         .step-container { display: none; }
         .step-container.active { display: block; animation: fadeIn 0.5s; }
         
         .keyword-section { margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; }
         .keyword-section h4 { margin-bottom: 10px; color: #A0A0FF; font-size: 1rem; }
-        
-        /* 체크박스/라디오 그리드 */
+
         .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
         
-        /* 버튼형 라디오/체크박스 스타일 (Glassmorphism 적용) */
         .toggle-label {
             display: flex; align-items: center; gap: 8px; cursor: pointer;
-            background: rgba(255, 255, 255, 0.1); 
-            padding: 10px 12px; border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 12px; border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.2s; font-size: 0.9rem; justify-content: center;
-            color: white;
+            color: #2C3E50;
         }
         .toggle-label:hover { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.5); }
         
-        /* 선택된 상태 스타일 */
         input[type="checkbox"]:checked + span,
         input[type="radio"]:checked + span { 
             font-weight: bold; color: #00ffcc; 
         }
-        /* 라디오 버튼 선택 시 테두리 강조 */
+
         label:has(input:checked) {
             border-color: #00ffcc;
             background-color: rgba(0, 255, 204, 0.1);
         }
-
-        /* 양자택일 그룹 스타일 */
         .radio-group-container {
             display: flex;
             flex-direction: column;
@@ -95,28 +88,28 @@
                     <div class="persona-cards">
                         <div class="persona-card" data-persona="user00">
                             <div class="persona-icon" style="font-size: 4.5rem">🧑‍🏫</div>
-                            <h3>김철수 (17세)</h3>
-                            <p>광성고 학생 · 게임, 웹툰</p>
+                            <h3>광성고 학생</h3>
+                            <p>(남, 17세)</p>
                         </div>
                         <div class="persona-card" data-persona="user01">
                             <div class="persona-icon" style="font-size: 4.5rem">👩‍💼</div>
-                            <h3>강우리 (30세)</h3>
-                            <p>우리은행 사원 · 뷰티, 뮤지컬</p>
+                            <h3>우리은행 은행원</h3>
+                            <p>(여, 30세)</p>
                         </div>
                         <div class="persona-card" data-persona="user02">
                             <div class="persona-icon" style="font-size: 4.5rem">👨‍🎓</div>
-                            <h3>김서강 (24세)</h3>
-                            <p>서강대 학생 · 운동, 게임</p>
+                            <h3>서강대 경제학과 학생</h3>
+                            <p>(남, 24세)</p>
                         </div>
                         <div class="persona-card" data-persona="user03">
                             <div class="persona-icon" style="font-size: 4.5rem">👩‍💻</div>
-                            <h3>편집장 (48세)</h3>
-                            <p>한겨레 편집장 · 비건, 클래식</p>
+                            <h3>한겨레신문사 편집장</h3>
+                            <p>(여, 48세)</p>
                         </div>
                         <div class="persona-card" data-persona="user04">
-                            <div class="persona-icon" style="font-size: 4.5rem">👨‍🔧</div>
-                            <h3>사장님 (56세)</h3>
-                            <p>인테리어 사장 · 건강, 골프</p>
+                            <div class="persona-icon" style="font-size: 4.5rem">👨‍🏫</div>
+                            <h3>마포국어학원 학원장</h3>
+                            <p>(남, 56세)</p>
                         </div>
 
                         <div class="persona-card" data-persona="custom">
@@ -130,8 +123,8 @@
 
             <div id="view-custom" class="view-section">
                 <div class="form-section">
-                    <h3 style="display:flex; justify-content:space-between; align-items:center;">
-                        🛠️ 나만의 프로필 만들기
+                    <h3 style="color: #2C3E50; display:flex; justify-content:space-between; align-items:left;">
+                        나만의 프로필 만들기
                         <button class="btn" style="padding: 6px 14px; font-size: 0.85rem; flex: 0 0 auto; width: auto; margin: 0; min-width: 0;" onclick="adminPanel.showMainView()">
                             ↩ 뒤로 가기
                         </button>
@@ -139,14 +132,14 @@
                     
                     <form id="custom-profile-form">
                         <div id="step-1" class="step-container active">
-                            <h4>1단계: 기본 정보 입력</h4>
+                            <h4 style="color: #2C3E50; font-size:16px; font-weight:70px;">1단계: 기본 정보 입력</h4>
                             <div class="form-group">
                                 <label>이름</label>
-                                <input type="text" id="custom-name" placeholder="예: 홍길동">
+                                <input type="text" id="custom-name" placeholder="예: 홍길동" style="color: #2C3E50;">
                             </div>
                             <div class="form-group">
                                 <label>나이대</label>
-                                <select id="custom-age-group">
+                                <select id="custom-age-group" style="color: #2C3E50;">
                                     <option value="20s">20대</option>
                                     <option value="30s">30대</option>
                                     <option value="40s">40대</option>
@@ -155,14 +148,14 @@
                             </div>
                             <div class="form-group">
                                 <label>성별</label>
-                                <select id="custom-gender">
+                                <select id="custom-gender" style="color: #2C3E50;">
                                     <option value="female">여성</option>
                                     <option value="male">남성</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>직업</label>
-                                <select id="custom-occupation">
+                                <select id="custom-occupation" style="color: #2C3E50;">
                                     <option value="student">학생 (Student)</option>
                                     <option value="worker">직장인 (Worker)</option>
                                 </select>
@@ -175,10 +168,9 @@
 
                         <div id="step-2" class="step-container">
                             <h4>2단계: 선호 키워드 선택</h4>
-                            <p style="color: #ccc; font-size: 0.9rem; margin-bottom:15px;">* 양자택일 항목을 선택해주세요.</p>
 
                             <div class="keyword-section">
-                                <h4>☕ 카페 취향 (필수 선택)</h4>
+                                <h4>☕ 카페 취향</h4>
                                 <div class="radio-group-container">
                                     <div class="radio-row">
                                         <span class="label">온도</span>

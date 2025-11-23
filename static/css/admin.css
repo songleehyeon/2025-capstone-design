@@ -61,31 +61,46 @@ body {
 
 .form-group {
     margin-bottom: 30px;
+    margin-top: 20px;
 }
 
 .form-group label {
     display: block;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-weight: 300;
+    margin-bottom: 3px;
     font-size: 1.1rem;
-    color: #2C3E50;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .form-group input[type="text"],
 .form-group select {
     width: 100%;
     padding: 12px 15px;
-    border: 2px solid #E0E0E0;
-    border-radius: 10px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
     font-size: 1rem;
     transition: all 0.3s ease;
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group select option {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .form-group input[type="text"]:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2), 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .form-group input[readonly] {
@@ -99,15 +114,11 @@ body {
     100% { transform: translateY(0px); }
 }
 
-/* 페르소나 카드 */
 .persona-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 30px;
-    margin: 15px 25px auto 25px;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 25px;
-    margin-top: 10px;
+    margin: 10px auto 0 auto; /* 상하좌우 균등하게 */
     width: 100%;
     max-width: 1500px;
 }
@@ -127,7 +138,6 @@ body {
     border-right: 1px solid rgba(255,255,255,0.1);
     border-bottom: 1px solid rgba(255,255,255,0.1);
     backdrop-filter: blur(5px);
-    
 
     overflow: hidden;
     display: flex;
@@ -154,17 +164,29 @@ body {
 .persona-icon {
     font-size: 3rem;
     margin-bottom: 10px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+
+
 }
 
 .persona-card h3 {
-    font-size: 1rem;
-    margin-bottom: 5px;
+    font-size: 1.15rem;
+    margin-bottom: 0rem; 
+    letter-spacing: -0.03em;
     color: #2C3E50;
 }
 
 .persona-card p {
-    font-size: 0.85rem;
-    color: #7F8C8D;
+    font-size: 0.95rem;
+    margin-top: 0rem;
+    color: #3f5062;
 }
 
 .checkbox-group {
@@ -249,7 +271,7 @@ body {
 .preview-section {
     background: var(--card-bg);
     border-radius: 20px;
-    padding: 30px;
+    padding: 20px;
     box-shadow: var(--shadow);
     margin-bottom: 30px;
 }
@@ -299,18 +321,11 @@ body {
     border-top: 2px solid #E0E0E0;
 }
 
-/* 폼 섹션 */
-.form-section {
-    margin-bottom: 40px;
-    padding: 0px;
-    background: #F8F9FA;
-    border-radius: 15px;
-}
+
 
 .form-section h3 {
     font-size: 1.3rem;
-    margin-bottom: 20px;
-    color: #2C3E50;
+    margin-bottom: 0px;
 }
 
 .form-section:last-child {

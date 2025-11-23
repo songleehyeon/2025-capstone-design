@@ -35,7 +35,6 @@ body {
     margin: 0 auto;
 }
 
-/* ========== 헤더 ========== */
 .header {
     text-align: center;
     margin-bottom: 30px;
@@ -44,8 +43,8 @@ body {
 
 .header h1 {
     font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
+    font-weight: 300;
+    margin: 100px auto 100px auto;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -55,65 +54,71 @@ body {
     font-weight: 300;
 }
 
-/* ========== 페르소나 정보 표시 ========== */
 .persona-display {
-    max-width: 1280px;
+    max-width: 600px;
     margin: 0 auto 20px;
     padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
+    
+    /* Glassmorphism 효과 */
+    background: rgba(255, 255, 255, 0.2); /* 배경을 더 투명하게 */
+    backdrop-filter: blur(12px);           /* 블러 효과 */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* 테두리 강조 */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.6s ease-out;
+
+    /* 텍스트 색상을 흰색으로 변경 (가독성) */
+    color: #ffffff;
+
+    /* 좌우 배치 */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
 }
 
+/* [수정] 제목과 이름을 위아래로 배치 */
 .persona-info {
     display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-wrap: wrap;
-    flex: 1;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
 }
 
-.persona-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.persona-tags {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.persona-tag {
-    display: inline-block;
-    padding: 5px 12px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 20px;
+/* [수정] 라벨 스타일 (밝은 색으로) */
+.persona-label {
     font-size: 0.85rem;
-    font-weight: 500;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    color: rgba(255, 255, 255, 0.8); /* 흰색 + 투명도 */
+    font-weight: 600;
+    letter-spacing: -0.5px;
 }
 
+/* [수정] 이름 스타일 (강조된 밝은 색) */
+.persona-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #FFFFFF;           /* 완전한 흰색 */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3); /* 가독성용 그림자 */
+    white-space: pre-line;
+}
+
+/* 설정 버튼 (기존 유지) */
 .admin-link {
     display: inline-block;
-    padding: 8px 20px;
+    padding: 8px 16px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     text-decoration: none;
-    border-radius: 25px;
-    font-size: 0.9rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
     font-weight: 600;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
     white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
 }
+
+.admin-link:active {
+    transform: scale(0.95);
+}
+
 
 .admin-link:hover {
     transform: translateY(-2px);
