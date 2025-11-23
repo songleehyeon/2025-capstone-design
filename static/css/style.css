@@ -36,7 +36,7 @@ body {
     min-height: 100vh;
     color: var(--text-light);
     padding: 20px;
-    overflow: hidden;
+    overflow: auto;
     transition: background 0.5s ease, color 0.5s ease; /* 부드러운 전환 효과 */
 }
 body.debug-active {
@@ -334,7 +334,7 @@ body.dark-mode #right { background: var(--right-dark); filter: blur(60px); opaci
     padding: 7px 12px;
     box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.3);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.3); /* 투명도를 0.05에서 0.3으로 증가 */
     border-top: 1px solid rgba(255, 255, 255, 0.5);
     border-left: 1px solid rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(5px);
@@ -342,8 +342,8 @@ body.dark-mode #right { background: var(--right-dark); filter: blur(60px); opaci
     display: block;
     text-align: left;
     color: #fff;
-    font-size: 0.7em;
-    font-weight: 500;
+    font-size: 0.9em; /* 폰트 크기를 0.7em에서 0.9em으로 증가 */
+    font-weight: 600; /* 폰트 굵기를 500에서 600으로 증가 */
     line-height: 1.2; /* 행간 좁게 */
     white-space: pre-wrap; /* 자동 줄바꿈 허용 */
     transition: left 0.3s ease-out, top 0.3s ease-out, transform 0.3s ease;

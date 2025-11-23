@@ -317,7 +317,9 @@ class SmartAdARSystem {
         const now = Date.now();
         if (now - this.lastFpsTime >= 1000) {
             this.fps = this.frameCount;
-            this.fpsElement.textContent = this.fps;
+            if (this.fpsElement) {
+                this.fpsElement.textContent = this.fps;
+            }
             this.frameCount = 0;
             this.lastFpsTime = now;
         }
@@ -336,22 +338,31 @@ class SmartAdARSystem {
         this.showLoading(true);
 
         try {
+            console.log('🎬 OCR 시작...');
             this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
             const imageData = this.canvas.toDataURL('image/jpeg', 0.8);
 
+            console.log('📤 서버로 요청 전송 중...');
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ image: imageData })
             });
 
+            console.log('📥 서버 응답 받음:', response.status);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
+            console.log('📦 응답 데이터:', data);
 
             if (data.success) {
                 this.ocrCount++;
-                this.ocrCountElement.textContent = this.ocrCount;
+                if (this.ocrCountElement) {
+                    this.ocrCountElement.textContent = this.ocrCount;
+                }
+
+                console.log('✓ OCR 결과:', data.ocr_results);
+                console.log('✓ 오버레이 개수:', data.overlays ? data.overlays.length : 0);
 
                 // OCR 결과 표시
                 this.displayOCRResults(data.ocr_results);
@@ -367,10 +378,12 @@ class SmartAdARSystem {
                     this.updateDebugInfo(`OCR 완료: ${data.ocr_results.length}개 인식, ${data.overlays.length}개 오버레이`);
                 }
             } else {
+                console.error('❌ 서버 에러:', data.error);
                 throw new Error(data.error);
             }
         } catch (error) {
-            console.error('OCR 오류:', error);
+            console.error('❌ OCR 오류:', error);
+            this.updateDebugInfo(`❌ 오류 발생: ${error.message}`);
         } finally {
             this.isProcessing = false;
             this.showLoading(false);
@@ -391,21 +404,28 @@ class SmartAdARSystem {
 
     // [수정] 슬롯 기반 배치를 위해 idx 전달
     renderOverlays(overlays) {
+        console.log('🎨 renderOverlays 호출됨, 오버레이 개수:', overlays ? overlays.length : 0);
         if (!overlays) overlays = [];
 
         const existingElements = Array.from(this.overlayLayer.children);
-        
+        console.log('📋 기존 오버레이 요소 개수:', existingElements.length);
+
         // 1. 개수가 다르면 싹 지우고 새로 그립니다 (초기화 등 급격한 변화 시)
         if (existingElements.length !== overlays.length) {
+            console.log('🔄 개수가 달라서 재생성:', existingElements.length, '→', overlays.length);
             this.clearOverlays();
             overlays.forEach((overlay, idx) => {
+                console.log(`  생성 중 [${idx}]:`, overlay.content?.substring(0, 30));
                 const element = this.createOverlayElement(overlay, idx);
                 this.overlayLayer.appendChild(element);
+                console.log(`  ✓ 요소 추가됨 [${idx}]`, element);
             });
+            console.log('✓ overlayLayer에 추가된 자식 요소 수:', this.overlayLayer.children.length);
             return;
         }
 
         // 2. 개수가 같으면 "위치와 내용만" 부드럽게 업데이트 (핵심!)
+        console.log('🔄 개수가 같아서 업데이트만 수행');
         overlays.forEach((overlay, idx) => {
             const div = existingElements[idx];
 
@@ -413,6 +433,7 @@ class SmartAdARSystem {
             const newContent = overlay.content ? overlay.content : '';
             if (div.textContent !== newContent) {
                 div.textContent = newContent;
+                console.log(`  업데이트 [${idx}]:`, newContent.substring(0, 30));
             }
 
             // 목표 위치 계산
@@ -441,12 +462,16 @@ class SmartAdARSystem {
 
     // [수정] 슬롯 기반 위치 + 부드러운 바운스 애니메이션
     createOverlayElement(overlay, idx) {
+        console.log(`🏗️ createOverlayElement [${idx}] 시작`, overlay);
         const div = document.createElement('div');
         div.className = `overlay-card`;
 
         // 내용 삽입
         if (overlay.content) {
             div.textContent = overlay.content;
+            console.log(`  ✓ 내용 설정: "${overlay.content.substring(0, 30)}..."`);
+        } else {
+            console.warn(`  ⚠️ overlay.content가 없음!`);
         }
 
         // 위치 설정 (bbox 우선, 없으면 슬롯)
@@ -456,6 +481,7 @@ class SmartAdARSystem {
             const y = Math.min(...points.map(p => p[1]));
             div.style.left = `${x}px`;
             div.style.top = `${y}px`;
+            console.log(`  ✓ BBox 위치: (${x}px, ${y}px)`);
         } else {
             // 중앙(30~70%)을 피하는 좌우 슬롯
             const slots = [
@@ -467,9 +493,10 @@ class SmartAdARSystem {
             div.style.position = 'absolute';
             div.style.left = `${slot[0]}%`;
             div.style.top = `${slot[1]}%`;
+            console.log(`  ✓ 슬롯 위치: (${slot[0]}%, ${slot[1]}%)`);
         }
 
-        const duration = Math.random() * 0.3 + 0.9; 
+        const duration = Math.random() * 0.3 + 0.9;
         const delay = Math.random() * 0.5;
 
         div.style.animationName = 'bounceFloat';
@@ -478,13 +505,16 @@ class SmartAdARSystem {
         div.style.animationIterationCount = 'infinite';
         div.style.animationTimingFunction = 'ease-in-out';
         div.style.animationDirection = 'alternate';
-        
+
+        console.log(`  ✓ 요소 생성 완료:`, div);
         return div;
     }
 
     clearOverlays() {
         this.overlayLayer.innerHTML = '';
-        this.overlayCountElement.textContent = '0';
+        if (this.overlayCountElement) {
+            this.overlayCountElement.textContent = '0';
+        }
     }
 
     showLoading(show) {
