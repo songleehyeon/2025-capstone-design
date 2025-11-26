@@ -51,7 +51,7 @@ class SmartAdARSystem {
         this.fps = 0;
 
         // 설정
-        this.ocrInterval = 20; // 20프레임마다 OCR 실행
+        this.ocrInterval = 2; // 2프레임마다 OCR 실행 (매우 빠른 반응, 마커 즉시 감지)
         this.frameCounter = 0;
 
         // API 엔드포인트
