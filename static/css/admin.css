@@ -445,16 +445,57 @@ section {
 
 /* 반응형 */
 @media (max-width: 768px) {
-    .persona-cards {
-        grid-template-columns: repeat(2, 1fr);
+    body {
+        padding: 20px 10px;
+        overflow-x: hidden;
     }
 
-    .button-group {
-        flex-direction: column;
+    .container {
+        max-width: 100%;
+        width: 100%;
+        overflow-x: hidden;
     }
 
     .header h1 {
         font-size: 2rem;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+
+    .persona-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .persona-card {
+        height: 240px;
+        max-width: 100%;
+    }
+
+    .persona-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+
+    .button-group, .btn-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 8px;
+    }
+
+    .toggle-label {
+        padding: 8px 10px;
+        font-size: 0.85rem;
     }
 }
 /* ========== 애니메이션 정의 (Fade In Up) ========== */

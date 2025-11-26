@@ -473,8 +473,8 @@ class SmartAdARSystem {
             console.log(`  ✓ 슬롯 위치: (${slot[0]}%, ${slot[1]}%)`);
         }
 
-        const duration = Math.random() * 0.3 + 0.9;
-        const delay = Math.random() * 0.5;
+        const duration = Math.random() * 0.5 + 2.5;
+        const delay = Math.random() * 0.8;
 
         div.style.animationName = 'bounceFloat';
         div.style.animationDuration = `${duration}s`;

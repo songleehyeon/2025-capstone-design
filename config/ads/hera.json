@@ -1,7 +1,7 @@
 {
   "brand": "HERA",
   "category": "cosmetics",
-  "detection_keywords": ["H E R A", "본연의 나를"],
+  "detection_keywords": ["H E R A", "본연의 나를", "BLACK", "이이이"],
   "rules": [
     {
       "rule_id": "GENERAL_RECOMM",
