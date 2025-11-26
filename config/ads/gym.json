@@ -19,7 +19,7 @@
       "priority": 20,
       "message": "💪 헬스 월 3만 원, PT 1회 4만 원 (민생회복 소비쿠폰 사용 가능)",
       "conditions": {
-        "type": "always"
+        "type": "always_true"
       },
       "color": [200, 240, 200]
     },

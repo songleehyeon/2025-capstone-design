@@ -78,7 +78,7 @@
     },
     {
       "rule_id": "EVENT_INFO",
-      "priority": 30,
+      "priority": 20,
       "message": "🍪 접속만 해도 네이버 웹툰 쿠키 3개 증정",
       "conditions": {
         "type": "and",
@@ -92,7 +92,7 @@
     {
       "rule_id": "EVENT_INFO",
       "priority": 30,
-      "message": "🎁 가입 시 '고양이와 스프' 호박 마차 아이템 증정",
+      "message": "🎁 가입 시 '고양이와 스프' 호박 마차 아이템을 드려요.",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "고양이와 스프" },
       "color": [220, 255, 220]
     },

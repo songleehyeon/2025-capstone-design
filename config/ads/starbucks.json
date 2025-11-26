@@ -138,6 +138,7 @@
         "type": "and",
         "rules": [
           {"type": "context_equals", "field": "current_time", "value": "afternoon"},
+          {"type": "context_equals", "field": "day_type", "value": "weekday"},
           {"type": "array_contains", "user_field": "attributes", "value": "sweet"}
         ]
       },

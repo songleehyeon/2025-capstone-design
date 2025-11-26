@@ -29,7 +29,7 @@
         "user_field": "living_type",
         "value": "couple"
       },
-      "message": "💑 커플끼리 방문하기 좋은 이벤트예요",
+      "message": "💑 커플끼리 방문하기 좋은 전시예요",
       "color": [255, 220, 240]
     },
     {
@@ -163,7 +163,7 @@
       "conditions": {
         "type": "array_contains",
         "user_field": "occupation",
-        "value": "woori_sogang"
+        "value": "hani"
       },
       "message": "🚗 한겨레출판사에서 차로 11분 거리",
       "color": [230, 245, 230]

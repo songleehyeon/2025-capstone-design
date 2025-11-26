@@ -18,9 +18,9 @@
     {
       "rule_id": "GENERAL_RECOMM",
       "priority": 20,
-      "message": "🍾 새롭게 선보이는 헤네시 블랙, 플로럴 향이 돋보이는 신상 라인업입니다.",
+      "message": "🍾 새롭게 선보이는 헤네시 블랙, 플로럴 향이 돋보이는 신상 라인업이에요.",
       "conditions": {
-        "type": "always"
+        "type": "always_true"
       },
       "color": [200, 240, 200]
     },

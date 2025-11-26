@@ -55,7 +55,7 @@
         {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
-      "message": "🎬 <나우유씨미 2> 감독 존 M. 추의 작품이에요",
+      "message": "🎬 이전에 보신 적 있는 <나우유씨미 2> 감독 존 M. 추의 작품이에요",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "director" },
       "color": [220, 240, 255]
     },

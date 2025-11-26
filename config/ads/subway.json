@@ -21,7 +21,7 @@
     {
       "rule_id": "CONTEXT_RECOMM",
       "priority": 30,
-      "message": "🍱 학생·직장인 인기 점심 메뉴예요",
+      "message": "🍱 학생·직장인 인기 점심 메뉴예요.",
       "conditions": {
         "type": "and",
         "rules": [
@@ -40,14 +40,14 @@
     {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
-      "message": "🥗 튀기지 않은 재료로 가벼운 한 끼 추천",
+      "message": "🥗 튀기지 않은 재료로 가벼운 한 끼 추천!",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "health" },
       "color": [220, 255, 220]
     },
     {
       "rule_id": "PERSONAL_RECOMM",
       "priority": 30,
-      "message": "💪 단백질 16.5g! 운동 후 샌드위치 추천",
+      "message": "💪 단백질 16.5g! 운동 후 샌드위치 한 끼로 보충하기 좋아요.",
       "conditions": { "type": "array_contains", "user_field": "attributes", "value": "protein" },
       "color": [220, 230, 255]
     },

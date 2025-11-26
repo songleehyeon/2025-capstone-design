@@ -1,7 +1,7 @@
 {
   "user_id": "user01",
   "persona_type": "user01",
-  "persona_name": "우리은행 사원 강우리",
+  "persona_name": "우리은행 은행원",
   "gender": "female",
   "age": 30,
   "age_group": "30s",
@@ -45,12 +45,14 @@
     "not_member_gym",
     "oily",
     "youtuber",
-    "has_black_cushion"
+    "has_black_cushion",
+    "hwahe"
   ],
   "context": {
     "current_time": "evening",
     "day_type": "weekday",
-    "weather": "rainy"
+    "weather": "rainy",
+    "season": "fall"
   },
   "personalization_level": "high"
 }

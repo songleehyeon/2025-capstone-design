@@ -29,7 +29,7 @@
     },
     {
       "rule_id": "CONTEXT_RECOMM",
-      "priority": 26,
+      "priority": 25,
       "message": "💼 야근까지 버틴 오늘, 너무 무겁지 않게. 좋은데이 제로로 가볍게 하루를 털어내 보세요.",
       "conditions": {
         "type": "and",
@@ -54,19 +54,10 @@
     },
     {
       "rule_id": "PERSONAL_RECOMM",
-      "priority": 30,
-      "message": "🍶 당류 0% 소주가 필요할 때, 부담은 줄이고 분위기만 남기는 좋은데이 과당제로와 함께하세요.",
-      "conditions": {
-        "type": "always_true"
-      },
-      "color": [220, 240, 255]
-    },
-    {
-      "rule_id": "PERSONAL_RECOMM",
       "priority": 20,
       "message": "🍶 당류 0% 소주가 필요할 때, 부담은 줄이고 분위기만 남기는 좋은데이 과당제로와 함께하세요.",
       "conditions": {
-        "type": "always"
+        "type": "always_true"
       },
       "color": [200, 240, 200]
     },

@@ -19,7 +19,7 @@
       "priority": 20,
       "message": "✨ 하루종일 무너지지 않는 고커버 베이스!\n지속력: ★★★★ 커버력: ★★★★★ 촉촉함: ★★★",
       "conditions": {
-        "type": "always"
+        "type": "always_true"
       },
       "color": [200, 240, 200]
     },
