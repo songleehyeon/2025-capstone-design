@@ -95,32 +95,9 @@ class SmartAdARSystem {
         // 초기 데이터 로드
         await this.loadUserProfile();
         await this.loadCameras();
-        this.initThemeToggle();
 
         this.updateDebugInfo('시스템 초기화 완료');
-        
-    }
-    initThemeToggle() {
-        const themeBtn = document.getElementById('theme-toggle');
-        
-        // 저장된 테마 불러오기
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeBtn.textContent = '☀️ Light Mode';
-        }
 
-        // 버튼 클릭 이벤트
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            
-            // 텍스트 변경 및 저장
-            themeBtn.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            
-            // 페르소나 텍스트 색상 등 가독성을 위해 UI 업데이트가 필요할 경우 여기서 처리
-        });
     }
 
     // [신규 기능] 화면 및 OCR 결과 초기화 (OCR도 일시정지)

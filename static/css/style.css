@@ -9,84 +9,61 @@
     --anim-speed-fast: 15s;
     --anim-speed-slow: 12s;
 
-    /* [Light Mode: Holographic] */
-    --bg-light: linear-gradient(135deg, #89CFF0 0%, #E6E6FA 100%);
-    --text-light: #2C3E50;
-    --up-light: linear-gradient(80deg, rgba(125, 249, 255, 0.8), rgba(255, 255, 255, 0.9));
-    --down-light: linear-gradient(80deg, rgba(255, 183, 197, 0.8), rgba(255, 250, 205, 0.9));
-    --left-light: linear-gradient(80deg, rgba(238, 130, 238, 0.8), rgba(125, 249, 255, 0.9));
-    --right-light: linear-gradient(80deg, rgba(255, 0, 255, 0.4), rgba(137, 207, 240, 0.8));
-    --blend-mode-light: normal;
+    /* 배경 및 텍스트 색상 */
+    --bg: linear-gradient(135deg, #89CFF0 0%, #E6E6FA 100%);
+    --text: #2C3E50;
 
-    /* [Dark Mode: Neon] */
-    --bg-dark: #050505;
-    --text-dark: #ffffff;
-    --up-dark: radial-gradient(circle at center, rgba(0, 255, 255, 0.8), rgba(0, 100, 255, 0));
-    --down-dark: radial-gradient(circle at center, rgba(255, 0, 255, 0.8), rgba(120, 0, 255, 0));
-    --left-dark: linear-gradient(135deg, rgba(50, 50, 255, 0.9), rgba(0, 200, 255, 0));
-    --right-dark: radial-gradient(circle at center, rgba(0, 255, 150, 0.6), rgba(0, 20, 50, 0));
-    --blend-mode-dark: screen;
+    /* 오로라 효과 */
+    --up: linear-gradient(80deg, rgba(125, 249, 255, 0.8), rgba(255, 255, 255, 0.9));
+    --down: linear-gradient(80deg, rgba(255, 183, 197, 0.8), rgba(255, 250, 205, 0.9));
+    --left: linear-gradient(80deg, rgba(238, 130, 238, 0.8), rgba(125, 249, 255, 0.9));
+    --right: linear-gradient(80deg, rgba(255, 0, 255, 0.4), rgba(137, 207, 240, 0.8));
+    --blend-mode: normal;
 }
 
-/* 기본 스타일 (Light Mode) */
+/* 기본 스타일 */
 body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-image: var(--bg-light);
+    background-image: var(--bg);
     background-color: #f0f0f0;
     min-height: 100vh;
-    color: var(--text-light);
+    color: var(--text);
     padding: 20px;
     overflow: auto;
-    transition: background 0.5s ease, color 0.5s ease; /* 부드러운 전환 효과 */
 }
 body.debug-active {
     overflow-y: auto;
 }
-/* 오로라 요소 기본값 */
+
+/* 오로라 요소 */
 section {
-    mix-blend-mode: var(--blend-mode-light);
-    transition: all 0.5s ease;
+    mix-blend-mode: var(--blend-mode);
 }
 
 #up {
     position: absolute; height: 800px; width: 800px; border-radius: 50%;
-    background: var(--up-light); filter: blur(80px); z-index: -1;
+    background: var(--up); filter: blur(80px); z-index: -1;
     animation: down var(--anim-speed-fast) infinite;
 }
 #down {
     position: absolute; right: 0; height: 500px; width: 500px; border-radius: 50%;
-    background: var(--down-light); filter: blur(80px); z-index: -1;
+    background: var(--down); filter: blur(80px); z-index: -1;
     animation: up var(--anim-speed-slow) infinite;
 }
 #left {
     position: absolute; height: 500px; width: 500px; border-radius: 50%;
-    background: var(--left-light); filter: blur(80px); z-index: -1;
+    background: var(--left); filter: blur(80px); z-index: -1;
     animation: left var(--anim-speed-slow) 1s infinite;
 }
 #right {
     position: absolute; height: 500px; width: 500px; border-radius: 50%;
-    background: var(--right-light); filter: blur(80px); z-index: -1;
+    background: var(--right); filter: blur(80px); z-index: -1;
     animation: right var(--anim-speed-fast) .5s infinite;
 }
 
-/* ========== Dark Mode 스타일 재정의 ========== */
-body.dark-mode {
-    background-image: none;
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
-}
-
-body.dark-mode section { mix-blend-mode: var(--blend-mode-dark); }
-
-/* 다크모드 시 배경 그라디언트 교체 및 미세 조정 */
-body.dark-mode #up { background: var(--up-dark); filter: blur(60px); opacity: 0.8; border-radius: 40%; }
-body.dark-mode #down { background: var(--down-dark); filter: blur(70px); opacity: 0.8; border-radius: 45%; }
-body.dark-mode #left { background: var(--left-dark); opacity: 0.7; }
-body.dark-mode #right { background: var(--right-dark); filter: blur(60px); opacity: 0.6; border-radius: 30%; }
-
 /* 테마 전환 버튼 스타일 */
 .theme-toggle-btn {
-    position: fixed;
+    position: absolute;
     top: 20px;
     right: 20px;
     z-index: 100;
@@ -101,12 +78,12 @@ body.dark-mode #right { background: var(--right-dark); filter: blur(60px); opaci
     font-size: 0.9rem;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .theme-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 .theme-toggle-btn.debug-btn {
     top: 70px; /* 20px(여백) + 40px(버튼높이) + 10px(간격) */
@@ -429,30 +406,163 @@ body.dark-mode #right { background: var(--right-dark); filter: blur(60px); opaci
 
 /* ========== 반응형 (모바일) ========== */
 @media (max-width: 768px) {
-    body { padding: 10px; }
-    .header h1 { font-size: 2.5rem; margin: 60px auto 40px auto; }
-    
+    body {
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    /* 컨테이너 전체 너비 */
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    /* 헤더 최소화 */
+    .header {
+        margin-bottom: 10px;
+        padding-top: 80px; /* 버튼 영역 확보 (Dark Mode + Debug Mode) */
+    }
+    .header h1 {
+        font-size: 1.8rem;
+        margin: 20px auto 10px auto;
+        letter-spacing: -2px;
+    }
+    .subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+    }
+
+    /* 테마/디버그 버튼 우측 상단 고정 (크기 축소) */
+    .theme-toggle-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        z-index: 100;
+        border-radius: 20px;
+    }
+    /* Debug 버튼만 유지 (Dark Mode 제거) */
+    .theme-toggle-btn {
+        top: 8px !important;
+    }
+
+    /* 컨트롤 레이아웃 */
     .top-controls {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
-    }
-    
-    .persona-display {
-        height: auto;
-        padding: 12px 20px;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding: 0 8px;
     }
 
-    .control-panel {
-        justify-content: space-between;
+    /* 페르소나 디스플레이 */
+    .persona-display {
+        height: auto;
+        padding: 10px 15px;
+        min-width: auto;
     }
-    
-    /* 모바일에서 버튼 터치 영역 확보 */
-    .btn, .camera-dropdown {
-        flex: 1 0 auto;
-        height: 42px;
+    .persona-label { font-size: 0.65rem; }
+    .persona-name { font-size: 0.9rem; }
+    .admin-link {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* 버튼 패널 */
+    .control-panel {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* 버튼 터치 영역 확보 (최소 44px) */
+    .btn {
+        flex: 1 1 calc(50% - 3px);
+        min-width: 80px;
+        height: 44px;
+        font-size: 0.75rem;
+        padding: 0 10px;
+    }
+
+    /* 카메라 선택 */
+    .camera-selector {
+        flex: 1 1 100%;
+    }
+    .camera-dropdown {
+        width: 100%;
+        height: 44px;
         font-size: 0.8rem;
     }
-    
-    .stats { display: none; } /* 공간 부족 시 통계 숨김 */
+
+    /* 통계 숨김 */
+    .stats { display: none; }
+
+    /* 비디오 컨테이너 전체 너비 */
+    .video-container {
+        margin: 0 0 10px 0;
+        border-radius: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    /* 오버레이 카드 모바일 최적화 */
+    .overlay-card {
+        font-size: 0.65em;
+        padding: 5px 10px;
+        max-width: 180px;
+        min-width: 80px;
+    }
+
+    /* 로딩 인디케이터 */
+    .loading-indicator {
+        top: 5px;
+        right: 5px;
+        padding: 5px 10px;
+        font-size: 0.65em;
+        gap: 5px;
+    }
+    .spinner {
+        width: 12px;
+        height: 12px;
+    }
+
+    /* 디버그 패널 */
+    .debug-panel {
+        padding: 10px;
+        margin: 0 8px;
+        font-size: 0.85rem;
+    }
+    .debug-panel h3 {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+    #debug-info, #ocr-results {
+        padding: 10px;
+        font-size: 0.75rem;
+        max-height: 150px;
+    }
+}
+
+/* ========== 소형 모바일 (375px 이하) ========== */
+@media (max-width: 375px) {
+    .header h1 {
+        font-size: 1.5rem;
+        margin: 20px auto 15px auto;
+    }
+
+    .persona-display {
+        padding: 8px 12px;
+    }
+    .persona-name { font-size: 0.85rem; }
+
+    .btn {
+        font-size: 0.7rem;
+        height: 42px;
+    }
+
+    .overlay-card {
+        font-size: 0.6em;
+        padding: 4px 8px;
+        max-width: 150px;
+    }
 }
