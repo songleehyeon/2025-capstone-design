@@ -74,7 +74,7 @@
         #ad-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(10, 10, 15, 0.95);
+            background-color: rgba(255, 255, 255, 0.95);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -89,7 +89,7 @@
 
         #modal-image {
             height: 85vh; width: auto; max-width: 90vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             object-fit: contain;
             transform: scale(0.95) translateY(20px);
             transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -98,7 +98,7 @@
         #ad-modal.active #modal-image { transform: scale(1) translateY(0); }
 
         #modal-text {
-            margin-top: 20px; color: white; font-size: 1.0rem; font-weight: 250;
+            margin-top: 20px; color: #333; font-size: 1.0rem; font-weight: 250;
             opacity: 0; transform: translateY(10px); transition: all 0.4s ease 0.2s;
         }
         #ad-modal.active #modal-text { opacity: 1; transform: translateY(0); }
